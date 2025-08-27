@@ -1,21 +1,22 @@
 import {Navbar, Container, Nav} from "react-bootstrap"
-
-import { useNavigate } from 'react-router'
+import {useNavigate} from "react-router"
 
 
 const NavBar = () =>  {
-    const navigate = useNavigate()
-
+    console.log("pepio")
     return (    
-        <Navbar>
+        <Navbar className="bg-secondary">
             <Container>
-                <Navbar.Brand>
+                <Navbar.Brand href="/home">
                     B-lue Hoteles
                 </Navbar.Brand>
                 <Nav>
-                    <Nav.Link > Nosotros </Nav.Link>
-                    <Nav.Link > Nuestras ofertas </Nav.Link>
-                    <Nav.Link > blablabla </Nav.Link>
+                    <Nav.Link href="/reservation"> Reserva ahora! </Nav.Link>
+                    <Nav.Link href="/aboutUs"> Sobre Nosotros </Nav.Link>
+                    <Nav.Link href="/login"> login </Nav.Link>
+                    <Nav.Link href="/register"> register </Nav.Link>
+                    <Nav.Link href="/sales"> sales </Nav.Link>
+                    <Nav.Link href="/blablabla"> blablabla </Nav.Link>
                 </Nav>
 
             </Container>
