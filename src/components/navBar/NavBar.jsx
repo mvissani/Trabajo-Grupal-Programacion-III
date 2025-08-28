@@ -1,27 +1,22 @@
-import {Navbar, Container, Nav} from "react-bootstrap"
-import {useNavigate} from "react-router"
+import { Navbar, Container, Nav } from "react-bootstrap";
+import { useNavigate } from "react-router";
 
+const NavBar = () => {
+	console.log("pepio");
+	return (
+		<Navbar className="bg-secondary">
+			<Container>
+				<Navbar.Brand href="/home">Starligth Hoteles</Navbar.Brand>
+				<Nav>
+					<Nav.Link href="/home"> Home </Nav.Link>
+					<Nav.Link href="/reservation"> Reserva Ahora </Nav.Link>
+					<Nav.Link href="/sales"> Habitaciones y Promociones </Nav.Link>
+					<Nav.Link href="/aboutUs"> Nosotros </Nav.Link>
+					<Nav.Link href="/login"> login </Nav.Link>
+				</Nav>
+			</Container>
+		</Navbar>
+	);
+};
 
-const NavBar = () =>  {
-    console.log("pepio")
-    return (    
-        <Navbar className="bg-secondary">
-            <Container>
-                <Navbar.Brand href="/home">
-                    B-lue Hoteles
-                </Navbar.Brand>
-                <Nav>
-                    <Nav.Link href="/reservation"> Reserva ahora! </Nav.Link>
-                    <Nav.Link href="/aboutUs"> Sobre Nosotros </Nav.Link>
-                    <Nav.Link href="/login"> login </Nav.Link>
-                    <Nav.Link href="/register"> register </Nav.Link>
-                    <Nav.Link href="/sales"> sales </Nav.Link>
-                    <Nav.Link href="/blablabla"> blablabla </Nav.Link>
-                </Nav>
-
-            </Container>
-        </Navbar>
-    )
-}
-
-export default NavBar
+export default NavBar;
