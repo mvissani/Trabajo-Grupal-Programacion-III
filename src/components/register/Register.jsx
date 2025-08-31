@@ -22,25 +22,25 @@ function Register() {
 				>
 					<Card.Body className="justify-content-center border-1 ">
 						<Card.Title className="text-center fw-bold shadow fs-2">
-							Registrarse
+							Registrarme
 						</Card.Title>
 						<Row>
 							<Col>
 								<Form.Group>
-									<Form.Label>ingrese su nombre</Form.Label>
+									<Form.Label>Ingrese su nombre</Form.Label>
 									<Form.Control type="text" placeholder="Nombre" />
 								</Form.Group>
 							</Col>
 							<Col>
 								<Form.Group>
-									<Form.Label>ingrese su apellido</Form.Label>
+									<Form.Label>Ingrese su apellido</Form.Label>
 									<Form.Control type="text" placeholder="Apellido" />
 								</Form.Group>
 							</Col>
 						</Row>
 						<Row>
 							<Form.Group>
-								<Form.Label>Ingrese su numero de celular</Form.Label>
+								<Form.Label>Ingrese su número de celular</Form.Label>
 								<InputGroup>
 									<InputGroupText>+54</InputGroupText>
 									<Form.Control
@@ -58,7 +58,7 @@ function Register() {
 						</Row>
 						<Row>
 							<Form.Group>
-								<Form.Label>Ingrese un Mail</Form.Label>
+								<Form.Label>Ingrese su email</Form.Label>
 								<Form.Control type="email" placeholder="Email"></Form.Control>
 							</Form.Group>
 						</Row>
@@ -66,7 +66,7 @@ function Register() {
 							type="submit"
 							className=" text-light bg-dark fc-black d-block mx-auto mt-3"
 						>
-							Iniciar sesion
+							Iniciar Sesión
 						</Button>
 					</Card.Body>
 				</Card>

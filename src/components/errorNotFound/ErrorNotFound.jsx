@@ -1,13 +1,30 @@
-import { Button, Row } from 'react-bootstrap'
+// Imports
+import '../../App.scss';
+import { Button } from 'react-bootstrap';
+import error404 from '../../images/404NotFound.jpg';
 
+// ErrorNotFound
 const ErrorNotFound = () => {
     return (
-        <Row>
-            <h1>Ups! Sitio no encontrado</h1>
-            <p>Haz click en el botón para regresar al inicio</p>
-            <Button className='w-25' href="/">Regresar</Button>
-        </Row>
-    )
-}
+        <div
+            style={{
+                height: '100vh',
+                width: '100%',
+                backgroundImage: `url(${error404})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                position: 'relative',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'flex-end',
+            }}
+        >
+            <Button href="/" className="custom-btn">
+                Regresar
+            </Button>
+        </div>
+    );
+};
 
-export default ErrorNotFound
+export default ErrorNotFound;

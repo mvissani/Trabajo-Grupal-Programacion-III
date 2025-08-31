@@ -18,7 +18,7 @@ function Login() {
 						<form onSubmit={handleSubmit}>
 							<Row>
 								<Card.Title className="text-center fw-bold shadow fs-2">
-									Iniciar sesion
+									Iniciar Sesión
 								</Card.Title>
 
 								<Col>
@@ -35,7 +35,7 @@ function Login() {
 
 									<Form.Group>
 										<Form.Label className="text-center w-100">
-											Ingrese su contraseña contraseña
+											Ingrese su contraseña
 										</Form.Label>
 										<Form.Control
 											type="text"
@@ -44,7 +44,7 @@ function Login() {
 										/>
 									</Form.Group>
 									<Button type="submit" className="d-block mx-auto mt-3">
-										Iniciar sesion
+										Iniciar Sesión
 									</Button>
 								</Col>
 							</Row>
