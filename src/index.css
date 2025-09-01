@@ -1,0 +1,11 @@
+.estilo-imagen-fondo {
+  width: 100%;
+  height: 50px;     
+  object-fit: cover;   
+}
+.covertor-imagen-fondo {
+  width: 100vw;
+  margin-left: 0;
+  margin-right: 0;
+
+}
