@@ -22,14 +22,14 @@ function Home() {
               tanto para viajes de negocios como para escapadas de placer.{" "}
             </p>
             <p>
-              A pocas cuadras del Monumento a la Bandera y de la peatonal
+              A 2 km del Monumento a la Bandera y a pocas cuadras de la peatonal
               Córdoba, la ubicación es ideal para quienes buscan comodidad y
               cercanía a los principales atractivos turísticos y comerciales de
               la ciudad. Cada detalle está pensado para garantizar bienestar y
               exclusividad.
             </p>
             <p>
-              El hotel cuenta con habitaciones de lujo, spa, piscina y servicio
+              El hotel cuenta con habitaciones de lujo, spa, piscina climatizada y servicio
               de primer nivel. Además, se encuentra muy cerca de la vibrante
               avenida Pellegrini, reconocida por su variada oferta gastronómica,
               lo que permite disfrutar de la mejor cocina local a pasos del
@@ -41,6 +41,8 @@ function Home() {
                   src="https://ik.imagekit.io/rooxjlwlq/restaurant.jpeg?updatedAt=1756837680315"
                   n
                   alt="Hotel - hero"
+                  width={80}  
+                   height={80}
                 />
               </div>
               <div className="amenity">
@@ -48,6 +50,8 @@ function Home() {
                   src="https://ik.imagekit.io/rooxjlwlq/wiFi.jpeg?updatedAt=1756837680481"
                   n
                   alt="Hotel - hero"
+                  width={80}  
+                   height={80}
                 />
                 </div>
               <div className="amenity">
@@ -55,28 +59,91 @@ function Home() {
                   src="https://ik.imagekit.io/rooxjlwlq/pileta%20climatizada.jpeg?updatedAt=1756837680876"
                   n
                   alt="Hotel - hero"
+                  width={80}  
+                   height={80}
                 />
                 </div>
               <div className="amenity">
-                <div className="amenity-ico">🛎️</div>
-                Room Service
-              </div>
+                <Image
+                  src="https://ik.imagekit.io/rooxjlwlq/estacionamiento.jpeg?updatedAt=1756837680521"
+                  n
+                  alt="Hotel - hero"
+                  width={80}  
+                   height={80}
+                />
+                </div>
               <div className="amenity">
-                <div className="amenity-ico">🧺</div>
-                Lavandería &amp; Tintorería
-              </div>
+                <Image
+                  src="https://ik.imagekit.io/rooxjlwlq/caja%20de%20seguridad.jpeg?updatedAt=1756837682258"
+                  n
+                  alt="Hotel - hero"
+                   width={80}  
+                   height={80}
+                />
+                </div>
               <div className="amenity">
-                <div className="amenity-ico">🅿️</div>
-                Estacionamiento
-              </div>
+                <Image
+                  src="https://ik.imagekit.io/rooxjlwlq/camara%20permanente.jpeg?updatedAt=1756837680623"
+                  n
+                  alt="Hotel - hero"
+                   width={80}  
+                   height={80}
+                />
+                </div>
               <div className="amenity">
-                <div className="amenity-ico">🛡️</div>
-                CCTV &amp; Seguridad
-              </div>
+                <Image
+                  src="https://ik.imagekit.io/rooxjlwlq/lavanderia%20y%20tintoreria.jpeg?updatedAt=1756837682964"
+                  n
+                  alt="Hotel - hero"
+                   width={80}  
+                   height={80}
+                />
+                </div>
               <div className="amenity">
-                <div className="amenity-ico">🏋️</div>
-                Gimnasio cercano
-              </div>
+                <Image
+                  src="https://ik.imagekit.io/rooxjlwlq/yacuzzi.jpeg?updatedAt=1756837680332"
+                  n
+                  alt="Hotel - hero"
+                   width={80}  
+                   height={80}
+                />
+                </div>
+                <div className="amenity">
+                <Image
+                  src="https://ik.imagekit.io/rooxjlwlq/casino.jpeg?updatedAt=1756837680979"
+                  n
+                  alt="Hotel - hero"
+                   width={80}  
+                   height={80}
+                />
+                </div>
+                <div className="amenity">
+                <Image
+                  src="https://ik.imagekit.io/rooxjlwlq/gimnasio.jpeg?updatedAt=1756837680656"
+                  n
+                  alt="Hotel - hero"
+                   width={80}  
+                   height={80}
+                />
+                </div>
+                <div className="amenity">
+                <Image
+                  src="https://ik.imagekit.io/rooxjlwlq/spa.jpeg?updatedAt=1756837680729"
+                  n
+                  alt="Hotel - hero"
+                   width={80}  
+                   height={80}
+                />
+                </div>
+                <div className="amenity">
+                <Image
+                  src="https://ik.imagekit.io/rooxjlwlq/centrodeconvenciones.jpeg?updatedAt=1756837680809"
+                  n
+                  alt="Hotel - hero"
+                   width={80}  
+                   height={80}
+                />
+                </div>
             </div>
           </Col>
           <Col md={4}>
