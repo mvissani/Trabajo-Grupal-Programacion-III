@@ -50,3 +50,33 @@ main {
   color: white;
 }
 
+// Efecto Hover sobre elementos del Header
+
+.navbar.bg-secondary .dropdown-menu .dropdown-item:hover {
+  color: #66a1e0; 
+  background-color: transparent;
+  box-shadow: none; 
+  outline: none; 
+}
+
+.navbar.bg-secondary .nav-link.dropdown-toggle:hover {
+  color: #007bff; 
+  text-decoration: none; 
+}
+
+.navbar .nav-link.dropdown-toggle::after {
+  display: none;
+}
+
+// Espacios de los elementos del header
+.navbar .nav-link.dropdown-toggle {
+  margin-left: 1rem;  
+  margin-right: 1rem; 
+  padding-top: 0.75rem;  
+  padding-bottom: 0.75rem;
+}
+
+
+
+
+

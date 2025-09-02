@@ -1,24 +1,40 @@
-import {Navbar, Container, Nav} from "react-bootstrap"
+import {Navbar, Container, Nav, NavDropdown} from "react-bootstrap"
 import hotelName from '../../images/hotel-name.png';
 // import {useNavigate} from "react-router"
 
 const Header = () =>  {
     return (    
-        <Navbar className="bg-secondary">
-            <Container>
-                <Navbar.Brand href="/home">
-                    <img src={hotelName} width="150" height="60" className="d-inline-block align-top" alt="Starlight Hoteles"/>
-                </Navbar.Brand>
+        <Navbar variant="dark" expand="lg" className="bg-secondary">
+        <Container>
+            <Navbar.Brand href="/" className="d-flex align-items-center">
+                <img src={hotelName} width="150" height="60" className="d-inline-block align-top" alt="Starlight Hoteles"/>
+            </Navbar.Brand>
+            <Navbar.Toggle aria-controls="navbar-nav" />
+            <Navbar.Collapse id="navbar-nav" className="justify-content-end">
                 <Nav>
-                    <Nav.Link href="/reservation"> ¡Reserva ahora! </Nav.Link>
-                    <Nav.Link href="/aboutUs"> Sobre Nosotros </Nav.Link>
-                    <Nav.Link href="/login"> Iniciar Sesión </Nav.Link>
-                    <Nav.Link href="/register"> Registrarme </Nav.Link>
-                    <Nav.Link href="/sales"> Ofertas </Nav.Link>
-                    <Nav.Link href="/services"> Servicios </Nav.Link>
+                    <NavDropdown id="nav-dropdown-reservas" title="Reservas" menuVariant="light">
+                        <NavDropdown.Item href="/rooms">Habitaciones</NavDropdown.Item>
+                        <NavDropdown.Divider />
+                        <NavDropdown.Item href="/services">Servicios</NavDropdown.Item>
+                        <NavDropdown.Divider />
+                        <NavDropdown.Item href="/sales">Ofertas</NavDropdown.Item>
+                    </NavDropdown>
+                    <NavDropdown id="nav-dropdown-about" title="Sobre Nosotros" menuVariant="light">
+                        <NavDropdown.Item href="/aboutUs">¿Quiénes Somos?</NavDropdown.Item>
+                        <NavDropdown.Divider />
+                        <NavDropdown.Item href="/reviews">Reseñas</NavDropdown.Item>
+                    </NavDropdown>
+                    <NavDropdown id="nav-dropdown-account" title="Mi Cuenta" menuVariant="light">
+                        <NavDropdown.Item href="/login">Iniciar Sesión</NavDropdown.Item>
+                        <NavDropdown.Divider />
+                        <NavDropdown.Item href="/register">Registrarme</NavDropdown.Item>
+                        <NavDropdown.Divider />
+                        <NavDropdown.Item href="/reservation">Mis Reservas</NavDropdown.Item>
+                    </NavDropdown>
                 </Nav>
-            </Container>
-        </Navbar>
+            </Navbar.Collapse>
+        </Container>
+        </Navbar> 
     )
 }
 
