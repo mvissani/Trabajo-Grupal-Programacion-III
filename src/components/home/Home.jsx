@@ -1,13 +1,21 @@
+
 import hotelName from "../../images/hotel-name.png";
 import { Container, Row, Col, Image, Card } from "react-bootstrap";
 import Map from "./Map";
+import Reviews from "./Reviews";
+import BookingBar from "./BookingBar";
+import Patrocinadores from "./Patrocinadores";
+
 function Home() {
   return (
     <div>
       <div className="full-bleed">
+        <BookingBar/>
+
+        
         <Image
           src="https://ik.imagekit.io/rooxjlwlq/Fachada_Sur_Gran_Hotel_Miramar_(M%C3%A1laga).jpg?updatedAt=1756832780904"
-          n
+          
           alt="Hotel - hero"
           className="hero-img hero--halfUp"
         />
@@ -186,7 +194,12 @@ function Home() {
           </Col>
         </Row>
       </Container>
+      <Reviews/>
+        
+      
       <Map/>
+      <Patrocinadores/>
+      
     </div>
   );
 }

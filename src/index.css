@@ -32,10 +32,12 @@ body { margin: 0; }
   padding: 12px;
   font-size: 0.95rem;
   display: flex;
-  align-items: center;
+  align-items: center;     /* centra vertical */
+  justify-content: center; /* centra horizontal */
   gap: 10px;
   background: #fff;
 }
+
 .amenity-ico {
   font-size: 1.25rem;
   line-height: 1;
@@ -51,4 +53,53 @@ body { margin: 0; }
   position: absolute; top:0; left:0;
   width: 100%; height: 40%;
   border: 0;
+}
+/* Barra compacta con fondo marrón/gris como en la imagen */
+.booking-bar {
+  background: #6c5f4f;        /* podés ajustar el tono */
+  padding: 8px 0;
+}
+
+/* Columnas angostitas y alineadas */
+.booking-col { min-width: 210px; }
+
+/* Inputs “beige” y sin bordes */
+.booking-bar .input-group-text {
+  background: #e9e2d8;
+  border: none;
+  border-radius: 4px 0 0 4px;
+}
+.booking-bar .form-control,
+.booking-bar .form-select {
+  background: #e9e2d8;
+  border: none;
+  font-weight: 600;
+  letter-spacing: .02em;
+}
+.booking-bar .form-control:focus,
+.booking-bar .form-select:focus {
+  box-shadow: none;
+}
+
+/* Campo promo un poco más angosto */
+.booking-bar .promo { min-width: 180px; }
+
+/* Botón celeste/turquesa como la referencia */
+.booking-bar .search-btn {
+  background: #55c3bb;
+  border: none;
+  font-weight: 700;
+  padding: .55rem 1.25rem;
+  border-radius: 4px;
+}
+
+/* Opcional: superponer la barra sobre la imagen hero */
+.booking-over-hero { margin-top: -18px; }
+.patrocinadores-section {
+  background: #fff;   /* fondo blanco */
+}
+
+.patrocinadores-section img {
+  max-height: 80px;   /* controla tamaño de logos */
+  object-fit: contain;
 }
