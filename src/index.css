@@ -48,6 +48,7 @@ body { margin: 0; }
   height: 0;
   overflow: hidden;
   border-radius: 12px;
+  margin-top: 130px;
 }
 .map-container iframe{
   position: absolute; top:0; left:0;

@@ -5,6 +5,7 @@ import Map from "./Map";
 import Reviews from "./Reviews";
 import BookingBar from "./BookingBar";
 import Patrocinadores from "./Patrocinadores";
+import Carrusel from "./Carrusel";
 
 function Home() {
   return (
@@ -195,9 +196,10 @@ function Home() {
         </Row>
       </Container>
       <Reviews/>
-        
+      <Carrusel/>
       
       <Map/>
+      
       <Patrocinadores/>
       
     </div>

@@ -17,14 +17,14 @@ export default function Patrocinadores() {
           </Col>
           <Col xs={12} md={4}>
             <Image
-              src="https://via.placeholder.com/200x100?text=Logo+2"
+              src="https://ik.imagekit.io/rooxjlwlq/Booking.Com-Logo-removebg-preview.png?updatedAt=1756930623925"
               alt="Patrocinador 2"
               fluid
             />
           </Col>
           <Col xs={12} md={4}>
             <Image
-              src="https://via.placeholder.com/200x100?text=Logo+3"
+              src="https://ik.imagekit.io/rooxjlwlq/LOGO-DESPEGAR-removebg-preview.png?updatedAt=1756932962867"
               alt="Patrocinador 3"
               fluid
             />
