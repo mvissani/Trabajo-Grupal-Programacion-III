@@ -162,7 +162,7 @@ function Home() {
                   src={hotelName}
                   alt="Logo Hotel"
                   fluid
-                  style={{ maxWidth: "120px", margin: "0 auto 15px" }}
+                  style={{ maxWidth: "300px", margin: "10 auto 260px" }}
                 />
 
                 <div className="d-flex justify-content-between align-items-center py-3 border-bottom">

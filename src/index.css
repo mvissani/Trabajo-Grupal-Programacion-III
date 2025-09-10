@@ -26,16 +26,17 @@ body { margin: 0; }
   grid-template-columns: repeat(4, minmax(0,1fr));
   gap: 16px;
 }
-.amenity {
+.amenity { 
   border: 1px solid #e9ecef;
   border-radius: 10px;
   padding: 12px;
   font-size: 0.95rem;
   display: flex;
-  align-items: center;     /* centra vertical */
-  justify-content: center; /* centra horizontal */
+  align-items: center;     
+  justify-content: center; 
   gap: 10px;
   background: #fff;
+  
 }
 
 .amenity-ico {
@@ -44,7 +45,7 @@ body { margin: 0; }
 }
 .map-container{
   position: relative;
-  padding-bottom: 56.25%; /* 16:9 */
+  padding-bottom: 56.25%; 
   height: 0;
   overflow: hidden;
   border-radius: 12px;
@@ -55,16 +56,16 @@ body { margin: 0; }
   width: 100%; height: 40%;
   border: 0;
 }
-/* Barra compacta con fondo marrón/gris como en la imagen */
+
 .booking-bar {
-  background: #6c5f4f;        /* podés ajustar el tono */
+  background: #6c5f4f;       
   padding: 8px 0;
 }
 
-/* Columnas angostitas y alineadas */
+
 .booking-col { min-width: 210px; }
 
-/* Inputs “beige” y sin bordes */
+
 .booking-bar .input-group-text {
   background: #e9e2d8;
   border: none;
@@ -82,10 +83,10 @@ body { margin: 0; }
   box-shadow: none;
 }
 
-/* Campo promo un poco más angosto */
+
 .booking-bar .promo { min-width: 180px; }
 
-/* Botón celeste/turquesa como la referencia */
+
 .booking-bar .search-btn {
   background: #55c3bb;
   border: none;
@@ -94,13 +95,19 @@ body { margin: 0; }
   border-radius: 4px;
 }
 
-/* Opcional: superponer la barra sobre la imagen hero */
+
 .booking-over-hero { margin-top: -18px; }
 .patrocinadores-section {
-  background: #fff;   /* fondo blanco */
+  background: #fff;   
 }
 
 .patrocinadores-section img {
-  max-height: 80px;   /* controla tamaño de logos */
+  max-height: 80px;   
   object-fit: contain;
+}
+.carousel .carousel-item img,
+.carousel-img {
+  width: 100% !important;
+  height: 800px !important;
+  object-fit: cover !important;
 }
