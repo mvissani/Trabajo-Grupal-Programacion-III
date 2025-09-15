@@ -23,175 +23,112 @@ function Home() {
       </div>
       <Container>
         <Row>
-          <Col>
-            <p>
-              En pleno corazón de Rosario, este hotel 5 estrellas combina
-              elegancia y modernidad para ofrecer una experiencia única. Su
-              diseño sofisticado y ambientes amplios brindan el máximo confort
-              tanto para viajes de negocios como para escapadas de placer.{" "}
-            </p>
-            <p>
-              A 2 km del Monumento a la Bandera y a pocas cuadras de la peatonal
-              Córdoba, la ubicación es ideal para quienes buscan comodidad y
-              cercanía a los principales atractivos turísticos y comerciales de
-              la ciudad. Cada detalle está pensado para garantizar bienestar y
-              exclusividad.
-            </p>
-            <p>
-              El hotel cuenta con habitaciones de lujo, spa, piscina climatizada y servicio
-              de primer nivel. Además, se encuentra muy cerca de la vibrante
-              avenida Pellegrini, reconocida por su variada oferta gastronómica,
-              lo que permite disfrutar de la mejor cocina local a pasos del
-              alojamiento.
-            </p>
-            <div className="amenities-grid mt-4">
-              <div className="amenity">
-                <Image
-                  src="https://ik.imagekit.io/rooxjlwlq/restaurant.jpeg?updatedAt=1756837680315"
-                  n
-                  alt="Hotel - hero"
-                  width={80}  
-                   height={80}
-                />
-              </div>
-              <div className="amenity">
-                <Image
-                  src="https://ik.imagekit.io/rooxjlwlq/wiFi.jpeg?updatedAt=1756837680481"
-                  n
-                  alt="Hotel - hero"
-                  width={80}  
-                   height={80}
-                />
-                </div>
-              <div className="amenity">
-                <Image
-                  src="https://ik.imagekit.io/rooxjlwlq/pileta%20climatizada.jpeg?updatedAt=1756837680876"
-                  n
-                  alt="Hotel - hero"
-                  width={80}  
-                   height={80}
-                />
-                </div>
-              <div className="amenity">
-                <Image
-                  src="https://ik.imagekit.io/rooxjlwlq/estacionamiento.jpeg?updatedAt=1756837680521"
-                  n
-                  alt="Hotel - hero"
-                  width={80}  
-                   height={80}
-                />
-                </div>
-              <div className="amenity">
-                <Image
-                  src="https://ik.imagekit.io/rooxjlwlq/caja%20de%20seguridad.jpeg?updatedAt=1756837682258"
-                  n
-                  alt="Hotel - hero"
-                   width={80}  
-                   height={80}
-                />
-                </div>
-              <div className="amenity">
-                <Image
-                  src="https://ik.imagekit.io/rooxjlwlq/camara%20permanente.jpeg?updatedAt=1756837680623"
-                  n
-                  alt="Hotel - hero"
-                   width={80}  
-                   height={80}
-                />
-                </div>
-              <div className="amenity">
-                <Image
-                  src="https://ik.imagekit.io/rooxjlwlq/lavanderia%20y%20tintoreria.jpeg?updatedAt=1756837682964"
-                  n
-                  alt="Hotel - hero"
-                   width={80}  
-                   height={80}
-                />
-                </div>
-              <div className="amenity">
-                <Image
-                  src="https://ik.imagekit.io/rooxjlwlq/yacuzzi.jpeg?updatedAt=1756837680332"
-                  n
-                  alt="Hotel - hero"
-                   width={80}  
-                   height={80}
-                />
-                </div>
-                <div className="amenity">
-                <Image
-                  src="https://ik.imagekit.io/rooxjlwlq/casino.jpeg?updatedAt=1756837680979"
-                  n
-                  alt="Hotel - hero"
-                   width={80}  
-                   height={80}
-                />
-                </div>
-                <div className="amenity">
-                <Image
-                  src="https://ik.imagekit.io/rooxjlwlq/gimnasio.jpeg?updatedAt=1756837680656"
-                  n
-                  alt="Hotel - hero"
-                   width={80}  
-                   height={80}
-                />
-                </div>
-                <div className="amenity">
-                <Image
-                  src="https://ik.imagekit.io/rooxjlwlq/spa.jpeg?updatedAt=1756837680729"
-                  n
-                  alt="Hotel - hero"
-                   width={80}  
-                   height={80}
-                />
-                </div>
-                <div className="amenity">
-                <Image
-                  src="https://ik.imagekit.io/rooxjlwlq/centrodeconvenciones.jpeg?updatedAt=1756837680809"
-                  n
-                  alt="Hotel - hero"
-                   width={80}  
-                   height={80}
-                />
-                </div>
+  <Col>
+      {/* Párrafos estilizados */}
+      <div className="mb-4">
+        <p className="lead fs-5 fw-light text-dark mt-4 mb-4">
+          En pleno corazón de Rosario, este hotel 5 estrellas combina elegancia y
+          modernidad para ofrecer una experiencia única. Su diseño sofisticado y
+          ambientes amplios brindan el máximo confort tanto para viajes de negocios
+          como para escapadas de placer.
+        </p>
+        <p className="fs-5 fw-light text-dark mb-4">
+          A 2 km del Monumento a la Bandera y a pocas cuadras de la peatonal
+          Córdoba, la ubicación es ideal para quienes buscan comodidad y cercanía a
+          los principales atractivos turísticos y comerciales de la ciudad. Cada
+          detalle está pensado para garantizar bienestar y exclusividad.
+        </p>
+        <p className="fs-5 fw-light text-dark">
+          El hotel cuenta con habitaciones de lujo, spa, piscina climatizada y
+          servicio de primer nivel. Además, se encuentra muy cerca de la vibrante
+          avenida Pellegrini, reconocida por su variada oferta gastronómica, lo que
+          permite disfrutar de la mejor cocina local a pasos del alojamiento.
+        </p>
+      </div>
+
+      {/* Amenities */}
+      <div className="row g-3 mt-4">
+        {[
+          "https://ik.imagekit.io/rooxjlwlq/restaurant.jpeg?updatedAt=1756837680315",
+          "https://ik.imagekit.io/rooxjlwlq/wiFi.jpeg?updatedAt=1756837680481",
+          "https://ik.imagekit.io/rooxjlwlq/pileta%20climatizada.jpeg?updatedAt=1756837680876",
+          "https://ik.imagekit.io/rooxjlwlq/estacionamiento.jpeg?updatedAt=1756837680521",
+          "https://ik.imagekit.io/rooxjlwlq/caja%20de%20seguridad.jpeg?updatedAt=1756837682258",
+          "https://ik.imagekit.io/rooxjlwlq/camara%20permanente.jpeg?updatedAt=1756837680623",
+          "https://ik.imagekit.io/rooxjlwlq/lavanderia%20y%20tintoreria.jpeg?updatedAt=1756837682964",
+          "https://ik.imagekit.io/rooxjlwlq/yacuzzi.jpeg?updatedAt=1756837680332",
+          "https://ik.imagekit.io/rooxjlwlq/casino.jpeg?updatedAt=1756837680979",
+          "https://ik.imagekit.io/rooxjlwlq/gimnasio.jpeg?updatedAt=1756837680656",
+          "https://ik.imagekit.io/rooxjlwlq/spa.jpeg?updatedAt=1756837680729",
+          "https://ik.imagekit.io/rooxjlwlq/centrodeconvenciones.jpeg?updatedAt=1756837680809",
+        ].map((src, index) => (
+          <div
+            className="col-4 col-md-3 col-lg-2 d-flex justify-content-center"
+            key={index}
+          >
+            <div
+              className="shadow rounded-2 p-2 bg-light d-flex align-items-center justify-content-center"
+              style={{ width: "70px", height: "70px" }}
+            >
+              <Image
+                src={src}
+                alt={`Amenity ${index + 1}`}
+                width={50}
+                height={50}
+                className="img-fluid"
+              />
             </div>
-          </Col>
+          </div>
+        ))}
+      </div>
+    </Col>
+  
+
+
+
           <Col md={4}>
-            <Card className="hotel-card text-center">
-              <Card.Body>
-                <Image
-                  src={hotelName}
-                  alt="Logo Hotel"
-                  fluid
-                  style={{ maxWidth: "300px", margin: "10 auto 260px" }}
-                />
+            <Card className="hotel-card text-center shadow-lg border-0 rounded-4 p-3">
+  <Card.Body>
+    <Image
+      src={hotelName}
+      alt="Logo Hotel"
+      fluid
+      style={{ maxWidth: "200px", margin: "20px auto 20px" }}
+    />
 
-                <div className="d-flex justify-content-between align-items-center py-3 border-bottom">
-                  <div>
-                    <div className="label">Check in</div>
-                    <div className="time">14:00</div>
-                  </div>
-                  <div className="text-muted">|</div>
-                  <div className="text-end">
-                    <div className="label">Check out</div>
-                    <div className="time">10:00</div>
-                  </div>
-                </div>
+    {/* Check-in y Check-out */}
+    <div className="d-flex justify-content-between align-items-center py-4 border-bottom fs-5">
+      <div>
+        <div className="fw-bold text-primary">Check in</div>
+        <div className="fs-4">14:00</div>
+        
+      </div>
+      <div className="text-muted fs-3">|</div>
+      <div className="text-end">
+        <div className="fw-bold text-primary">Check out</div>
+        <div className="fs-4">10:00</div>
+      </div>
+    </div>
 
-                <div className="py-3">
-                  <div className="small text-muted">Dirección</div>
-                  <div>Boulevard Oroño 1234</div>
-                  <div>CP 2000 Rosario · Santa Fe · Argentina</div>
-                  <div className="mt-3">
-                    <div className="small text-muted">Tel.</div>
-                    <div>+54 341 4223456</div>
-                  </div>
-                  <div className="mt-3">
-                    <div className="small text-muted">Reservas</div>
-                    <div>starlighthoteles@gmail.com</div>
-                  </div>
-                </div>
-              </Card.Body>
-            </Card>
+    {/* Información general */}
+    <div className="py-4 fs-5">
+      <div className="text-uppercase text-muted small mb-1">Dirección</div>
+      <div className="fw-semibold">Boulevard Oroño 1234</div>
+      <div>CP 2000 · Rosario · Santa Fe · Argentina</div>
+
+      <div className="mt-1">
+        <div className="text-uppercase text-muted small mb-1">Tel.</div>
+        <div className="fw-semibold">+54 341 4223456</div>
+      </div>
+
+      <div className="mt-1">
+        <div className="text-uppercase text-muted small mb-1">Reservas</div>
+        <div className="fw-semibold">starlighthoteles@gmail.com</div>
+      </div>
+    </div>
+  </Card.Body>
+</Card>
+
           </Col>
         </Row>
       </Container>

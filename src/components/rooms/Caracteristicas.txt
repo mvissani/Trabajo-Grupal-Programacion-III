@@ -1,0 +1,33 @@
+1-id habitacion
+2-nombre
+3-cantidad de personas
+4-capacidad (single,twin,triple)
+5-tipo (deluxe , suite)
+6-texto
+7-area
+
+tabla imagenes
+1-id habitacion
+2-imagen url
+
+
+tabla tarifas
+1-id habitacion
+2 Solo alojamiento (SA) → solo incluye la habitación.
+3 Alojamiento y desayuno (AD / B&B) → incluye desayuno.
+4 Media pensión (MP) → desayuno + una comida (almuerzo o cena).
+5 Pensión completa (PC) → desayuno + almuerzo + cena.
+6 All Inclusive (AI) → incluye todas las comidas, bebidas y algunos servicios.
+
+tabla amenitys
+1-id habitacion
+2-WiFi gratuito
+3-Desayuno incluido
+4-Aire acondicionado  calefacción
+5-Televisión por cable o Smart TV
+6-Baño privado con toallas y artículos de aseo
+7-Caja fuerte
+8-Minibar o frigobar
+9-Servicio de limpieza diaria
+
+
