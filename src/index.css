@@ -112,3 +112,18 @@ background-color: rgb(240, 240, 240); }
   height: 800px !important;
   object-fit: cover !important;
 }
+.whatsapp-float {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #25d366;
+  border-radius: 50%;
+  padding: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  transition: background 0.3s;
+  z-index: 1000;
+}
+
+.whatsapp-float:hover {
+  background-color: #20b857;
+}

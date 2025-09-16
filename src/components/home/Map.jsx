@@ -1,6 +1,6 @@
 import React from "react";
 
-const Map= () => (
+const Map = () => (
   <div className="map-container">
     <iframe
       title="Ubicación del hotel"
