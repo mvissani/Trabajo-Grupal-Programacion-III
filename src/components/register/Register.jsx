@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
 	Button,
 	Card,
@@ -10,6 +11,95 @@ import {
 import InputGroupText from "react-bootstrap/esm/InputGroupText";
 
 function Register() {
+	const [name, setName] = useState("");
+	const [surname, setSurname] = useState("");
+	const [cellNumber, setCellNumbre] = useState("");
+	const [Dni, setDni] = useState("");
+	const [email, setEmail] = useState("");
+	const [errors, setError] = useState({
+		names: false,
+		surname: false,
+		cellNumber: false,
+		Dni: false,
+		email: false,
+		errorType: "",
+	});
+	const handleSubmit = (event) => {
+		event.preventDefault();
+	};
+
+	const handleNameChange = (e) => {
+		setName(e.target.value);
+
+		if (basicErrors(e.target.value)) {
+			setError((prev) => ({
+				...prev,
+				names: true,
+				errorType: "Debe ingresar un nombre",
+			}));
+		}
+	};
+
+	const handleSurnameChange = (e) => {
+		setSurname(e.target.value);
+
+		if (basicErrors(e.target.value)) {
+			setError((prev) => ({
+				...prev,
+				surname: true,
+				errorType: "Debe ingresar un apellido",
+			}));
+		}
+	};
+
+	const handleCellChange = (e) => {
+		setCellNumbre(e.target.value);
+
+		if (basicErrors(e.target.value)) {
+			setError((prev) => ({
+				...prev,
+				cellNumber: true,
+				errorType: "Debe ingresar un numero celular",
+			}));
+		}
+	};
+
+	const handleDniChange = (e) => {
+		setDni(e.target.value);
+
+		if (basicErrors(e.target.value)) {
+			setError((prev) => ({
+				...prev,
+				Dni: true,
+				errorType: "Debe ingresar un DNI",
+			}));
+		}
+	};
+
+	const handleEmailChange = (e) => {
+		setEmail(e.target.value);
+
+		if (basicErrors(e.target.value)) {
+			setError((prev) => ({
+				...prev,
+				email: true,
+				errorType: "Debe ingresar un email",
+			}));
+		}
+	};
+
+	const basicErrors = (value) => {
+		setError((prev) => ({
+			...prev,
+			names: false,
+			surname: false,
+			cellNumber: false,
+			Dni: false,
+			email: false,
+			errorType: "",
+		}));
+		return !value ? true : false;
+	};
 	return (
 		<>
 			<Container
@@ -24,50 +114,96 @@ function Register() {
 						<Card.Title className="text-center fw-bold shadow fs-2">
 							Registrarme
 						</Card.Title>
-						<Row>
-							<Col>
+						<form onSubmit={handleSubmit}>
+							<Row>
+								<Col>
+									<Form.Group>
+										<Form.Label>Ingrese su nombre</Form.Label>
+
+										<Form.Control
+											type="text"
+											placeholder="Nombre"
+											className={errors.names && "bg-warning"}
+											onChange={handleNameChange}
+											value={name}
+										/>
+										{errors.names && (
+											<p className="mt-2 text-danger">{errors.errorType}</p>
+										)}
+									</Form.Group>
+								</Col>
+								<Col>
+									<Form.Group>
+										<Form.Label>Ingrese su apellido</Form.Label>
+										<Form.Control
+											type="text"
+											placeholder="Apellido"
+											className={errors.surname && "bg-warning"}
+											onChange={handleSurnameChange}
+											value={surname}
+										/>
+										{errors.surname && (
+											<p className="mt-2 text-danger">{errors.errorType}</p>
+										)}
+									</Form.Group>
+								</Col>
+							</Row>
+							<Row>
 								<Form.Group>
-									<Form.Label>Ingrese su nombre</Form.Label>
-									<Form.Control type="text" placeholder="Nombre" />
+									<Form.Label>Ingrese su número de celular</Form.Label>
+									<InputGroup>
+										<InputGroupText>+54</InputGroupText>
+										<Form.Control
+											type="email"
+											placeholder="Ingrese su numero"
+											className={errors.cellNumber && "bg-warning"}
+											onChange={handleCellChange}
+											value={cellNumber}
+										></Form.Control>
+										<br></br>
+										{errors.cellNumber && (
+											<p className="mt-2 text-danger">{errors.errorType}</p>
+										)}
+									</InputGroup>
 								</Form.Group>
-							</Col>
-							<Col>
+							</Row>
+							<Row>
 								<Form.Group>
-									<Form.Label>Ingrese su apellido</Form.Label>
-									<Form.Control type="text" placeholder="Apellido" />
+									<Form.Label>Ingrese su DNI</Form.Label>
+									<Form.Control
+										placeholder="DNI"
+										type="text"
+										onChange={handleDniChange}
+										value={Dni}
+										className={errors.Dni && "bg-warning"}
+									></Form.Control>
+									{errors.Dni && (
+										<p className="mt-2 text-danger">{errors.errorType}</p>
+									)}
 								</Form.Group>
-							</Col>
-						</Row>
-						<Row>
-							<Form.Group>
-								<Form.Label>Ingrese su número de celular</Form.Label>
-								<InputGroup>
-									<InputGroupText>+54</InputGroupText>
+							</Row>
+							<Row>
+								<Form.Group>
+									<Form.Label>Ingrese su email</Form.Label>
 									<Form.Control
 										type="email"
-										placeholder="Ingrese su numero"
+										placeholder="Email"
+										onChange={handleEmailChange}
+										value={email}
+										className={errors.email && "bg-warning"}
 									></Form.Control>
-								</InputGroup>
-							</Form.Group>
-						</Row>
-						<Row>
-							<Form.Group>
-								<Form.Label>Ingrese su DNI</Form.Label>
-								<Form.Control placeholder="DNI" type="text"></Form.Control>
-							</Form.Group>
-						</Row>
-						<Row>
-							<Form.Group>
-								<Form.Label>Ingrese su email</Form.Label>
-								<Form.Control type="email" placeholder="Email"></Form.Control>
-							</Form.Group>
-						</Row>
-						<Button
-							type="submit"
-							className=" text-light bg-dark fc-black d-block mx-auto mt-3"
-						>
-							Iniciar Sesión
-						</Button>
+									{errors.email && (
+										<p className="mt-2 text-danger">{errors.errorType}</p>
+									)}
+								</Form.Group>
+							</Row>
+							<Button
+								type="submit"
+								className=" text-light bg-dark fc-black d-block mx-auto mt-3"
+							>
+								Iniciar Sesión
+							</Button>
+						</form>
 					</Card.Body>
 				</Card>
 			</Container>
