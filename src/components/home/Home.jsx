@@ -5,9 +5,8 @@ import Reviews from "./Reviews";
 import BookingBar from "./BookingBar";
 import Patrocinadores from "./Patrocinadores";
 import Carrusel from "./Carrusel";
-import { FaWhatsapp } from "react-icons/fa"; 
+import { FaWhatsapp } from "react-icons/fa";
 import WhatsAppButton from "./WhatsAppButton";
-
 
 function Home() {
   return (
@@ -24,7 +23,7 @@ function Home() {
       <Container>
         <Row>
           <Col>
-            {/* Párrafos estilizados */}
+            {}
             <div className="mb-4">
               <p className="lead fs-5 fw-light text-dark mt-4 mb-4">
                 En pleno corazón de Rosario, este hotel 5 estrellas combina
@@ -48,7 +47,7 @@ function Home() {
               </p>
             </div>
 
-            {/* Amenities */}
+            {}
             <div className="row g-3 mt-4">
               {[
                 "https://ik.imagekit.io/rooxjlwlq/restaurant.jpeg?updatedAt=1756837680315",
@@ -144,7 +143,6 @@ function Home() {
 
       <Patrocinadores />
       <WhatsAppButton />
-      
     </div>
   );
 }

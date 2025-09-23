@@ -3,16 +3,14 @@ import { Card, Button, Row, Col, Table, Spinner, Alert } from "react-bootstrap";
 import { getRooms } from "./Rooms.services";
 
 const Rooms = () => {
-  // Estados para manejar los datos de la API
   const [habitaciones, setHabitaciones] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Función para cargar las habitaciones desde la API
-  const cargarHabitaciones = () => { //agregado
+  const cargarHabitaciones = () => {
     setLoading(true);
     setError(null);
-    
+
     getRooms(
       (data) => {
         setHabitaciones(data);
@@ -25,26 +23,29 @@ const Rooms = () => {
     );
   };
 
-  // Cargar habitaciones al montar el componente
   useEffect(() => {
     cargarHabitaciones();
   }, []);
 
-  // Función para obtener la URL de la imagen
-  const obtenerImagen = (imagenNombre) => { //agregado
-    if (imagenNombre) {
-      return `https://picsum.photos/400/200?random=${imagenNombre}`;
-    }
-    return "https://picsum.photos/400/200?random=default";
+ 
+  const obtenerImagen = (id) => {
+    const fotos = {
+      1: "https://ik.imagekit.io/rooxjlwlq/interior-del-sitio-de-alojamiento-comodo.jpg?updatedAt=1758663799036",
+      2: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c", 
+      3: "https://images.unsplash.com/photo-1600585154206-8d4a2a46f87f", 
+      4: "https://images.unsplash.com/photo-1628744448884-6eac6a13a64f", 
+      5: "https://images.unsplash.com/photo-1582719478189-4c9c63a3f9a3", 
+      6: "https://images.unsplash.com/photo-1627333850897-9d2e57a2d3f3",
+    };
+
+    return fotos[id] || "https://images.unsplash.com/photo-1505691938895-1758d7feb511";
   };
 
-  // Función para procesar los amenities (convertir string a array)
   const procesarAmenities = (amenitiesString) => {
     if (!amenitiesString) return [];
-    return amenitiesString.split(',').map(amenity => amenity.trim());
+    return amenitiesString.split(",").map((amenity) => amenity.trim());
   };
 
-  // Mostrar spinner mientras carga
   if (loading) {
     return (
       <div className="container mt-4 text-center">
@@ -57,7 +58,6 @@ const Rooms = () => {
     );
   }
 
-  // Mostrar error si hay algún problema
   if (error) {
     return (
       <div className="container mt-4">
@@ -74,7 +74,6 @@ const Rooms = () => {
     );
   }
 
-  // Mostrar mensaje si no hay habitaciones
   if (habitaciones.length === 0) {
     return (
       <div className="container mt-4">
@@ -94,18 +93,33 @@ const Rooms = () => {
         {habitaciones.map((hab) => (
           <Col key={hab.Id} md={6} className="mb-4">
             <Card>
-              <Card.Img variant="top" src={obtenerImagen(hab.Imagen)} />
+              {}
+              <Card.Img variant="top" src={obtenerImagen(hab.Id)} />
               <Card.Body>
                 <Card.Title>{hab.Nombre}</Card.Title>
                 <Card.Text>{hab.Texto}</Card.Text>
                 <ul>
-                  <li><strong>ID:</strong> {hab.Id}</li>
-                  <li><strong>Número:</strong> {hab.RoomNo}</li>
-                  <li><strong>Capacidad:</strong> {hab.Capacidad}</li>
-                  <li><strong>Tipo:</strong> {hab.Tipo}</li>
-                  <li><strong>Personas:</strong> {hab.Personas}</li>
-                  <li><strong>Área:</strong> {hab.Area}</li>
-                  <li><strong>Disponible:</strong> {hab.Disponible ? "Sí" : "No"}</li>
+                  <li>
+                    <strong>ID:</strong> {hab.Id}
+                  </li>
+                  <li>
+                    <strong>Número:</strong> {hab.RoomNo}
+                  </li>
+                  <li>
+                    <strong>Capacidad:</strong> {hab.Capacidad}
+                  </li>
+                  <li>
+                    <strong>Tipo:</strong> {hab.Tipo}
+                  </li>
+                  <li>
+                    <strong>Personas:</strong> {hab.Personas}
+                  </li>
+                  <li>
+                    <strong>Área:</strong> {hab.Area}
+                  </li>
+                  <li>
+                    <strong>Disponible:</strong> {hab.Disponible ? "Sí" : "No"}
+                  </li>
                 </ul>
                 <h6>Tarifas:</h6>
                 <Table striped bordered hover size="sm">
@@ -134,8 +148,8 @@ const Rooms = () => {
                     <li key={idx}>{amenity}</li>
                   ))}
                 </ul>
-                <Button 
-                  variant={hab.Disponible ? "primary" : "secondary"} 
+                <Button
+                  variant={hab.Disponible ? "primary" : "secondary"}
                   disabled={!hab.Disponible}
                 >
                   {hab.Disponible ? "Reservar" : "No Disponible"}

@@ -33,7 +33,7 @@ export default function BookingBar({ onSearch }) {
       <Container>
         <Form onSubmit={submit}>
           <Row className="g-2 align-items-center flex-nowrap overflow-auto">
-            {/* INGRESO */}
+            {}
             <Col xs="auto" className="booking-col">
               <InputGroup>
                 <InputGroup.Text>
@@ -48,7 +48,7 @@ export default function BookingBar({ onSearch }) {
               </InputGroup>
             </Col>
 
-            {/* EGRESO */}
+            {}
             <Col xs="auto" className="booking-col">
               <InputGroup>
                 <InputGroup.Text>
@@ -63,7 +63,7 @@ export default function BookingBar({ onSearch }) {
               </InputGroup>
             </Col>
 
-            {/* HABITACIONES */}
+            {}
             <Col xs="auto" className="booking-col w-auto">
               <InputGroup>
                 <InputGroup.Text>
@@ -78,7 +78,7 @@ export default function BookingBar({ onSearch }) {
               </InputGroup>
             </Col>
 
-            {/* PERSONAS */}
+            {}
             <Col xs="auto" className="booking-col w-auto">
               <InputGroup>
                 <InputGroup.Text>
@@ -93,7 +93,7 @@ export default function BookingBar({ onSearch }) {
               </InputGroup>
             </Col>
 
-            {/* BOTÓN */}
+            {}
             <Col xs="auto">
               <Button type="submit" className="search-btn">
                 BUSCAR

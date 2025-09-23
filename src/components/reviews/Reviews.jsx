@@ -19,7 +19,7 @@ const reviews = [
   },
 ];
 
-// Reviews
+
 function Reviews() {
   return (
     <Container className="my-5">

@@ -11,7 +11,7 @@ const WhatsAppButton = () => {
       href={whatsappLink}
       target="_blank"
       rel="noopener noreferrer"
-      className="whatsapp-float"  // usa tu CSS
+      className="whatsapp-float"  
     >
       <FaWhatsapp size={32} color="white" />
     </a>
