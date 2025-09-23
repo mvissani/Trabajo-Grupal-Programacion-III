@@ -1,112 +1,111 @@
-import React from "react";
-import { Card, Button, Row, Col, Table } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { Card, Button, Row, Col, Table, Spinner, Alert } from "react-bootstrap";
+import { getRooms } from "./Rooms.services";
 
 const Rooms = () => {
-  // Datos principales de habitaciones
-  const habitaciones = [
-    {
-      id: 1,
-      nombre: "Habitación Deluxe Single",
-      personas: 1,
-      capacidad: "Single",
-      tipo: "Deluxe",
-      texto: "Ideal para viajeros solos, equipada con todas las comodidades.",
-      area: "25 m²",
-    },
-    {
-      id: 2,
-      nombre: "Habitación Suite Twin",
-      personas: 2,
-      capacidad: "Twin",
-      tipo: "Suite",
-      texto: "Perfecta para dos personas, con dos camas y espacio cómodo.",
-      area: "35 m²",
-    },
-    {
-      id: 3,
-      nombre: "Habitación Deluxe Triple",
-      personas: 3,
-      capacidad: "Triple",
-      tipo: "Deluxe",
-      texto: "Con capacidad para tres, ideal para familias o amigos.",
-      area: "40 m²",
-    },
-    {
-      id: 4,
-      nombre: "Habitación Suite Single",
-      personas: 1,
-      capacidad: "Single",
-      tipo: "Suite",
-      texto: "Una suite individual de lujo, para máxima comodidad.",
-      area: "28 m²",
-    },
-    {
-      id: 5,
-      nombre: "Habitación Deluxe Twin",
-      personas: 2,
-      capacidad: "Twin",
-      tipo: "Deluxe",
-      texto: "Habitación elegante para dos personas, con estilo moderno.",
-      area: "32 m²",
-    },
-    {
-      id: 6,
-      nombre: "Habitación Suite Triple",
-      personas: 3,
-      capacidad: "Triple",
-      tipo: "Suite",
-      texto: "Amplia suite para grupos de tres, con todas las comodidades.",
-      area: "45 m²",
-    },
-  ];
+  // Estados para manejar los datos de la API
+  const [habitaciones, setHabitaciones] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Imágenes asociadas
-  const imagenes = {
-    1: "https://picsum.photos/400/200?random=1",
-    2: "https://picsum.photos/400/200?random=2",
-    3: "https://picsum.photos/400/200?random=3",
-    4: "https://picsum.photos/400/200?random=4",
-    5: "https://picsum.photos/400/200?random=5",
-    6: "https://picsum.photos/400/200?random=6",
+  // Función para cargar las habitaciones desde la API
+  const cargarHabitaciones = () => { //agregado
+    setLoading(true);
+    setError(null);
+    
+    getRooms(
+      (data) => {
+        setHabitaciones(data);
+        setLoading(false);
+      },
+      (errorMessage) => {
+        setError(errorMessage);
+        setLoading(false);
+      }
+    );
   };
 
-  // Tarifas
-  const tarifas = {
-    1: { SA: 50, AD: 65, MP: 90, PC: 120, AI: 150 },
-    2: { SA: 80, AD: 100, MP: 130, PC: 160, AI: 200 },
-    3: { SA: 120, AD: 150, MP: 180, PC: 220, AI: 260 },
-    4: { SA: 70, AD: 90, MP: 120, PC: 150, AI: 180 },
-    5: { SA: 90, AD: 110, MP: 140, PC: 180, AI: 220 },
-    6: { SA: 140, AD: 170, MP: 210, PC: 250, AI: 300 },
+  // Cargar habitaciones al montar el componente
+  useEffect(() => {
+    cargarHabitaciones();
+  }, []);
+
+  // Función para obtener la URL de la imagen
+  const obtenerImagen = (imagenNombre) => { //agregado
+    if (imagenNombre) {
+      return `https://picsum.photos/400/200?random=${imagenNombre}`;
+    }
+    return "https://picsum.photos/400/200?random=default";
   };
 
-  // Amenities
-  const amenitys = {
-    1: ["WiFi gratuito", "Desayuno incluido", "Aire acondicionado", "Televisión", "Baño privado", "Caja fuerte", "Minibar", "Servicio de limpieza"],
-    2: ["WiFi gratuito", "Aire acondicionado", "Televisión", "Baño privado", "Caja fuerte", "Minibar", "Servicio de limpieza"],
-    3: ["WiFi gratuito", "Desayuno incluido", "Aire acondicionado", "Televisión", "Baño privado", "Caja fuerte", "Servicio de limpieza"],
-    4: ["WiFi gratuito", "Aire acondicionado", "Televisión", "Baño privado", "Caja fuerte", "Minibar", "Servicio de limpieza"],
-    5: ["WiFi gratuito", "Desayuno incluido", "Aire acondicionado", "Televisión", "Baño privado", "Caja fuerte"],
-    6: ["WiFi gratuito", "Desayuno incluido", "Aire acondicionado", "Televisión", "Baño privado", "Caja fuerte", "Minibar"],
+  // Función para procesar los amenities (convertir string a array)
+  const procesarAmenities = (amenitiesString) => {
+    if (!amenitiesString) return [];
+    return amenitiesString.split(',').map(amenity => amenity.trim());
   };
+
+  // Mostrar spinner mientras carga
+  if (loading) {
+    return (
+      <div className="container mt-4 text-center">
+        <h2 className="mb-4 text-center">Habitaciones Disponibles</h2>
+        <Spinner animation="border" role="status">
+          <span className="visually-hidden">Cargando habitaciones...</span>
+        </Spinner>
+        <p className="mt-2">Cargando habitaciones disponibles...</p>
+      </div>
+    );
+  }
+
+  // Mostrar error si hay algún problema
+  if (error) {
+    return (
+      <div className="container mt-4">
+        <h2 className="mb-4 text-center">Habitaciones Disponibles</h2>
+        <Alert variant="danger">
+          <Alert.Heading>Error al cargar las habitaciones</Alert.Heading>
+          <p>{error instanceof Error ? error.message : String(error)}</p>
+          <hr />
+          <Button variant="outline-danger" onClick={cargarHabitaciones}>
+            Intentar de nuevo
+          </Button>
+        </Alert>
+      </div>
+    );
+  }
+
+  // Mostrar mensaje si no hay habitaciones
+  if (habitaciones.length === 0) {
+    return (
+      <div className="container mt-4">
+        <h2 className="mb-4 text-center">Habitaciones Disponibles</h2>
+        <Alert variant="info">
+          <Alert.Heading>No hay habitaciones disponibles</Alert.Heading>
+          <p>No se encontraron habitaciones en este momento.</p>
+        </Alert>
+      </div>
+    );
+  }
 
   return (
     <div className="container mt-4">
       <h2 className="mb-4 text-center">Habitaciones Disponibles</h2>
       <Row>
         {habitaciones.map((hab) => (
-          <Col key={hab.id} md={6} className="mb-4">
+          <Col key={hab.Id} md={6} className="mb-4">
             <Card>
-              <Card.Img variant="top" src={imagenes[hab.id]} />
+              <Card.Img variant="top" src={obtenerImagen(hab.Imagen)} />
               <Card.Body>
-                <Card.Title>{hab.nombre}</Card.Title>
-                <Card.Text>{hab.texto}</Card.Text>
+                <Card.Title>{hab.Nombre}</Card.Title>
+                <Card.Text>{hab.Texto}</Card.Text>
                 <ul>
-                  <li><strong>ID:</strong> {hab.id}</li>
-                  <li><strong>Capacidad:</strong> {hab.capacidad}</li>
-                  <li><strong>Tipo:</strong> {hab.tipo}</li>
-                  <li><strong>Personas:</strong> {hab.personas}</li>
-                  <li><strong>Área:</strong> {hab.area}</li>
+                  <li><strong>ID:</strong> {hab.Id}</li>
+                  <li><strong>Número:</strong> {hab.RoomNo}</li>
+                  <li><strong>Capacidad:</strong> {hab.Capacidad}</li>
+                  <li><strong>Tipo:</strong> {hab.Tipo}</li>
+                  <li><strong>Personas:</strong> {hab.Personas}</li>
+                  <li><strong>Área:</strong> {hab.Area}</li>
+                  <li><strong>Disponible:</strong> {hab.Disponible ? "Sí" : "No"}</li>
                 </ul>
                 <h6>Tarifas:</h6>
                 <Table striped bordered hover size="sm">
@@ -121,21 +120,26 @@ const Rooms = () => {
                   </thead>
                   <tbody>
                     <tr>
-                      <td>${tarifas[hab.id].SA}</td>
-                      <td>${tarifas[hab.id].AD}</td>
-                      <td>${tarifas[hab.id].MP}</td>
-                      <td>${tarifas[hab.id].PC}</td>
-                      <td>${tarifas[hab.id].AI}</td>
+                      <td>${hab.TarifaSA}</td>
+                      <td>${hab.TarifaAD}</td>
+                      <td>${hab.TarifaMP}</td>
+                      <td>${hab.TarifaPC}</td>
+                      <td>${hab.TarifaAI}</td>
                     </tr>
                   </tbody>
                 </Table>
                 <h6>Amenities:</h6>
                 <ul>
-                  {amenitys[hab.id].map((am, idx) => (
-                    <li key={idx}>{am}</li>
+                  {procesarAmenities(hab.Amenities).map((amenity, idx) => (
+                    <li key={idx}>{amenity}</li>
                   ))}
                 </ul>
-                <Button variant="primary">Reservar</Button>
+                <Button 
+                  variant={hab.Disponible ? "primary" : "secondary"} 
+                  disabled={!hab.Disponible}
+                >
+                  {hab.Disponible ? "Reservar" : "No Disponible"}
+                </Button>
               </Card.Body>
             </Card>
           </Col>
