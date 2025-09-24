@@ -9,97 +9,80 @@ import {
 	Row,
 } from "react-bootstrap";
 import InputGroupText from "react-bootstrap/esm/InputGroupText";
+import { useNavigate } from "react-router";
 
 function Register() {
-	const [name, setName] = useState("");
-	const [surname, setSurname] = useState("");
-	const [cellNumber, setCellNumbre] = useState("");
-	const [Dni, setDni] = useState("");
-	const [email, setEmail] = useState("");
-	const [errors, setError] = useState({
-		names: false,
-		surname: false,
-		cellNumber: false,
-		Dni: false,
-		email: false,
-		errorType: "",
+	const navigate = useNavigate();
+	const [formData, setFormData] = useState({
+		name: "",
+		surname: "",
+		cellNumber: "",
+		dni: "",
+		email: "",
+		password: "",
 	});
-	const handleSubmit = (event) => {
-		event.preventDefault();
-	};
+	const [errors, setErrors] = useState({
+		name: "",
+		surname: "",
+		cellNumber: "",
+		dni: "",
+		email: "",
+		password: "",
+	});
 
-	const handleNameChange = (e) => {
-		setName(e.target.value);
-
-		if (basicErrors(e.target.value)) {
-			setError((prev) => ({
-				...prev,
-				names: true,
-				errorType: "Debe ingresar un nombre",
-			}));
+	const validateField = (field, value) => {
+		if (!value.trim()) {
+			return `El campo ${field} es obligatorio`;
 		}
+		return "";
 	};
 
-	const handleSurnameChange = (e) => {
-		setSurname(e.target.value);
+	const handleChange = (e) => {
+		const { name, value } = e.target;
 
-		if (basicErrors(e.target.value)) {
-			setError((prev) => ({
-				...prev,
-				surname: true,
-				errorType: "Debe ingresar un apellido",
-			}));
-		}
-	};
-
-	const handleCellChange = (e) => {
-		setCellNumbre(e.target.value);
-
-		if (basicErrors(e.target.value)) {
-			setError((prev) => ({
-				...prev,
-				cellNumber: true,
-				errorType: "Debe ingresar un numero celular",
-			}));
-		}
-	};
-
-	const handleDniChange = (e) => {
-		setDni(e.target.value);
-
-		if (basicErrors(e.target.value)) {
-			setError((prev) => ({
-				...prev,
-				Dni: true,
-				errorType: "Debe ingresar un DNI",
-			}));
-		}
-	};
-
-	const handleEmailChange = (e) => {
-		setEmail(e.target.value);
-
-		if (basicErrors(e.target.value)) {
-			setError((prev) => ({
-				...prev,
-				email: true,
-				errorType: "Debe ingresar un email",
-			}));
-		}
-	};
-
-	const basicErrors = (value) => {
-		setError((prev) => ({
+		setFormData((prev) => ({
 			...prev,
-			names: false,
-			surname: false,
-			cellNumber: false,
-			Dni: false,
-			email: false,
-			errorType: "",
+			[name]: value,
 		}));
-		return !value ? true : false;
+
+		setErrors((prev) => ({
+			...prev,
+			[name]: validateField(name, value),
+		}));
 	};
+
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+
+		const newErrors = Object.keys(formData).reduce((acc, key) => {
+			acc[key] = validateField(key, formData[key]);
+			return acc;
+		}, {});
+
+		setErrors(newErrors);
+
+		if (Object.values(newErrors).some((err) => err !== "")) return;
+
+		try {
+			const res = await fetch("http://localhost:3000/register", {
+				headers: { "Content-Type": "application/json" },
+				method: "POST",
+				body: JSON.stringify(formData),
+			});
+
+			const data = await res.json();
+
+			if (!res.ok) {
+				console.error(data.message);
+				return;
+			}
+
+			navigate("/login");
+		} catch (err) {
+			console.error("Error al registrar:", err);
+		}
+	};
+
 	return (
 		<>
 			<Container
@@ -123,12 +106,13 @@ function Register() {
 										<Form.Control
 											type="text"
 											placeholder="Nombre"
-											className={errors.names && "bg-warning"}
-											onChange={handleNameChange}
-											value={name}
+											className={errors.name && "bg-warning"}
+											onChange={handleChange}
+											name="name"
+											value={formData.name}
 										/>
-										{errors.names && (
-											<p className="mt-2 text-danger">{errors.errorType}</p>
+										{errors.name && (
+											<p className="mt-2 text-danger">{errors.name}</p>
 										)}
 									</Form.Group>
 								</Col>
@@ -137,13 +121,14 @@ function Register() {
 										<Form.Label>Ingrese su apellido</Form.Label>
 										<Form.Control
 											type="text"
+											name="surname"
 											placeholder="Apellido"
 											className={errors.surname && "bg-warning"}
-											onChange={handleSurnameChange}
-											value={surname}
+											onChange={handleChange}
+											value={formData.surname}
 										/>
 										{errors.surname && (
-											<p className="mt-2 text-danger">{errors.errorType}</p>
+											<p className="mt-2 text-danger">{errors.surname}</p>
 										)}
 									</Form.Group>
 								</Col>
@@ -154,15 +139,16 @@ function Register() {
 									<InputGroup>
 										<InputGroupText>+54</InputGroupText>
 										<Form.Control
-											type="email"
+											type="text"
+											name="cellNumber"
 											placeholder="Ingrese su numero"
 											className={errors.cellNumber && "bg-warning"}
-											onChange={handleCellChange}
-											value={cellNumber}
+											onChange={handleChange}
+											value={formData.cellNumber}
 										></Form.Control>
 										<br></br>
 										{errors.cellNumber && (
-											<p className="mt-2 text-danger">{errors.errorType}</p>
+											<p className="mt-2 text-danger">{errors.cellNumber}</p>
 										)}
 									</InputGroup>
 								</Form.Group>
@@ -172,13 +158,14 @@ function Register() {
 									<Form.Label>Ingrese su DNI</Form.Label>
 									<Form.Control
 										placeholder="DNI"
+										name="dni"
 										type="text"
-										onChange={handleDniChange}
-										value={Dni}
-										className={errors.Dni && "bg-warning"}
+										onChange={handleChange}
+										value={formData.dni}
+										className={errors.dni && "bg-warning"}
 									></Form.Control>
-									{errors.Dni && (
-										<p className="mt-2 text-danger">{errors.errorType}</p>
+									{errors.dni && (
+										<p className="mt-2 text-danger">{errors.dni}</p>
 									)}
 								</Form.Group>
 							</Row>
@@ -188,20 +175,38 @@ function Register() {
 									<Form.Control
 										type="email"
 										placeholder="Email"
-										onChange={handleEmailChange}
-										value={email}
+										name="email"
+										onChange={handleChange}
+										value={formData.email}
 										className={errors.email && "bg-warning"}
 									></Form.Control>
 									{errors.email && (
-										<p className="mt-2 text-danger">{errors.errorType}</p>
+										<p className="mt-2 text-danger">{errors.email}</p>
+									)}
+								</Form.Group>
+							</Row>
+							<Row>
+								<Form.Group>
+									<Form.Label>Ingrese su contraseña</Form.Label>
+									<Form.Control
+										type="password"
+										placeholder="contraseña"
+										name="password"
+										onChange={handleChange}
+										value={formData.password}
+										className={errors.password && "bg-warning"}
+									></Form.Control>
+									{errors.password && (
+										<p className="mt-2 text-danger">{errors.password}</p>
 									)}
 								</Form.Group>
 							</Row>
 							<Button
 								type="submit"
 								className=" text-light bg-dark fc-black d-block mx-auto mt-3"
+								onClick={handleSubmit}
 							>
-								Iniciar Sesión
+								Registrarme
 							</Button>
 						</form>
 					</Card.Body>
