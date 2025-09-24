@@ -1,8 +1,62 @@
+import { useState } from "react";
 import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
+import { Navigate, useNavigate } from "react-router";
 
 function Login() {
-	const handleSubmit = (event) => {
-		event.preventDefault();
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+	const [error, setError] = useState("");
+	const [formData, setFormData] = useState({
+		email: "",
+		password: "",
+	});
+	const navigate = useNavigate();
+
+	const navigateToRegister = () => {
+		navigate("/register");
+	};
+
+	const validateField = (field, value) => {
+		if (!value.trim()) {
+			return `El campo ${field} es obligatorio`;
+		}
+		return "";
+	};
+
+	const handleChange = (e) => {
+		const { name, value } = e.target;
+
+		setFormData((prev) => ({
+			...prev,
+			[name]: value,
+		}));
+
+		setError((prev) => ({
+			...prev,
+			[name]: validateField(name, value),
+		}));
+	};
+
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+		try {
+			const res = await fetch("http://localhost:3000/login", {
+				headers: { "Content-Type": "application/json" },
+				method: "POST",
+				body: JSON.stringify(formData),
+			});
+
+			const data = await res.json();
+
+			if (!res.ok) {
+				setError(data.message || "Error desconocido");
+				return;
+			}
+			navigate("/reservation");
+		} catch (err) {
+			setError("Error de conexión con el servidor");
+			console.error(err);
+		}
 	};
 	return (
 		<>
@@ -22,33 +76,54 @@ function Login() {
 								</Card.Title>
 
 								<Col>
-									<Form.Group controlId="userName">
+									<Form.Group controlId="userName" className="text-center">
 										<Form.Label className="text-center w-100">
 											Ingrese su nombre de usuario
 										</Form.Label>
 										<Form.Control
 											type="text"
-											placeholder="Nombre de usuario"
-											className="text-center w-100"
+											placeholder="Email"
+											className={error.email && "bg-warning"}
+											name="email"
+											onChange={handleChange}
 										/>
+										{error.email && (
+											<p className="mt-2 text-danger">{error.email}</p>
+										)}
 									</Form.Group>
 
-									<Form.Group>
+									<Form.Group className="text-center w-100">
 										<Form.Label className="text-center w-100">
 											Ingrese su contraseña
 										</Form.Label>
 										<Form.Control
-											type="text"
+											type="password"
 											placeholder="Contraseña"
-											className="text-center w-100"
+											className={error.password && "bg-warning"}
+											name="password"
+											onChange={handleChange}
 										/>
+										<p className="mt-2 text-danger">{error.password}</p>
 									</Form.Group>
-									<Button type="submit" className="d-block mx-auto mt-3">
+									<Button
+										type="submit"
+										className="d-block mx-auto mt-3"
+										onClick={handleSubmit}
+									>
 										Iniciar Sesión
 									</Button>
 								</Col>
 							</Row>
 						</form>
+						<h3 className="text-center">
+							No tienes cuenta?{" "}
+							<Button
+								className="d-block mx-auto mt-3"
+								onClick={navigateToRegister}
+							>
+								Registrate
+							</Button>
+						</h3>
 					</Card.Body>
 				</Card>
 			</Container>
