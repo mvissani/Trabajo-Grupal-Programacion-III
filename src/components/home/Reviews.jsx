@@ -1,22 +1,20 @@
-
 import { Container, Row, Col, Image, Card } from "react-bootstrap";
 const reviews = [
   {
     rating: 5,
     text: "La estadía en el Starlight Hotel fue increíble. Habitaciones modernas, limpias y con una vista espectacular. El personal siempre atento. Sin dudas volveré.",
-    author: "Carolina M."
+    author: "Carolina M.",
   },
   {
     rating: 5,
     text: "Muy buena ubicación, cerca de todo en el centro. El desayuno variado y abundante. Excelente atención.",
-    author: "Andrés L."
+    author: "Andrés L.",
   },
   {
     rating: 5,
     text: "Excelente servicio. El spa y la piscina son un lujo, ideales para relajarse después de recorrer la ciudad. Lo recomiendo al 100%.",
-    author: "Florencia T."
+    author: "Florencia T.",
   },
-  
 ];
 
 export default function Reviews() {
@@ -35,9 +33,7 @@ export default function Reviews() {
           <Col md={6} lg={4} key={index} className="mb-4">
             <Card className="shadow-sm h-100">
               <Card.Body>
-                <Card.Title>
-                  {"⭐".repeat(review.rating)}
-                </Card.Title>
+                <Card.Title>{"⭐".repeat(review.rating)}</Card.Title>
                 <Card.Text>"{review.text}"</Card.Text>
               </Card.Body>
               <Card.Footer className="text-muted text-end">
@@ -48,7 +44,5 @@ export default function Reviews() {
         ))}
       </Row>
     </Container>
-   
   );
-
 }

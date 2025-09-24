@@ -1,4 +1,4 @@
-// Imagenes del carrusel - Services
+
 .carousel-img {
   width: 100%;
   height: 500px;
@@ -7,7 +7,7 @@
   margin: 0 auto;
 }
 
-// Estilos basicos
+
 html, body, #root {
   height: 100%;
 }
@@ -22,7 +22,6 @@ main {
   flex: 1; 
 }
 
-// Footer
 .footer-icon {
   font-size: 1.5rem; 
   vertical-align: middle; 
@@ -34,7 +33,7 @@ main {
   width: 100%;
 }
 
-// Boton "Regresar" - Error404
+
 .custom-btn {
   margin-bottom: 9rem;
   padding: 0.5rem 1.5rem;
@@ -48,7 +47,7 @@ main {
   color: white;
 }
 
-// Efecto Hover sobre elementos del Header
+
 .navbar.bg-secondary .dropdown-menu .dropdown-item:hover {
   color: #66a1e0; 
   background-color: transparent;
@@ -65,7 +64,7 @@ main {
   display: none;
 }
 
-// Espacios de los elementos del header
+
 .navbar .nav-link.dropdown-toggle {
   margin-left: 1rem;  
   margin-right: 1rem; 
@@ -73,9 +72,6 @@ main {
   padding-bottom: 0.75rem;
 }
 
-// Carrusel en Reviews
-
-/* Título y subtítulo */
 .reviews-title {
   font-size: 2rem;
   margin-bottom: 0.5rem;
@@ -92,14 +88,13 @@ main {
   border-radius: 6px;
 }
 
-/* Flechas visibles en cualquier fondo */
+
 .carousel-control-prev-icon,
 .carousel-control-next-icon {
   filter: invert(1);
   background-size: 100% 100%;
 }
 
-/* Wrapper centrado horizontal y vertical */
 .review-card-wrapper {
   display: flex;
   justify-content: center;  
@@ -110,7 +105,6 @@ main {
   transition: transform 0.3s ease;
 }
 
-/* Card estilizada */
 .review-card-full {
   width: 100%;
   max-width: 600px;
@@ -124,13 +118,13 @@ main {
   padding: 20px;
 }
 
-/* Hover elegante con sombra sutil */
+
 .review-card-wrapper:hover .review-card-full {
   transform: scale(1.02);
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* Estilo del texto */
+
 .review-text {
   font-size: 1.1rem;
   line-height: 1.6;
@@ -138,13 +132,13 @@ main {
   margin-top: 0.5rem;
 }
 
-/* Estrellas */
+
 .review-stars {
   font-size: 1.2rem;
   color: #ffda6a;
 }
 
-/* Footer */
+
 .review-author {
   text-align: right;
   font-style: italic;

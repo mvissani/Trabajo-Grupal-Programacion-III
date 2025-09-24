@@ -15,7 +15,6 @@ import {
 
 export default function BookingBar({ onSearch }) {
   const [form, setForm] = useState({
-    destino: "",
     ingreso: "",
     egreso: "",
     rooms: 1,
@@ -34,23 +33,7 @@ export default function BookingBar({ onSearch }) {
       <Container>
         <Form onSubmit={submit}>
           <Row className="g-2 align-items-center flex-nowrap overflow-auto">
-            {/* DESTINO */}
-            <Col xs="auto" className="booking-col">
-              <InputGroup>
-                <InputGroup.Text>
-                  <BsGeoAlt />
-                </InputGroup.Text>
-                <Form.Select value={form.destino} onChange={handle("destino")}>
-                  <option value="">DESTINO…</option>
-                  <option>Rosario</option>
-                  <option>Buenos Aires</option>
-                  <option>Córdoba</option>
-                  <option>Mendoza</option>
-                </Form.Select>
-              </InputGroup>
-            </Col>
-
-            {/* INGRESO */}
+            {}
             <Col xs="auto" className="booking-col">
               <InputGroup>
                 <InputGroup.Text>
@@ -65,7 +48,7 @@ export default function BookingBar({ onSearch }) {
               </InputGroup>
             </Col>
 
-            {/* EGRESO */}
+            {}
             <Col xs="auto" className="booking-col">
               <InputGroup>
                 <InputGroup.Text>
@@ -80,7 +63,7 @@ export default function BookingBar({ onSearch }) {
               </InputGroup>
             </Col>
 
-            {/* HABITACIONES */}
+            {}
             <Col xs="auto" className="booking-col w-auto">
               <InputGroup>
                 <InputGroup.Text>
@@ -95,7 +78,7 @@ export default function BookingBar({ onSearch }) {
               </InputGroup>
             </Col>
 
-            {/* PERSONAS */}
+            {}
             <Col xs="auto" className="booking-col w-auto">
               <InputGroup>
                 <InputGroup.Text>
@@ -110,7 +93,7 @@ export default function BookingBar({ onSearch }) {
               </InputGroup>
             </Col>
 
-            {/* BOTÓN */}
+            {}
             <Col xs="auto">
               <Button type="submit" className="search-btn">
                 BUSCAR
