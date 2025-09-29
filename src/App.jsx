@@ -1,4 +1,3 @@
-// import { useState } from 'react'
 import "./App.scss";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 
@@ -16,27 +15,27 @@ import Rooms from "./components/rooms/Rooms";
 import Footer from "./components/footer/Footer";
 
 function App() {
-	return (
-		<div>
-			<Header />
-			<BrowserRouter>
-				<Routes>
-					<Route path="/" element={<Navigate to="/home" />} />
-					<Route path="/home" element={<Home />} />
-					<Route path="/aboutUs" element={<AboutUs />} />
-					<Route path="/login" element={<Login />} />
-					<Route path="/register" element={<Register />} />
-					<Route path="/reservation" element={<Reservation />} />
-					<Route path="/sales" element={<Sales />} />
-					<Route path="/services" element={<Services />} />
-					<Route path="/reviews" element={<Reviews />} />
-					<Route path="/rooms" element={<Rooms />} />
-					<Route path="*" element={<ErrorNotFound />} />
-				</Routes>
-			</BrowserRouter>
-			<Footer />
-		</div>
-	);
+  return (
+    <div>
+      <Header />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Navigate to="/home" />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/aboutUs" element={<AboutUs />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/reservation" element={<Reservation />} />
+          <Route path="/sales" element={<Sales />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/reviews" element={<Reviews />} />
+          <Route path="/rooms" element={<Rooms />} />
+          <Route path="*" element={<ErrorNotFound />} />
+        </Routes>
+      </BrowserRouter>
+      <Footer />
+    </div>
+  );
 }
 
 export default App;

@@ -1,8 +1,8 @@
-// Imports
+
 import '../../App.scss';
 import { Button } from 'react-bootstrap';
 
-// ErrorNotFound
+
 const ErrorNotFound = () => {
     return (
         <div

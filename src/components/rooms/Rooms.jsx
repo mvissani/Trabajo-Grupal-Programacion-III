@@ -27,18 +27,20 @@ const Rooms = () => {
     cargarHabitaciones();
   }, []);
 
- 
   const obtenerImagen = (id) => {
     const fotos = {
       1: "https://ik.imagekit.io/rooxjlwlq/interior-del-sitio-de-alojamiento-comodo.jpg?updatedAt=1758663799036",
-      2: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c", 
-      3: "https://images.unsplash.com/photo-1600585154206-8d4a2a46f87f", 
-      4: "https://images.unsplash.com/photo-1628744448884-6eac6a13a64f", 
-      5: "https://images.unsplash.com/photo-1582719478189-4c9c63a3f9a3", 
+      2: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c",
+      3: "https://images.unsplash.com/photo-1600585154206-8d4a2a46f87f",
+      4: "https://images.unsplash.com/photo-1628744448884-6eac6a13a64f",
+      5: "https://images.unsplash.com/photo-1582719478189-4c9c63a3f9a3",
       6: "https://images.unsplash.com/photo-1627333850897-9d2e57a2d3f3",
     };
 
-    return fotos[id] || "https://images.unsplash.com/photo-1505691938895-1758d7feb511";
+    return (
+      fotos[id] ||
+      "https://images.unsplash.com/photo-1505691938895-1758d7feb511"
+    );
   };
 
   const procesarAmenities = (amenitiesString) => {

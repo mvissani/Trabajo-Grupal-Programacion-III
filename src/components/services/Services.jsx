@@ -1,7 +1,7 @@
-// Imports
+
 import Carousel from "react-bootstrap/Carousel";
 
-// Services
+
 function Services() {
   return (
     <Carousel>

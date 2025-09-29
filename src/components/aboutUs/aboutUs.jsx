@@ -1,7 +1,7 @@
-// Imports
+
 import { Container, Row, Col } from "react-bootstrap";
 
-// About Us
+
 function AboutUs() {
   return (
     <Container fluid className="min-vh-100 d-flex align-items-center py-5 bg-light">
