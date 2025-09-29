@@ -13,6 +13,8 @@ import AboutUs from "./components/aboutUs/aboutUs";
 import Reviews from "./components/reviews/Reviews";
 import Rooms from "./components/rooms/Rooms";
 import Footer from "./components/footer/Footer";
+import Admin from "./components/admin/Admin";   
+
 
 function App() {
   return (
@@ -31,6 +33,7 @@ function App() {
           <Route path="/reviews" element={<Reviews />} />
           <Route path="/rooms" element={<Rooms />} />
           <Route path="*" element={<ErrorNotFound />} />
+          <Route path="/admin" element={<Admin />} />
         </Routes>
       </BrowserRouter>
       <Footer />

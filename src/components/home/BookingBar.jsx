@@ -6,11 +6,9 @@ import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import Button from "react-bootstrap/Button";
 import {
-  BsGeoAlt,
   BsCalendarEvent,
   BsHouseDoor,
   BsPerson,
-  BsTag,
 } from "react-icons/bs";
 
 export default function BookingBar({ onSearch }) {
@@ -33,67 +31,77 @@ export default function BookingBar({ onSearch }) {
       <Container>
         <Form onSubmit={submit}>
           <Row className="g-2 align-items-center flex-nowrap overflow-auto">
-            {}
+            
             <Col xs="auto" className="booking-col">
-              <InputGroup>
-                <InputGroup.Text>
-                  <BsCalendarEvent />
-                </InputGroup.Text>
-                <Form.Control
-                  type="date"
-                  value={form.ingreso}
-                  onChange={handle("ingreso")}
-                  placeholder="INGRESO"
-                />
-              </InputGroup>
+              <Form.Group controlId="formIngreso">
+                <Form.Label>INGRESO</Form.Label>
+                <InputGroup>
+                  <InputGroup.Text>
+                    <BsCalendarEvent />
+                  </InputGroup.Text>
+                  <Form.Control
+                    type="date"
+                    value={form.ingreso}
+                    onChange={handle("ingreso")}
+                  />
+                </InputGroup>
+              </Form.Group>
             </Col>
 
-            {}
+            
             <Col xs="auto" className="booking-col">
-              <InputGroup>
-                <InputGroup.Text>
-                  <BsCalendarEvent />
-                </InputGroup.Text>
-                <Form.Control
-                  type="date"
-                  value={form.egreso}
-                  onChange={handle("egreso")}
-                  placeholder="EGRESO"
-                />
-              </InputGroup>
+              <Form.Group controlId="formEgreso">
+                <Form.Label>EGRESO</Form.Label>
+                <InputGroup>
+                  <InputGroup.Text>
+                    <BsCalendarEvent />
+                  </InputGroup.Text>
+                  <Form.Control
+                    type="date"
+                    value={form.egreso}
+                    onChange={handle("egreso")}
+                  />
+                </InputGroup>
+              </Form.Group>
             </Col>
 
-            {}
+            
             <Col xs="auto" className="booking-col w-auto">
-              <InputGroup>
-                <InputGroup.Text>
-                  <BsHouseDoor />
-                </InputGroup.Text>
-                <Form.Control
-                  type="number"
-                  min={1}
-                  value={form.rooms}
-                  onChange={handle("rooms")}
-                />
-              </InputGroup>
+              <Form.Group controlId="formRooms">
+                <Form.Label>HABITACIONES</Form.Label>
+                <InputGroup>
+                  <InputGroup.Text>
+                    <BsHouseDoor />
+                  </InputGroup.Text>
+                  <Form.Control
+                    type="number"
+                    min={1}
+                    value={form.rooms}
+                    onChange={handle("rooms")}
+                  />
+                </InputGroup>
+              </Form.Group>
             </Col>
 
-            {}
+            
             <Col xs="auto" className="booking-col w-auto">
-              <InputGroup>
-                <InputGroup.Text>
-                  <BsPerson />
-                </InputGroup.Text>
-                <Form.Control
-                  type="number"
-                  min={0}
-                  value={form.guests}
-                  onChange={handle("guests")}
-                />
-              </InputGroup>
+              <Form.Group controlId="formGuests">
+                <Form.Label>HUÉSPEDES</Form.Label>
+                <InputGroup>
+                  <InputGroup.Text>
+                    <BsPerson />
+                  </InputGroup.Text>
+                  <Form.Control
+                    type="number"
+                    min={0}
+                    value={form.guests}
+                    onChange={handle("guests")}
+                  />
+                </InputGroup>
+              </Form.Group>
             </Col>
 
-            {}
+            
             <Col xs="auto">
               <Button type="submit" className="search-btn">
                 BUSCAR
