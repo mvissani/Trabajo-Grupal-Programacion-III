@@ -1,4 +1,3 @@
-
 import { Container, Row, Col, Card, Carousel } from "react-bootstrap";
 
 const reviews = [

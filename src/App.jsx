@@ -13,8 +13,7 @@ import AboutUs from "./components/aboutUs/aboutUs";
 import Reviews from "./components/reviews/Reviews";
 import Rooms from "./components/rooms/Rooms";
 import Footer from "./components/footer/Footer";
-import Admin from "./components/admin/Admin";   
-
+import Admin from "./components/admin/Admin";
 
 function App() {
   return (

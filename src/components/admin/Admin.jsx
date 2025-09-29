@@ -1,16 +1,16 @@
 import { useState, useEffect } from "react";
-import { 
-  Container, 
-  Row, 
-  Col, 
-  Card, 
-  Form, 
-  Button, 
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  Form,
+  Button,
   Alert,
   Tab,
   Tabs,
   Table,
-  Badge
+  Badge,
 } from "react-bootstrap";
 
 import { getRooms } from "../rooms/Rooms.services";
@@ -31,63 +31,79 @@ function Admin() {
     TarifaPC: "",
     TarifaAI: "",
     Amenities: "",
-    Disponible: true
+    Disponible: true,
   });
 
   const [errors, setErrors] = useState({});
-  const [notification, setNotification] = useState({ show: false, message: "", type: "" });
+  const [notification, setNotification] = useState({
+    show: false,
+    message: "",
+    type: "",
+  });
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const validateField = (field, value) => {
-    // Campos obligatorios
-    const requiredFields = ["RoomNo", "Nombre", "Personas", "Capacidad", "Tipo"];
-    
+    const requiredFields = [
+      "RoomNo",
+      "Nombre",
+      "Personas",
+      "Capacidad",
+      "Tipo",
+    ];
+
     if (requiredFields.includes(field) && !value.toString().trim()) {
       return `El campo ${field} es obligatorio`;
     }
-    
-    // Validaciones numéricas
+
     if (field === "Personas" && (isNaN(value) || parseInt(value) <= 0)) {
       return `La cantidad de personas debe ser un número mayor a 0`;
     }
-    
+
     if (field === "RoomNo" && (isNaN(value) || parseInt(value) <= 0)) {
       return `El número de habitación debe ser un número mayor a 0`;
     }
-    
+
     if (field === "Area" && value && (isNaN(value) || parseFloat(value) <= 0)) {
       return `El área debe ser un número mayor a 0`;
     }
-    
-    // Validaciones de tarifas
-    const tarifaFields = ["TarifaSA", "TarifaAD", "TarifaMP", "TarifaPC", "TarifaAI"];
-    if (tarifaFields.includes(field) && value && (isNaN(value) || parseFloat(value) < 0)) {
+
+    const tarifaFields = [
+      "TarifaSA",
+      "TarifaAD",
+      "TarifaMP",
+      "TarifaPC",
+      "TarifaAI",
+    ];
+    if (
+      tarifaFields.includes(field) &&
+      value &&
+      (isNaN(value) || parseFloat(value) < 0)
+    ) {
       return "La tarifa debe ser un número mayor o igual a 0";
     }
-    
+
     return "";
   };
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    
-    // Manejar diferentes tipos de input
+
     let processedValue = value;
     if (type === "checkbox") {
       processedValue = checked;
     } else if (type === "number") {
       processedValue = value === "" ? "" : parseFloat(value);
     }
-    
-    setFormData(prev => ({
+
+    setFormData((prev) => ({
       ...prev,
-      [name]: processedValue
+      [name]: processedValue,
     }));
 
-    setErrors(prev => ({
+    setErrors((prev) => ({
       ...prev,
-      [name]: validateField(name, processedValue)
+      [name]: validateField(name, processedValue),
     }));
   };
 
@@ -100,7 +116,7 @@ function Admin() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     const newErrors = Object.keys(formData).reduce((acc, key) => {
       acc[key] = validateField(key, formData[key]);
       return acc;
@@ -108,13 +124,16 @@ function Admin() {
 
     setErrors(newErrors);
 
-    if (Object.values(newErrors).some(err => err !== "")) {
-      showNotification("Por favor corrige los errores en el formulario", "danger");
+    if (Object.values(newErrors).some((err) => err !== "")) {
+      showNotification(
+        "Por favor corrige los errores en el formulario",
+        "danger"
+      );
       return;
     }
 
     setLoading(true);
-    
+
     createRoom(
       formData,
       (data) => {
@@ -135,10 +154,10 @@ function Admin() {
           TarifaPC: "",
           TarifaAI: "",
           Amenities: "",
-          Disponible: true
+          Disponible: true,
         });
         setErrors({});
-        loadRooms(); // Recargar la lista de habitaciones
+        loadRooms();
       },
       (error) => {
         setLoading(false);
@@ -158,7 +177,6 @@ function Admin() {
     );
   };
 
-  // Cargar habitaciones al montar el componente
   useEffect(() => {
     loadRooms();
   }, []);
@@ -168,12 +186,14 @@ function Admin() {
       <Row>
         <Col>
           <h1 className="text-center mb-4">Panel Administrativo</h1>
-          
+
           {notification.show && (
-            <Alert 
-              variant={notification.type} 
-              dismissible 
-              onClose={() => setNotification({ show: false, message: "", type: "" })}
+            <Alert
+              variant={notification.type}
+              dismissible
+              onClose={() =>
+                setNotification({ show: false, message: "", type: "" })
+              }
               className="mb-4"
             >
               {notification.message}
@@ -182,10 +202,10 @@ function Admin() {
 
           <Tabs defaultActiveKey="add-room" className="mb-4">
             <Tab eventKey="add-room" title="Agregar Habitación">
-                <div className="mb-3">
-                <Button 
-                  variant="outline-info" 
-                  size="sm" 
+              <div className="mb-3">
+                <Button
+                  variant="outline-info"
+                  size="sm"
                   onClick={testBackendConnection}
                   className="me-2"
                 >
@@ -306,7 +326,6 @@ function Admin() {
                       </Col>
                     </Row>
 
-                    {/* Información Adicional */}
                     <Row>
                       <Col md={6}>
                         <Form.Group className="mb-3">
@@ -346,7 +365,6 @@ function Admin() {
                       />
                     </Form.Group>
 
-                    {/* Tarifas */}
                     <h5 className="mt-4 mb-3">Tarifas</h5>
                     <Row>
                       <Col md={6}>
@@ -459,9 +477,9 @@ function Admin() {
                       />
                     </Form.Group>
 
-                    <Button 
-                      type="submit" 
-                      variant="primary" 
+                    <Button
+                      type="submit"
+                      variant="primary"
                       disabled={loading}
                       className="w-100"
                     >
@@ -501,11 +519,15 @@ function Admin() {
                               <Badge bg="info">{room.Capacidad}</Badge>
                             </td>
                             <td>
-                              <Badge bg={room.Tipo === 'Suite' ? 'warning' : 'success'}>
+                              <Badge
+                                bg={
+                                  room.Tipo === "Suite" ? "warning" : "success"
+                                }
+                              >
                                 {room.Tipo}
                               </Badge>
                             </td>
-                            <td>{room.Area || 'N/A'}</td>
+                            <td>{room.Area || "N/A"}</td>
                             <td>
                               <Badge bg="success">Activa</Badge>
                             </td>
