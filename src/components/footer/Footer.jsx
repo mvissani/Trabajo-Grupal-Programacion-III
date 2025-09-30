@@ -1,28 +1,65 @@
 import React from "react";
+import { Container, Row, Col } from "react-bootstrap";
+import { BsTelephone, BsWhatsapp, BsGeoAlt, BsEnvelope } from "react-icons/bs";
+import hotelName from "../../images/hotel-name.png";
 import "../../App.scss";
 
 function Footer() {
   return (
-    <footer className="bg-secondary text-light py-3 footer-sticky">
-      <div className="container d-flex flex-column flex-md-row align-items-center justify-content-between">
-        {}
-        <div className="me-md-4 mb-2 mb-md-0 d-flex justify-content-center justify-content-md-start">
-          <i className="fa-brands fa-cc-visa me-2 footer-icon"></i>
-          <i className="fa-brands fa-cc-mastercard me-2 footer-icon"></i>
-          <i className="fa-brands fa-cc-amex me-2 footer-icon"></i>
-          <i className="fa-brands fa-cc-paypal footer-icon"></i>
-        </div>
-        {}
-        <div className="position-absolute start-50 translate-middle-x text-center">
-          © 2025 Starlight Hoteles. Todos los derechos reservados.
-        </div>
-        {}
-        <div>
-          <span className="d-inline-flex align-items-center justify-content-end">
-            <i className="fa-solid fa-envelope me-1"></i> starlighthoteles@gmail.com
-          </span>
-        </div>
-      </div>
+    <footer className="bg-secondary text-light py-5">
+      <Container>
+        <Row className="align-items-center text-center text-md-start">
+        
+          <Col md={4} className="mb-4 mb-md-0">
+            <h5 className="fw-bold">Starlight Hotel</h5>
+            <p className="mb-1"><BsTelephone /> +54 0800 111 0000</p>
+            <p className="mb-1"><BsWhatsapp /> +54 341 4223456</p>
+            <p className="mb-1"><BsGeoAlt /> Bv Oroño 1234</p>
+            <p className="mb-0"><BsEnvelope /> starlighthoteles@gmail.com</p>
+          </Col>
+
+       
+          <Col md={4} className="text-center mb-4 mb-md-0">
+            <img
+              src={hotelName}
+              alt="Hotel Logo"
+              style={{ maxWidth: "180px" }}
+              className="mb-2"
+            />
+            <p className="small">Hotels and Resorts</p>
+          </Col>
+
+         
+          <Col md={4} className="text-center text-md-end">
+            <h6 className="fw-bold mb-2">SUSCRIBITE A NUESTRO NEWSLETTER</h6>
+            <form className="d-flex justify-content-center justify-content-md-end">
+              <input
+                type="email"
+                placeholder="Ingresa tu Email"
+                className="form-control me-2"
+                style={{ maxWidth: "220px" }}
+              />
+              <button className="btn btn-outline-light">Suscribirse</button>
+            </form>
+          </Col>
+        </Row>
+
+        
+
+        <Row className="pt-4 mt-4 border-top">
+          <Col className="text-center small">
+            <div className="mb-2">
+              <i className="fa-brands fa-cc-visa me-2"></i>
+              <i className="fa-brands fa-cc-mastercard me-2"></i>
+              <i className="fa-brands fa-cc-amex me-2"></i>
+              <i className="fa-brands fa-cc-paypal"></i>
+            </div>
+            <p className="mb-0">
+              © 2025 Starlight Hotel. Todos los derechos reservados.
+            </p>
+          </Col>
+        </Row>
+      </Container>
     </footer>
   );
 }

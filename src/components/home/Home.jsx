@@ -20,25 +20,43 @@ function Home() {
           className="hero-img hero--halfUp"
         />
       </div>
+
+     
+      <Container className="text-center my-5">
+        <h2 className="fw-light fst-italic mb-3">Bienvenido a</h2>
+        <Image
+          src={hotelName}
+          alt="Logo Hotel"
+          fluid
+          style={{ maxWidth: "250px" }}
+          className="mb-3"
+        />
+        <h5 className="fw-semibold">Rosario - Santa Fe - Argentina</h5>
+        <p className="fw-light fst-italic fs-5 mt-3 text-dark">
+          Hotel Pullman Rosario se encuentra en el ingreso a la ciudad de Rosario. 
+          Cuenta con habitaciones modernas, el Casino más grande de Sudamérica y una 
+          variedad de instalaciones y servicios pensados para que tenga una estadía única.
+        </p>
+      </Container>
+
       <Container>
         <Row>
           <Col>
-            {}
             <div className="mb-4">
-              <p className="lead fs-5 fw-light text-dark mt-4 mb-4">
+              <p className="fw-light fst-italic fs-5 text-dark mt-4 mb-4">
                 En pleno corazón de Rosario, este hotel 5 estrellas combina
                 elegancia y modernidad para ofrecer una experiencia única. Su
                 diseño sofisticado y ambientes amplios brindan el máximo confort
                 tanto para viajes de negocios como para escapadas de placer.
               </p>
-              <p className="fs-5 fw-light text-dark mb-4">
+              <p className="fw-light fst-italic fs-5 text-dark mb-4">
                 A 2 km del Monumento a la Bandera y a pocas cuadras de la
                 peatonal Córdoba, la ubicación es ideal para quienes buscan
                 comodidad y cercanía a los principales atractivos turísticos y
                 comerciales de la ciudad. Cada detalle está pensado para
                 garantizar bienestar y exclusividad.
               </p>
-              <p className="fs-5 fw-light text-dark">
+              <p className="fw-light fst-italic fs-5 text-dark">
                 El hotel cuenta con habitaciones de lujo, spa, piscina
                 climatizada y servicio de primer nivel. Además, se encuentra muy
                 cerca de la vibrante avenida Pellegrini, reconocida por su
@@ -47,7 +65,7 @@ function Home() {
               </p>
             </div>
 
-            {}
+           
             <div className="row g-3 mt-4">
               {[
                 "https://ik.imagekit.io/rooxjlwlq/restaurant.jpeg?updatedAt=1756837680315",
@@ -84,6 +102,7 @@ function Home() {
             </div>
           </Col>
 
+          
           <Col md={4}>
             <Card className="hotel-card text-center shadow-lg border-0 rounded-4 p-3">
               <Card.Body>
@@ -94,7 +113,6 @@ function Home() {
                   style={{ maxWidth: "200px", margin: "20px auto 20px" }}
                 />
 
-                {}
                 <div className="d-flex justify-content-between align-items-center py-4 border-bottom fs-5">
                   <div>
                     <div className="fw-bold text-primary">Check in</div>
@@ -107,7 +125,6 @@ function Home() {
                   </div>
                 </div>
 
-                {}
                 <div className="py-4 fs-5">
                   <div className="text-uppercase text-muted small mb-1">
                     Dirección
@@ -136,11 +153,10 @@ function Home() {
           </Col>
         </Row>
       </Container>
+
       <Reviews />
       <Carrusel />
-
       <Map />
-
       <Patrocinadores />
       <WhatsAppButton />
     </div>
