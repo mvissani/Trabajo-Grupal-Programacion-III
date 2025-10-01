@@ -4,11 +4,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import {
-  BsCalendarEvent,
-  BsHouseDoor,
-  BsPerson,
-} from "react-icons/bs";
+import { BsCalendarEvent, BsHouseDoor, BsPerson } from "react-icons/bs";
 
 export default function BookingBar({ onSearch }) {
   const [form, setForm] = useState({
@@ -30,8 +26,6 @@ export default function BookingBar({ onSearch }) {
       <Container fluid>
         <Form onSubmit={submit}>
           <Row className="g-0 justify-content-center text-center">
-            
-            
             <Col xs="auto" className="booking-box px-2">
               <Form.Label className="d-block fw-semibold small text-light">
                 INGRESO
