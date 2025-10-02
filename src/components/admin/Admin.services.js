@@ -50,6 +50,9 @@ export const createRoom = (roomData, onSuccess, onError) => {
 };
 
 export const updateRoom = (roomId, roomData, onSuccess, onError) => {
+  console.log("Actualizando habitación ID:", roomId, "con datos:", roomData);
+  console.log("URL de destino:", `/api/rooms/${roomId}`);
+
   fetch(`/api/rooms/${roomId}`, {
     method: "PUT",
     headers: {
@@ -57,7 +60,25 @@ export const updateRoom = (roomId, roomData, onSuccess, onError) => {
     },
     body: JSON.stringify(roomData),
   })
-    .then((response) => response.json())
+    .then((response) => {
+      console.log(
+        "Respuesta del servidor (UPDATE):",
+        response.status,
+        response.statusText
+      );
+
+      if (!response.ok) {
+        return response.text().then((text) => {
+          console.log("Contenido de la respuesta de error (UPDATE):", text);
+          throw new Error(
+            `HTTP ${response.status}: ${
+              response.statusText
+            }. Contenido: ${text.substring(0, 200)}`
+          );
+        });
+      }
+      return response.json();
+    })
     .then((data) => {
       if (data.success) {
         console.log("Habitación actualizada exitosamente:", data.data);
@@ -78,7 +99,6 @@ export const updateRoom = (roomId, roomData, onSuccess, onError) => {
       }
     });
 };
-
 export const deleteRoom = (roomId, onSuccess, onError) => {
   fetch(`/api/rooms/${roomId}`, {
     method: "DELETE",
@@ -127,6 +147,7 @@ export const testBackendConnection = () => {
     Personas: 1,
     Capacidad: "Single",
     Tipo: "Deluxe",
+    Tarifa: 100,
     Disponible: true,
   };
 

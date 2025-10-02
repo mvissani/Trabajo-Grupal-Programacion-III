@@ -14,7 +14,7 @@ import {
 } from "react-bootstrap";
 
 import { getRooms } from "../rooms/Rooms.services";
-import { createRoom, testBackendConnection } from "./Admin.services";
+import { createRoom, updateRoom, deleteRoom } from "./Admin.services";
 function Admin() {
   const [formData, setFormData] = useState({
     RoomNo: "",
@@ -25,11 +25,7 @@ function Admin() {
     Texto: "",
     Area: "",
     Imagen: "",
-    TarifaSA: "",
-    TarifaAD: "",
-    TarifaMP: "",
-    TarifaPC: "",
-    TarifaAI: "",
+    Tarifa: "",
     Amenities: "",
     Disponible: true,
   });
@@ -42,6 +38,9 @@ function Admin() {
   });
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [editingRoom, setEditingRoom] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [activeTab, setActiveTab] = useState("add-room");
 
   const validateField = (field, value) => {
     const requiredFields = [
@@ -50,6 +49,7 @@ function Admin() {
       "Personas",
       "Capacidad",
       "Tipo",
+      "Tarifa",
     ];
 
     if (requiredFields.includes(field) && !value.toString().trim()) {
@@ -68,18 +68,7 @@ function Admin() {
       return `El área debe ser un número mayor a 0`;
     }
 
-    const tarifaFields = [
-      "TarifaSA",
-      "TarifaAD",
-      "TarifaMP",
-      "TarifaPC",
-      "TarifaAI",
-    ];
-    if (
-      tarifaFields.includes(field) &&
-      value &&
-      (isNaN(value) || parseFloat(value) < 0)
-    ) {
+    if (field === "Tarifa" && value && (isNaN(value) || parseFloat(value) < 0)) {
       return "La tarifa debe ser un número mayor o igual a 0";
     }
 
@@ -114,6 +103,72 @@ function Admin() {
     }, 5000);
   };
 
+  const resetForm = () => {
+    setFormData({
+      RoomNo: "",
+      Nombre: "",
+      Personas: "",
+      Capacidad: "Single",
+      Tipo: "Deluxe",
+      Texto: "",
+      Area: "",
+      Imagen: "",
+      Tarifa: "",
+      Amenities: "",
+      Disponible: true,
+    });
+    setErrors({});
+    setIsEditing(false);
+    setEditingRoom(null);
+  };
+
+  const handleEditRoom = (room) => {
+    setEditingRoom(room);
+    setIsEditing(true);
+    setFormData({
+      RoomNo: room.RoomNo,
+      Nombre: room.Nombre,
+      Personas: room.Personas,
+      Capacidad: room.Capacidad,
+      Tipo: room.Tipo,
+      Texto: room.Texto || "",
+      Area: room.Area || "",
+      Imagen: room.Imagen || "",
+      Tarifa: room.Tarifa,
+      Amenities: room.Amenities || "",
+      Disponible: room.Disponible,
+    });
+    setErrors({});
+    
+    // Cambiar automáticamente a la pestaña de agregar/editar
+    setActiveTab("add-room");
+  };
+
+  const handleCancelEdit = () => {
+    resetForm();
+  };
+
+  const handleDeleteRoom = (room) => {
+    const confirmMessage = `¿Estás seguro de que quieres eliminar la habitación "${room.Nombre}" (ID: ${room.Id})?\n\nEsta acción no se puede deshacer.`;
+    
+    if (window.confirm(confirmMessage)) {
+      setLoading(true);
+      
+      deleteRoom(
+        room.Id,
+        () => {
+          setLoading(false);
+          showNotification("¡Habitación eliminada exitosamente!", "success");
+          loadRooms();
+        },
+        (error) => {
+          setLoading(false);
+          showNotification(`Error al eliminar habitación: ${error}`, "danger");
+        }
+      );
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -134,36 +189,38 @@ function Admin() {
 
     setLoading(true);
 
-    createRoom(
-      formData,
-      (data) => {
-        setLoading(false);
-        showNotification("¡Habitación agregada exitosamente!", "success");
-        setFormData({
-          RoomNo: "",
-          Nombre: "",
-          Personas: "",
-          Capacidad: "Single",
-          Tipo: "Deluxe",
-          Texto: "",
-          Area: "",
-          Imagen: "",
-          TarifaSA: "",
-          TarifaAD: "",
-          TarifaMP: "",
-          TarifaPC: "",
-          TarifaAI: "",
-          Amenities: "",
-          Disponible: true,
-        });
-        setErrors({});
-        loadRooms();
-      },
-      (error) => {
-        setLoading(false);
-        showNotification(`Error al agregar habitación: ${error}`, "danger");
-      }
-    );
+    if (isEditing && editingRoom) {
+      // Modo edición
+      updateRoom(
+        editingRoom.Id,
+        formData,
+        (data) => {
+          setLoading(false);
+          showNotification("¡Habitación actualizada exitosamente!", "success");
+          resetForm();
+          loadRooms();
+        },
+        (error) => {
+          setLoading(false);
+          showNotification(`Error al actualizar habitación: ${error}`, "danger");
+        }
+      );
+    } else {
+      // Modo creación
+      createRoom(
+        formData,
+        (data) => {
+          setLoading(false);
+          showNotification("¡Habitación agregada exitosamente!", "success");
+          resetForm();
+          loadRooms();
+        },
+        (error) => {
+          setLoading(false);
+          showNotification(`Error al agregar habitación: ${error}`, "danger");
+        }
+      );
+    }
   };
 
   const loadRooms = () => {
@@ -180,6 +237,7 @@ function Admin() {
   useEffect(() => {
     loadRooms();
   }, []);
+
 
   return (
     <Container className="py-4">
@@ -200,24 +258,22 @@ function Admin() {
             </Alert>
           )}
 
-          <Tabs defaultActiveKey="add-room" className="mb-4">
+          <Tabs 
+            activeKey={activeTab} 
+            onSelect={(k) => {
+              setActiveTab(k);
+            }}
+            className="mb-4"
+          >
             <Tab eventKey="add-room" title="Agregar Habitación">
-              <div className="mb-3">
-                <Button
-                  variant="outline-info"
-                  size="sm"
-                  onClick={testBackendConnection}
-                  className="me-2"
-                >
-                  🔧 Probar Conexión Backend
-                </Button>
-                <small className="text-muted">
-                  Usa este botón para diagnosticar problemas de conectividad
-                </small>
-              </div>
               <Card>
                 <Card.Header>
-                  <h4>Nueva Habitación</h4>
+                  <h4>{isEditing ? "Editar Habitación" : "Nueva Habitación"}</h4>
+                  {isEditing && (
+                    <small className="text-muted">
+                      Editando: {editingRoom?.Nombre} (ID: {editingRoom?.Id})
+                    </small>
+                  )}
                 </Card.Header>
                 <Card.Body>
                   <Form onSubmit={handleSubmit}>
@@ -279,7 +335,8 @@ function Admin() {
                       <Col md={6}>
                         <Form.Group className="mb-3">
                           <Form.Label>Capacidad *</Form.Label>
-                          <Form.Select
+                          <Form.Control
+                            as="select"
                             name="Capacidad"
                             value={formData.Capacidad}
                             onChange={handleChange}
@@ -287,7 +344,7 @@ function Admin() {
                             <option value="Single">Single</option>
                             <option value="Twin">Twin</option>
                             <option value="Triple">Triple</option>
-                          </Form.Select>
+                          </Form.Control>
                         </Form.Group>
                       </Col>
                     </Row>
@@ -296,14 +353,15 @@ function Admin() {
                       <Col md={6}>
                         <Form.Group className="mb-3">
                           <Form.Label>Tipo *</Form.Label>
-                          <Form.Select
+                          <Form.Control
+                            as="select"
                             name="Tipo"
                             value={formData.Tipo}
                             onChange={handleChange}
                           >
                             <option value="Deluxe">Deluxe</option>
                             <option value="Suite">Suite</option>
-                          </Form.Select>
+                          </Form.Control>
                         </Form.Group>
                       </Col>
                       <Col md={6}>
@@ -365,105 +423,25 @@ function Admin() {
                       />
                     </Form.Group>
 
-                    <h5 className="mt-4 mb-3">Tarifas</h5>
-                    <Row>
-                      <Col md={6}>
-                        <Form.Group className="mb-3">
-                          <Form.Label>Solo Alojamiento (SA)</Form.Label>
-                          <Form.Control
-                            type="number"
-                            name="TarifaSA"
-                            value={formData.TarifaSA}
-                            onChange={handleChange}
-                            isInvalid={!!errors.TarifaSA}
-                            placeholder="0.00"
-                            step="0.01"
-                            min="0"
-                          />
-                          <Form.Control.Feedback type="invalid">
-                            {errors.TarifaSA}
-                          </Form.Control.Feedback>
-                        </Form.Group>
-                      </Col>
-                      <Col md={6}>
-                        <Form.Group className="mb-3">
-                          <Form.Label>Alojamiento y Desayuno (AD)</Form.Label>
-                          <Form.Control
-                            type="number"
-                            name="TarifaAD"
-                            value={formData.TarifaAD}
-                            onChange={handleChange}
-                            isInvalid={!!errors.TarifaAD}
-                            placeholder="0.00"
-                            step="0.01"
-                            min="0"
-                          />
-                          <Form.Control.Feedback type="invalid">
-                            {errors.TarifaAD}
-                          </Form.Control.Feedback>
-                        </Form.Group>
-                      </Col>
-                    </Row>
-
-                    <Row>
-                      <Col md={6}>
-                        <Form.Group className="mb-3">
-                          <Form.Label>Media Pensión (MP)</Form.Label>
-                          <Form.Control
-                            type="number"
-                            name="TarifaMP"
-                            value={formData.TarifaMP}
-                            onChange={handleChange}
-                            isInvalid={!!errors.TarifaMP}
-                            placeholder="0.00"
-                            step="0.01"
-                            min="0"
-                          />
-                          <Form.Control.Feedback type="invalid">
-                            {errors.TarifaMP}
-                          </Form.Control.Feedback>
-                        </Form.Group>
-                      </Col>
-                      <Col md={6}>
-                        <Form.Group className="mb-3">
-                          <Form.Label>Pensión Completa (PC)</Form.Label>
-                          <Form.Control
-                            type="number"
-                            name="TarifaPC"
-                            value={formData.TarifaPC}
-                            onChange={handleChange}
-                            isInvalid={!!errors.TarifaPC}
-                            placeholder="0.00"
-                            step="0.01"
-                            min="0"
-                          />
-                          <Form.Control.Feedback type="invalid">
-                            {errors.TarifaPC}
-                          </Form.Control.Feedback>
-                        </Form.Group>
-                      </Col>
-                    </Row>
-
-                    <Row>
-                      <Col md={6}>
-                        <Form.Group className="mb-3">
-                          <Form.Label>All Inclusive (AI)</Form.Label>
-                          <Form.Control
-                            type="number"
-                            name="TarifaAI"
-                            value={formData.TarifaAI}
-                            onChange={handleChange}
-                            isInvalid={!!errors.TarifaAI}
-                            placeholder="0.00"
-                            step="0.01"
-                            min="0"
-                          />
-                          <Form.Control.Feedback type="invalid">
-                            {errors.TarifaAI}
-                          </Form.Control.Feedback>
-                        </Form.Group>
-                      </Col>
-                    </Row>
+                    <Form.Group className="mb-3">
+                      <Form.Label>Tarifa *</Form.Label>
+                      <Form.Control
+                        type="number"
+                        name="Tarifa"
+                        value={formData.Tarifa}
+                        onChange={handleChange}
+                        isInvalid={!!errors.Tarifa}
+                        placeholder="0.00"
+                        step="0.01"
+                        min="0"
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.Tarifa}
+                      </Form.Control.Feedback>
+                      <Form.Text className="text-muted">
+                        Ingresa el precio por noche de la habitación
+                      </Form.Text>
+                    </Form.Group>
 
                     <Form.Group className="mb-3">
                       <Form.Label>Amenidades</Form.Label>
@@ -477,14 +455,29 @@ function Admin() {
                       />
                     </Form.Group>
 
-                    <Button
-                      type="submit"
-                      variant="primary"
-                      disabled={loading}
-                      className="w-100"
-                    >
-                      {loading ? "Agregando..." : "Agregar Habitación"}
-                    </Button>
+                    <div className="d-flex gap-2">
+                      <Button
+                        type="submit"
+                        variant="primary"
+                        disabled={loading}
+                        className="flex-fill"
+                      >
+                        {loading 
+                          ? (isEditing ? "Actualizando..." : "Agregando...") 
+                          : (isEditing ? "Actualizar Habitación" : "Agregar Habitación")
+                        }
+                      </Button>
+                      {isEditing && (
+                        <Button
+                          type="button"
+                          variant="secondary"
+                          onClick={handleCancelEdit}
+                          disabled={loading}
+                        >
+                          Cancelar
+                        </Button>
+                      )}
+                    </div>
                   </Form>
                 </Card.Body>
               </Card>
@@ -505,7 +498,9 @@ function Admin() {
                         <th>Capacidad</th>
                         <th>Tipo</th>
                         <th>Área (m²)</th>
+                        <th>Tarifa</th>
                         <th>Estado</th>
+                        <th style={{ width: '150px' }}>Acciones</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -529,13 +524,38 @@ function Admin() {
                             </td>
                             <td>{room.Area || "N/A"}</td>
                             <td>
-                              <Badge bg="success">Activa</Badge>
+                              <strong>${room.Tarifa}</strong>
+                            </td>
+                            <td>
+                              <Badge bg={room.Disponible ? "success" : "secondary"}>
+                                {room.Disponible ? "Disponible" : "No Disponible"}
+                              </Badge>
+                            </td>
+                            <td>
+                              <div className="d-flex gap-2">
+                                <Button
+                                  variant="outline-primary"
+                                  size="sm"
+                                  onClick={() => handleEditRoom(room)}
+                                  disabled={isEditing || loading}
+                                >
+                                  ✏️ Editar
+                                </Button>
+                                <Button
+                                  variant="outline-danger"
+                                  size="sm"
+                                  onClick={() => handleDeleteRoom(room)}
+                                  disabled={isEditing || loading}
+                                >
+                                  🗑️ Eliminar
+                                </Button>
+                              </div>
                             </td>
                           </tr>
                         ))
                       ) : (
                         <tr>
-                          <td colSpan="7" className="text-center">
+                          <td colSpan="9" className="text-center">
                             No hay habitaciones registradas
                           </td>
                         </tr>

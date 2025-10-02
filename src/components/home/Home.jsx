@@ -152,8 +152,8 @@ function Home() {
         </Row>
       </Container>
 
-      {/* Reducimos márgenes para compactar espacio */}
-      <div style={{ marginBottom: '5px' }}>
+      
+      <div style={{ marginBottom: '5px' , marginTop: '200px' }}>
         <Carrusel />
       </div>
 
