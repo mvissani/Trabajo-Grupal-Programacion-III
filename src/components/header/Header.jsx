@@ -1,11 +1,23 @@
-import { Navbar, Container, Nav, NavDropdown } from "react-bootstrap";
+import { Navbar, Container, NavDropdown } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 import hotelName from '../../images/hotel-name.png';
+import { useState } from "react";
 
 const Header = () => {
+    const navigate = useNavigate();
+    // estado para controlar el menu de "Mi Cuenta"
+    const [showCuenta, setShowCuenta] = useState(false);
+
+    // handler para los dropdowns vacios
+    const handleNavDropdownClick = (route, e) => {
+        e.preventDefault();
+        navigate(route);
+    };
+
     return (
         <Navbar variant="dark" expand="lg" className="bg-secondary">
             <Container>
-                <Navbar.Brand href="/" className="d-flex align-items-center">
+                <Navbar.Brand onClick={() => navigate("/")} style={{ cursor: "pointer" }} className="d-flex align-items-center">
                     <img
                         src={hotelName}
                         width="150"
@@ -15,28 +27,57 @@ const Header = () => {
                     />
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="navbar-nav" />
-                <Navbar.Collapse id="navbar-nav" className="justify-content-end">
-                    <Nav>
-                        {/* Items principales */}
-                        <Nav.Link href="/">Inicio</Nav.Link>
-                        <Nav.Link href="/rooms">Habitaciones</Nav.Link>
-                        <Nav.Link href="/services">Servicios</Nav.Link>
-
-                        {/* Dropdowns que se mantienen */}
-                        <NavDropdown id="nav-dropdown-about" title="Sobre Nosotros" menuVariant="light">
-                            <NavDropdown.Item href="/aboutUs">¿Quiénes Somos?</NavDropdown.Item>
+                <Navbar.Collapse id="navbar-nav">
+                    <div className="ms-auto d-flex align-items-center">
+                        <NavDropdown
+                            title="Inicio"
+                            id="nav-inicio"
+                            className="mx-2"
+                            menuVariant="light"
+                            show={false}
+                            onClick={e => handleNavDropdownClick("/", e)}
+                        />
+                        <NavDropdown
+                            title="Habitaciones"
+                            id="nav-habitaciones"
+                            className="mx-2"
+                            menuVariant="light"
+                            show={false}
+                            onClick={e => handleNavDropdownClick("/rooms", e)}
+                        />
+                        <NavDropdown
+                            title="Servicios"
+                            id="nav-servicios"
+                            className="mx-2"
+                            menuVariant="light"
+                            show={false}
+                            onClick={e => handleNavDropdownClick("/services", e)}
+                        />
+                        <NavDropdown
+                            title="Sobre Nosotros"
+                            id="nav-aboutus"
+                            className="mx-2"
+                            menuVariant="light"
+                            show={false}
+                            onClick={e => handleNavDropdownClick("/aboutUs", e)}
+                        />
+                        <NavDropdown
+                            title="Mi Cuenta"
+                            id="nav-micuenta"
+                            className="mx-2"
+                            menuVariant="light"
+                            show={showCuenta}
+                            onMouseEnter={() => setShowCuenta(true)}
+                            onMouseLeave={() => setShowCuenta(false)}
+                            onClick={() => setShowCuenta(!showCuenta)}
+                        >
+                            <NavDropdown.Item onClick={() => navigate("/login")} className="text-dark">Iniciar Sesión</NavDropdown.Item>
                             <NavDropdown.Divider />
-                            <NavDropdown.Item href="/reviews">Reseñas</NavDropdown.Item>
+                            <NavDropdown.Item onClick={() => navigate("/register")} className="text-dark">Registrarme</NavDropdown.Item>
+                            <NavDropdown.Divider />
+                            <NavDropdown.Item onClick={() => navigate("/reservation")} className="text-dark">Mis Reservas</NavDropdown.Item>
                         </NavDropdown>
-
-                        <NavDropdown id="nav-dropdown-account" title="Mi Cuenta" menuVariant="light">
-                            <NavDropdown.Item href="/login">Iniciar Sesión</NavDropdown.Item>
-                            <NavDropdown.Divider />
-                            <NavDropdown.Item href="/register">Registrarme</NavDropdown.Item>
-                            <NavDropdown.Divider />
-                            <NavDropdown.Item href="/reservation">Mis Reservas</NavDropdown.Item>
-                        </NavDropdown>
-                    </Nav>
+                    </div>
                 </Navbar.Collapse>
             </Container>
         </Navbar>

@@ -1,5 +1,5 @@
 import "./App.scss";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
 import Header from "./components/header/Header";
 import Login from "./components/login/Login";
@@ -17,26 +17,24 @@ import Admin from "./components/admin/Admin";
 
 function App() {
   return (
-    <div>
+    <BrowserRouter>
       <Header />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Navigate to="/home" />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/aboutUs" element={<AboutUs />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/reservation" element={<Reservation />} />
-          <Route path="/sales" element={<Sales />} />
-          <Route path="/services" element={<Services />} />
-          <Route path="/reviews" element={<Reviews />} />
-          <Route path="/rooms" element={<Rooms />} />
-          <Route path="*" element={<ErrorNotFound />} />
-          <Route path="/admin" element={<Admin />} />
-        </Routes>
-      </BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Navigate to="/home" />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/aboutUs" element={<AboutUs />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/reservation" element={<Reservation />} />
+        <Route path="/sales" element={<Sales />} />
+        <Route path="/services" element={<Services />} />
+        <Route path="/reviews" element={<Reviews />} />
+        <Route path="/rooms" element={<Rooms />} />
+        <Route path="*" element={<ErrorNotFound />} />
+        <Route path="/admin" element={<Admin />} />
+      </Routes>
       <Footer />
-    </div>
+    </BrowserRouter>
   );
 }
 
