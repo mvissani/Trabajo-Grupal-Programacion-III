@@ -127,3 +127,13 @@ background-color: rgb(240, 240, 240); }
 .whatsapp-float:hover {
   background-color: #20b857;
 }
+
+svg[viewBox*="100%"] {
+  display: none !important;
+}
+
+
+svg[viewBox="0 0 100% 4"] {
+  display: none !important;
+}
+

@@ -3,15 +3,8 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
 import Button from "react-bootstrap/Button";
-import {
-  BsGeoAlt,
-  BsCalendarEvent,
-  BsHouseDoor,
-  BsPerson,
-  BsTag,
-} from "react-icons/bs";
+import { BsCalendarEvent, BsHouseDoor, BsPerson } from "react-icons/bs";
 
 export default function BookingBar({ onSearch }) {
   const [form, setForm] = useState({
@@ -29,73 +22,79 @@ export default function BookingBar({ onSearch }) {
   };
 
   return (
-    <div className="booking-bar">
-      <Container>
+    <div className="booking-bar py-2" style={{ background: "#5a4d44" }}>
+      <Container fluid>
         <Form onSubmit={submit}>
-          <Row className="g-2 align-items-center flex-nowrap overflow-auto">
-            {}
-            <Col xs="auto" className="booking-col">
-              <InputGroup>
-                <InputGroup.Text>
-                  <BsCalendarEvent />
-                </InputGroup.Text>
+          <Row className="g-0 justify-content-center text-center">
+            <Col xs="auto" className="booking-box px-2">
+              <Form.Label className="d-block fw-semibold small text-light">
+                INGRESO
+              </Form.Label>
+              <div className="d-flex align-items-center bg-light px-2 py-1">
+                <BsCalendarEvent className="me-2" />
                 <Form.Control
                   type="date"
                   value={form.ingreso}
                   onChange={handle("ingreso")}
-                  placeholder="INGRESO"
+                  className="border-0 bg-light p-0"
                 />
-              </InputGroup>
+              </div>
             </Col>
 
-            {}
-            <Col xs="auto" className="booking-col">
-              <InputGroup>
-                <InputGroup.Text>
-                  <BsCalendarEvent />
-                </InputGroup.Text>
+            <Col xs="auto" className="booking-box px-2">
+              <Form.Label className="d-block fw-semibold small text-light">
+                EGRESO
+              </Form.Label>
+              <div className="d-flex align-items-center bg-light px-2 py-1">
+                <BsCalendarEvent className="me-2" />
                 <Form.Control
                   type="date"
                   value={form.egreso}
                   onChange={handle("egreso")}
-                  placeholder="EGRESO"
+                  className="border-0 bg-light p-0"
                 />
-              </InputGroup>
+              </div>
             </Col>
 
-            {}
-            <Col xs="auto" className="booking-col w-auto">
-              <InputGroup>
-                <InputGroup.Text>
-                  <BsHouseDoor />
-                </InputGroup.Text>
+            <Col xs="auto" className="booking-box px-2">
+              <Form.Label className="d-block fw-semibold small text-light">
+                HABITACIONES
+              </Form.Label>
+              <div className="d-flex align-items-center bg-light px-2 py-1">
+                <BsHouseDoor className="me-2" />
                 <Form.Control
                   type="number"
                   min={1}
                   value={form.rooms}
                   onChange={handle("rooms")}
+                  className="border-0 bg-light p-0 text-center"
                 />
-              </InputGroup>
+              </div>
             </Col>
 
-            {}
-            <Col xs="auto" className="booking-col w-auto">
-              <InputGroup>
-                <InputGroup.Text>
-                  <BsPerson />
-                </InputGroup.Text>
+            <Col xs="auto" className="booking-box px-2">
+              <Form.Label className="d-block fw-semibold small text-light">
+                HUÉSPEDES
+              </Form.Label>
+              <div className="d-flex align-items-center bg-light px-2 py-1">
+                <BsPerson className="me-2" />
                 <Form.Control
                   type="number"
                   min={0}
                   value={form.guests}
                   onChange={handle("guests")}
+                  className="border-0 bg-light p-0 text-center"
                 />
-              </InputGroup>
+              </div>
             </Col>
 
-            {}
-            <Col xs="auto">
-              <Button type="submit" className="search-btn">
+            <Col xs="auto" className="px-2">
+              <Form.Label className="d-block">&nbsp;</Form.Label>
+              <Button
+                type="submit"
+                className="px-4 fw-bold"
+                style={{ background: "#48c5b7", border: "none" }}
+              >
                 BUSCAR
               </Button>
             </Col>

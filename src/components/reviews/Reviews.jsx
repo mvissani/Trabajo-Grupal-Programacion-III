@@ -1,4 +1,3 @@
-// Imports
 import { Container, Row, Col, Card, Carousel } from "react-bootstrap";
 
 const reviews = [
@@ -19,13 +18,14 @@ const reviews = [
   },
 ];
 
-
 function Reviews() {
   return (
     <Container className="my-5">
       <Row className="mb-5 text-center">
         <Col>
-          <h3 className="fw-bold reviews-title">Opiniones de nuestros huéspedes:</h3>
+          <h3 className="fw-bold reviews-title">
+            Opiniones de nuestros huéspedes:
+          </h3>
           <div className="reviews-subtitle px-3 py-2 rounded">
             ⭐ 4.9 / 5 - {reviews.length} reseñas
           </div>

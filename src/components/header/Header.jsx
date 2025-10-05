@@ -1,19 +1,25 @@
-import { Navbar, Container, Nav, NavDropdown } from "react-bootstrap";
+import { Navbar, Container, NavDropdown } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 import hotelName from "../../images/hotel-name.png";
-import { useNavigate } from "react-router";
+import { useState } from "react";
 
 const Header = () => {
 	const navigate = useNavigate();
+	// estado para controlar el menu de "Mi Cuenta"
+	const [showCuenta, setShowCuenta] = useState(false);
 
-	const goTo = (path) => {
-		navigate(path);
+	// handler para los dropdowns vacios
+	const handleNavDropdownClick = (route, e) => {
+		e.preventDefault();
+		navigate(route);
 	};
 
 	return (
 		<Navbar variant="dark" expand="lg" className="bg-secondary">
 			<Container>
 				<Navbar.Brand
-					onClick={() => goTo("home")}
+					onClick={() => navigate("/")}
+					style={{ cursor: "pointer" }}
 					className="d-flex align-items-center"
 				>
 					<img
@@ -25,56 +31,72 @@ const Header = () => {
 					/>
 				</Navbar.Brand>
 				<Navbar.Toggle aria-controls="navbar-nav" />
-				<Navbar.Collapse id="navbar-nav" className="justify-content-end">
-					<Nav>
+				<Navbar.Collapse id="navbar-nav">
+					<div className="ms-auto d-flex align-items-center">
 						<NavDropdown
-							id="nav-dropdown-reservas"
-							title="Reservas"
+							title="Inicio"
+							id="nav-inicio"
+							className="mx-2"
 							menuVariant="light"
-						>
-							<NavDropdown.Item onClick={() => goTo("rooms")}>
-								Habitaciones
-							</NavDropdown.Item>
-							<NavDropdown.Divider />
-							<NavDropdown.Item onClick={() => goTo("services")}>
-								Servicios
-							</NavDropdown.Item>
-							<NavDropdown.Divider />
-							<NavDropdown.Item onClick={() => goTo("sales")}>
-								Ofertas
-							</NavDropdown.Item>
-						</NavDropdown>
+							show={false}
+							onClick={(e) => handleNavDropdownClick("/", e)}
+						/>
 						<NavDropdown
-							id="nav-dropdown-about"
+							title="Habitaciones"
+							id="nav-habitaciones"
+							className="mx-2"
+							menuVariant="light"
+							show={false}
+							onClick={(e) => handleNavDropdownClick("/rooms", e)}
+						/>
+						<NavDropdown
+							title="Servicios"
+							id="nav-servicios"
+							className="mx-2"
+							menuVariant="light"
+							show={false}
+							onClick={(e) => handleNavDropdownClick("/services", e)}
+						/>
+						<NavDropdown
 							title="Sobre Nosotros"
+							id="nav-aboutus"
+							className="mx-2"
 							menuVariant="light"
-						>
-							<NavDropdown.Item onClick={() => goTo("aboutUs")}>
-								¿Quiénes Somos?
-							</NavDropdown.Item>
-							<NavDropdown.Divider />
-							<NavDropdown.Item onClick={() => goTo("reviews")}>
-								Reseñas
-							</NavDropdown.Item>
-						</NavDropdown>
+							show={false}
+							onClick={(e) => handleNavDropdownClick("/aboutUs", e)}
+						/>
 						<NavDropdown
-							id="nav-dropdown-account"
 							title="Mi Cuenta"
+							id="nav-micuenta"
+							className="mx-2"
 							menuVariant="light"
+							show={showCuenta}
+							onMouseEnter={() => setShowCuenta(true)}
+							onMouseLeave={() => setShowCuenta(false)}
+							onClick={() => setShowCuenta(!showCuenta)}
 						>
-							<NavDropdown.Item onClick={() => goTo("login")}>
+							<NavDropdown.Item
+								onClick={() => navigate("/login")}
+								className="text-dark"
+							>
 								Iniciar Sesión
 							</NavDropdown.Item>
 							<NavDropdown.Divider />
-							<NavDropdown.Item onClick={() => goTo("register")}>
+							<NavDropdown.Item
+								onClick={() => navigate("/register")}
+								className="text-dark"
+							>
 								Registrarme
 							</NavDropdown.Item>
 							<NavDropdown.Divider />
-							<NavDropdown.Item onClick={() => goTo("reservation")}>
+							<NavDropdown.Item
+								onClick={() => navigate("/reservation")}
+								className="text-dark"
+							>
 								Mis Reservas
 							</NavDropdown.Item>
 						</NavDropdown>
-					</Nav>
+					</div>
 				</Navbar.Collapse>
 			</Container>
 		</Navbar>
