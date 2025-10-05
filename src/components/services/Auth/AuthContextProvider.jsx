@@ -5,6 +5,7 @@ const tokenValue = localStorage.getItem("login-token");
 
 export const AuthenticationContextProvider = ({ children }) => {
 	const [token, setToken] = useState(tokenValue);
+
 	const handleLogin = (token) => {
 		localStorage.setItem("login-token", token);
 		setToken(token);
@@ -16,7 +17,7 @@ export const AuthenticationContextProvider = ({ children }) => {
 	};
 
 	return (
-		<AuthenticationContex value={(token, handleLogin, handlelogOut)}>
+		<AuthenticationContex value={{ token, handleLogin, handlelogOut }}>
 			{children}
 		</AuthenticationContex>
 	);

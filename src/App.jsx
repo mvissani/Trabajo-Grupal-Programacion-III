@@ -14,6 +14,7 @@ import Reviews from "./components/reviews/Reviews";
 import Rooms from "./components/rooms/Rooms";
 import Footer from "./components/footer/Footer";
 import Admin from "./components/admin/Admin";
+import Protected from "./components/Protected/Protected";
 
 function App() {
 	return (
@@ -25,7 +26,11 @@ function App() {
 				<Route path="/aboutUs" element={<AboutUs />} />
 				<Route path="/login" element={<Login />} />
 				<Route path="/register" element={<Register />} />
-				<Route path="/reservation" element={<Reservation />} />
+
+				<Route element={<Protected />}>
+					<Route path="/reservation" element={<Reservation />} />
+				</Route>
+
 				<Route path="/sales" element={<Sales />} />
 				<Route path="/services" element={<Services />} />
 				<Route path="/reviews" element={<Reviews />} />
