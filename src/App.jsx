@@ -14,28 +14,33 @@ import Reviews from "./components/reviews/Reviews";
 import Rooms from "./components/rooms/Rooms";
 import Footer from "./components/footer/Footer";
 import Admin from "./components/admin/Admin";
+import Protected from "./components/Protected/Protected";
 
 function App() {
-  return (
-    <BrowserRouter>
-      <Header />
-      <Routes>
-        <Route path="/" element={<Navigate to="/home" />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/aboutUs" element={<AboutUs />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/reservation" element={<Reservation />} />
-        <Route path="/sales" element={<Sales />} />
-        <Route path="/services" element={<Services />} />
-        <Route path="/reviews" element={<Reviews />} />
-        <Route path="/rooms" element={<Rooms />} />
-        <Route path="*" element={<ErrorNotFound />} />
-        <Route path="/admin" element={<Admin />} />
-      </Routes>
-      <Footer />
-    </BrowserRouter>
-  );
+	return (
+		<BrowserRouter>
+			<Header />
+			<Routes>
+				<Route path="/" element={<Navigate to="/home" />} />
+				<Route path="/home" element={<Home />} />
+				<Route path="/aboutUs" element={<AboutUs />} />
+				<Route path="/login" element={<Login />} />
+				<Route path="/register" element={<Register />} />
+
+				<Route element={<Protected />}>
+					<Route path="/reservation" element={<Reservation />} />
+				</Route>
+
+				<Route path="/sales" element={<Sales />} />
+				<Route path="/services" element={<Services />} />
+				<Route path="/reviews" element={<Reviews />} />
+				<Route path="/rooms" element={<Rooms />} />
+				<Route path="*" element={<ErrorNotFound />} />
+				<Route path="/admin" element={<Admin />} />
+			</Routes>
+			<Footer />
+		</BrowserRouter>
+	);
 }
 
 export default App;
