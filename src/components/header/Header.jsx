@@ -1,13 +1,20 @@
 import { Navbar, Container, NavDropdown } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import hotelName from "../../images/hotel-name.png";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { AuthenticationContex } from "../services/Auth/Auth.context";
 
 const Header = () => {
 	const navigate = useNavigate();
+
+	const { token, handleLogOut } = useContext(AuthenticationContex);
 	// estado para controlar el menu de "Mi Cuenta"
 	const [showCuenta, setShowCuenta] = useState(false);
 
+	const LogOut = () => {
+		navigate("/home");
+		handleLogOut();
+	};
 	// handler para los dropdowns vacios
 	const handleNavDropdownClick = (route, e) => {
 		e.preventDefault();
@@ -75,26 +82,50 @@ const Header = () => {
 							onMouseLeave={() => setShowCuenta(false)}
 							onClick={() => setShowCuenta(!showCuenta)}
 						>
-							<NavDropdown.Item
-								onClick={() => navigate("/login")}
-								className="text-dark"
-							>
-								Iniciar Sesión
-							</NavDropdown.Item>
-							<NavDropdown.Divider />
-							<NavDropdown.Item
-								onClick={() => navigate("/register")}
-								className="text-dark"
-							>
-								Registrarme
-							</NavDropdown.Item>
-							<NavDropdown.Divider />
-							<NavDropdown.Item
-								onClick={() => navigate("/reservation")}
-								className="text-dark"
-							>
-								Mis Reservas
-							</NavDropdown.Item>
+							{token ? (
+								<>
+									<NavDropdown.Item
+										onClick={() => navigate("/perfil")}
+										className="text-dark"
+									>
+										Mi Perfil
+									</NavDropdown.Item>
+									<NavDropdown.Divider />
+									<NavDropdown.Item
+										onClick={() => navigate("/reservation")}
+										className="text-dark"
+									>
+										Mis Reservas
+									</NavDropdown.Item>
+									<NavDropdown.Divider />
+									<NavDropdown.Item onClick={LogOut} className="text-dark">
+										Cerrar Sesión
+									</NavDropdown.Item>
+								</>
+							) : (
+								<>
+									<NavDropdown.Item
+										onClick={() => navigate("/login")}
+										className="text-dark"
+									>
+										Iniciar Sesión
+									</NavDropdown.Item>
+									<NavDropdown.Divider />
+									<NavDropdown.Item
+										onClick={() => navigate("/register")}
+										className="text-dark"
+									>
+										Registrarme
+									</NavDropdown.Item>
+									<NavDropdown.Divider />
+									<NavDropdown.Item
+										onClick={() => navigate("/reservation")}
+										className="text-dark"
+									>
+										Mis Reservas
+									</NavDropdown.Item>
+								</>
+							)}
 						</NavDropdown>
 					</div>
 				</Navbar.Collapse>
