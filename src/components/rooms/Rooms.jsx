@@ -27,38 +27,29 @@ const Rooms = () => {
     cargarHabitaciones();
   }, []);
 
-  const obtenerImagen = (id) => {
-    const fotos = {
-      1: "https://ik.imagekit.io/rooxjlwlq/interior-del-sitio-de-alojamiento-comodo.jpg?updatedAt=1758663799036",
-      2: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c",
-      3: "https://images.unsplash.com/photo-1600585154206-8d4a2a46f87f",
-      4: "https://images.unsplash.com/photo-1628744448884-6eac6a13a64f",
-      5: "https://images.unsplash.com/photo-1582719478189-4c9c63a3f9a3",
-      6: "https://images.unsplash.com/photo-1627333850897-9d2e57a2d3f3",
-    };
+  const obtenerImagen = (habitacion) => {
+    if (habitacion.Imagen && habitacion.Imagen.trim() !== "") {
+      return habitacion.Imagen;
+    }
 
-    return (
-      fotos[id] ||
-      "https://images.unsplash.com/photo-1505691938895-1758d7feb511"
-    );
+    return "https://images.unsplash.com/photo-1505691938895-1758d7feb511";
   };
 
   const procesarAmenities = (amenitiesString) => {
     if (!amenitiesString) return [];
-    
-    // Si ya es un array, lo devolvemos directamente
+
     if (Array.isArray(amenitiesString)) {
       return amenitiesString.map((amenity) => String(amenity).trim());
     }
-    
-    // Si es string, procesamos y limpiamos
+
     let processedString = String(amenitiesString);
-    
-    // Removemos corchetes si existen
-    processedString = processedString.replace(/[\[\]]/g, '');
-    
-    // Dividimos por comas y limpiamos cada elemento
-    return processedString.split(",").map((amenity) => amenity.trim()).filter(amenity => amenity.length > 0);
+
+    processedString = processedString.replace(/[\[\]]/g, "");
+
+    return processedString
+      .split(",")
+      .map((amenity) => amenity.trim())
+      .filter((amenity) => amenity.length > 0);
   };
 
   if (loading) {
@@ -108,7 +99,15 @@ const Rooms = () => {
         {habitaciones.map((hab) => (
           <Col key={hab.Id} md={6} className="mb-4">
             <Card>
-              <Card.Img variant="top" src={obtenerImagen(hab.Id)} />
+              <Card.Img
+                variant="top"
+                src={obtenerImagen(hab)}
+                onError={(e) => {
+                  e.target.src =
+                    "https://images.unsplash.com/photo-1505691938895-1758d7feb511";
+                }}
+                alt={`Imagen de ${hab.Nombre}`}
+              />
               <Card.Body>
                 <Card.Title>{hab.Nombre}</Card.Title>
                 <Card.Text>{hab.Texto}</Card.Text>

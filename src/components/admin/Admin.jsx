@@ -68,7 +68,11 @@ function Admin() {
       return `El área debe ser un número mayor a 0`;
     }
 
-    if (field === "Tarifa" && value && (isNaN(value) || parseFloat(value) < 0)) {
+    if (
+      field === "Tarifa" &&
+      value &&
+      (isNaN(value) || parseFloat(value) < 0)
+    ) {
       return "La tarifa debe ser un número mayor o igual a 0";
     }
 
@@ -139,8 +143,7 @@ function Admin() {
       Disponible: room.Disponible,
     });
     setErrors({});
-    
-    // Cambiar automáticamente a la pestaña de agregar/editar
+
     setActiveTab("add-room");
   };
 
@@ -150,10 +153,10 @@ function Admin() {
 
   const handleDeleteRoom = (room) => {
     const confirmMessage = `¿Estás seguro de que quieres eliminar la habitación "${room.Nombre}" (ID: ${room.Id})?\n\nEsta acción no se puede deshacer.`;
-    
+
     if (window.confirm(confirmMessage)) {
       setLoading(true);
-      
+
       deleteRoom(
         room.Id,
         () => {
@@ -190,7 +193,6 @@ function Admin() {
     setLoading(true);
 
     if (isEditing && editingRoom) {
-      // Modo edición
       updateRoom(
         editingRoom.Id,
         formData,
@@ -202,11 +204,13 @@ function Admin() {
         },
         (error) => {
           setLoading(false);
-          showNotification(`Error al actualizar habitación: ${error}`, "danger");
+          showNotification(
+            `Error al actualizar habitación: ${error}`,
+            "danger"
+          );
         }
       );
     } else {
-      // Modo creación
       createRoom(
         formData,
         (data) => {
@@ -238,7 +242,6 @@ function Admin() {
     loadRooms();
   }, []);
 
-
   return (
     <Container className="py-4">
       <Row>
@@ -258,8 +261,8 @@ function Admin() {
             </Alert>
           )}
 
-          <Tabs 
-            activeKey={activeTab} 
+          <Tabs
+            activeKey={activeTab}
             onSelect={(k) => {
               setActiveTab(k);
             }}
@@ -268,7 +271,9 @@ function Admin() {
             <Tab eventKey="add-room" title="Agregar Habitación">
               <Card>
                 <Card.Header>
-                  <h4>{isEditing ? "Editar Habitación" : "Nueva Habitación"}</h4>
+                  <h4>
+                    {isEditing ? "Editar Habitación" : "Nueva Habitación"}
+                  </h4>
                   {isEditing && (
                     <small className="text-muted">
                       Editando: {editingRoom?.Nombre} (ID: {editingRoom?.Id})
@@ -462,10 +467,13 @@ function Admin() {
                         disabled={loading}
                         className="flex-fill"
                       >
-                        {loading 
-                          ? (isEditing ? "Actualizando..." : "Agregando...") 
-                          : (isEditing ? "Actualizar Habitación" : "Agregar Habitación")
-                        }
+                        {loading
+                          ? isEditing
+                            ? "Actualizando..."
+                            : "Agregando..."
+                          : isEditing
+                          ? "Actualizar Habitación"
+                          : "Agregar Habitación"}
                       </Button>
                       {isEditing && (
                         <Button
@@ -500,7 +508,7 @@ function Admin() {
                         <th>Área (m²)</th>
                         <th>Tarifa</th>
                         <th>Estado</th>
-                        <th style={{ width: '150px' }}>Acciones</th>
+                        <th style={{ width: "150px" }}>Acciones</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -527,8 +535,12 @@ function Admin() {
                               <strong>${room.Tarifa}</strong>
                             </td>
                             <td>
-                              <Badge bg={room.Disponible ? "success" : "secondary"}>
-                                {room.Disponible ? "Disponible" : "No Disponible"}
+                              <Badge
+                                bg={room.Disponible ? "success" : "secondary"}
+                              >
+                                {room.Disponible
+                                  ? "Disponible"
+                                  : "No Disponible"}
                               </Badge>
                             </td>
                             <td>
