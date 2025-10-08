@@ -28,7 +28,7 @@ function Reservation() {
               </Form.Label>
               <Form.Select>
                 <option value="">-- Elegir habitación --</option>
-                {/* Opciones dinámicas acá */}
+              
               </Form.Select>
             </Form.Group>
 
