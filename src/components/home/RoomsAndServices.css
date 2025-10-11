@@ -1,74 +1,83 @@
-/* 💎 Cards grandes */
-.room-card-large {
+/* 💎 Cards mucho más grandes */
+.room-card-xxl {
   border-radius: 25px;
   overflow: hidden;
   background-color: #ffffff;
+  height: 750px; /* 🔹 mucho más alto */
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  height: 600px; /* 🔹 Aumenta el tamaño total del card */
 }
 
-.room-card-large:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+.room-card-xxl:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.25);
 }
 
-/* 📸 Imagen más grande */
-.image-container-large {
+/* 📸 Imagen más grande y proporcional */
+.image-container-xxl {
   width: 100%;
-  height: 400px; /* 🔹 Imagen ocupa la mayor parte */
+  height: 520px; /* 🔹 gran parte del card */
   overflow: hidden;
   border-radius: 25px 25px 0 0;
 }
 
-.room-img-large {
+.room-img-xxl {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform 0.4s ease;
 }
 
-.room-card-large:hover .room-img-large {
+.room-card-xxl:hover .room-img-xxl {
   transform: scale(1.08);
 }
 
-/* 📝 Texto dentro de la card */
-.room-card-large .card-body {
+/* 📝 Texto interno */
+.room-card-xxl .card-body {
   background-color: #f8f9fa;
-  padding: 2rem;
+  padding: 2rem 1rem;
 }
 
-.room-card-large .card-title {
-  font-size: 1.8rem;
-  letter-spacing: 0.5px;
-}
-
-.room-card-large button {
-  font-size: 1.1rem;
+.room-card-xxl .card-title {
+  font-size: 2rem;
   font-weight: 600;
+}
+
+.room-card-xxl button {
+  font-size: 1.2rem;
+  font-weight: 500;
   transition: all 0.3s ease;
 }
 
-.room-card-large button:hover {
+.room-card-xxl button:hover {
   background-color: #0d6efd;
   border-color: #0d6efd;
   transform: scale(1.07);
 }
 
 /* 📱 Responsivo */
-@media (max-width: 992px) {
-  .room-card-large {
-    height: 500px;
+@media (max-width: 1200px) {
+  .room-card-xxl {
+    height: 650px;
   }
-  .image-container-large {
-    height: 320px;
+  .image-container-xxl {
+    height: 450px;
+  }
+}
+
+@media (max-width: 992px) {
+  .room-card-xxl {
+    height: 600px;
+  }
+  .image-container-xxl {
+    height: 420px;
   }
 }
 
 @media (max-width: 768px) {
-  .room-card-large {
-    height: 450px;
+  .room-card-xxl {
+    height: 550px;
   }
-  .image-container-large {
-    height: 280px;
+  .image-container-xxl {
+    height: 380px;
   }
 }

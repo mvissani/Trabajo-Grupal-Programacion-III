@@ -43,8 +43,8 @@ const RoomsAndServices = () => {
       <Row className="g-4 justify-content-center">
         {sections.map((section, index) => (
           <Col key={index} xl={3} lg={3} md={6} sm={12}>
-            <Card className="room-card-large shadow-lg border-0">
-              <div className="image-container-large">
+            <Card className="room-card-xxl shadow-lg border-0">
+              <div className="image-container-xxl">
                 <Carousel controls={false} indicators={false} interval={3000}>
                   {section.images.map((img, i) => (
                     <Carousel.Item key={i}>
@@ -52,17 +52,21 @@ const RoomsAndServices = () => {
                         variant="top"
                         src={img}
                         alt={section.title}
-                        className="room-img-large"
+                        className="room-img-xxl"
                       />
                     </Carousel.Item>
                   ))}
                 </Carousel>
               </div>
               <Card.Body className="text-center p-4">
-                <Card.Title className="fw-bold text-dark mb-3 fs-3">
+                <Card.Title className="fw-bold text-dark mb-3 fs-2">
                   {section.title}
                 </Card.Title>
-                <Button variant="dark" className="px-5 py-2 rounded-pill fs-5" onClick={() => navigate("/rooms")}>
+                <Button
+                  variant="dark"
+                  className="px-5 py-3 rounded-pill fs-5"
+                  onClick={() => navigate("/rooms")}
+                >
                   {section.buttonText}
                 </Button>
               </Card.Body>
