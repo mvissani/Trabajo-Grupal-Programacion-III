@@ -264,7 +264,7 @@ export default function BookingBar({ onSearch }) {
                         {availabilityResult.habitacionesRequeridas} requeridas
                       </p>
                       <p
-                        className="mb-0"
+                        className="mb-2"
                         style={{
                           fontSize: "1.05rem",
                           fontWeight: "600",
@@ -274,6 +274,45 @@ export default function BookingBar({ onSearch }) {
                         {availabilityResult.fechaInicio} al{" "}
                         {availabilityResult.fechaFin}
                       </p>
+                      {availabilityResult.habitaciones && availabilityResult.habitaciones.length > 0 && (
+                        <div className="mt-2">
+                          <p
+                            className="mb-1"
+                            style={{
+                              fontSize: "1.05rem",
+                              fontWeight: "600",
+                            }}
+                          >
+                            <strong>🚪 Todas las habitaciones disponibles:</strong>
+                          </p>
+                          <div 
+                            style={{ 
+                              fontSize: "0.9rem",
+                              maxHeight: "200px",
+                              overflowY: "auto",
+                              padding: "10px",
+                              backgroundColor: "rgba(255, 255, 255, 0.1)",
+                              borderRadius: "5px"
+                            }}
+                          >
+                            {availabilityResult.habitaciones.map((hab, idx) => (
+                              <div 
+                                key={hab.Id}
+                                style={{
+                                  padding: "5px 0",
+                                  borderBottom: idx < availabilityResult.habitaciones.length - 1 ? "1px solid rgba(255, 255, 255, 0.2)" : "none"
+                                }}
+                              >
+                                <strong>Habitación #{hab.RoomNo}</strong> - {hab.Nombre}
+                                <br />
+                                <small style={{ opacity: 0.9 }}>
+                                  Capacidad: {hab.Capacidad} personas | Tarifa: ${hab.Tarifa}/noche
+                                </small>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
 
                     <Button

@@ -7,6 +7,7 @@ import Patrocinadores from "./Patrocinadores";
 import Carrusel from "./Carrusel";
 import { FaWhatsapp } from "react-icons/fa";
 import WhatsAppButton from "./WhatsAppButton";
+import RoomsAndServices from "./RoomsAndServices";
 
 function Home() {
   return (
@@ -159,6 +160,10 @@ function Home() {
 
       <div style={{ marginTop: '1px', marginBottom: '1px' }}>
         <Map />
+      </div>
+
+       <div style={{ marginTop: '1px', marginBottom: '1px' }}>
+        <RoomsAndServices />
       </div>
 
       <div style={{ marginTop: '1px', marginBottom: '10px' }}>
