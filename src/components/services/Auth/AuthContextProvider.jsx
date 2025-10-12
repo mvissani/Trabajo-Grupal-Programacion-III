@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { AuthenticationContex } from "./Auth.context";
-import { useNavigate } from "react-router-dom";
 
 const tokenValue = localStorage.getItem("login-token");
 
@@ -15,6 +14,9 @@ export const AuthenticationContextProvider = ({ children }) => {
 	const handleLogOut = () => {
 		setToken(null);
 		localStorage.removeItem("login-token");
+		localStorage.removeItem("user-name");
+		localStorage.removeItem("user-surname");
+		localStorage.removeItem("user-email");
 	};
 
 	return (

@@ -1,0 +1,85 @@
+.reservation-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 85vh;
+	background: linear-gradient(135deg, #e8f0f2 0%, #f9f9f9 100%);
+}
+
+.reservation-card {
+	background: white;
+	padding: 2rem 3rem;
+	border-radius: 16px;
+	box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+	width: 100%;
+	max-width: 600px;
+	animation: fadeInUp 0.5s ease;
+}
+
+.reservation-title {
+	text-align: center;
+	font-size: 1.8rem;
+	color: #333;
+	margin-bottom: 1.5rem;
+	border-bottom: 2px solid #48c5b7;
+	padding-bottom: 0.5rem;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+}
+
+.reservation-form .form-group {
+	display: flex;
+	flex-direction: column;
+	margin-bottom: 1.2rem;
+}
+
+.form-group label {
+	font-weight: 600;
+	color: #555;
+	margin-bottom: 0.4rem;
+}
+
+.form-group input,
+.form-group select {
+	padding: 0.7rem;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	font-size: 1rem;
+	transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+	border-color: #48c5b7;
+	box-shadow: 0 0 0 3px rgba(72, 197, 183, 0.2);
+	outline: none;
+}
+
+.btn-reservar {
+	width: 100%;
+	padding: 0.9rem;
+	background-color: #48c5b7;
+	color: white;
+	font-size: 1.1rem;
+	font-weight: bold;
+	border: none;
+	border-radius: 10px;
+	transition: background-color 0.3s ease, transform 0.2s ease;
+	cursor: pointer;
+}
+
+.btn-reservar:hover {
+	background-color: #3cb2a5;
+	transform: translateY(-2px);
+}
+
+@keyframes fadeInUp {
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
