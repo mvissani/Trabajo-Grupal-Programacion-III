@@ -17,6 +17,7 @@ export const AuthenticationContextProvider = ({ children }) => {
 		localStorage.removeItem("user-name");
 		localStorage.removeItem("user-surname");
 		localStorage.removeItem("user-email");
+		localStorage.removeItem("user-id");
 	};
 
 	return (

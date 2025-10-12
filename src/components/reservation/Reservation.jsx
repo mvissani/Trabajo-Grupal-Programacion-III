@@ -4,7 +4,6 @@ import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
 
 function Reservation() {
 	const location = useLocation();
-
 	const [formData, setFormData] = useState({
 		name: "",
 		email: "",
@@ -16,8 +15,9 @@ function Reservation() {
 	});
 	const bookingData = location.state?.bookingData || {};
 	const availableRooms = location.state?.availabilityData || [];
+	const selected = location.state?.selectedRoom || null;
+
 	useEffect(() => {
-		// Recupera name y email desde localStorage, si existen
 		const storedName = localStorage.getItem("user-name") || "";
 		const storedEmail = localStorage.getItem("user-email") || "";
 
@@ -26,11 +26,11 @@ function Reservation() {
 			email: storedEmail,
 			ingreso: bookingData.ingreso || "",
 			egreso: bookingData.egreso || "",
-			habitaciones: "",
+			habitaciones: selected ? selected.Id : "",
 			guest: bookingData.guests || "",
 			comments: "",
 		});
-	}, [bookingData]);
+	}, [selected]);
 
 	const handleChange = (e) => {
 		const { name, value } = e.target;
@@ -68,6 +68,7 @@ function Reservation() {
 									value={formData.name}
 									onChange={handleChange}
 									placeholder="Ej. Juan Pérez"
+									disabled
 								/>
 							</Form.Group>
 
@@ -80,6 +81,7 @@ function Reservation() {
 									value={formData.email}
 									onChange={handleChange}
 									placeholder="Ej. juan@email.com"
+									disabled
 								/>
 							</Form.Group>
 
@@ -88,7 +90,7 @@ function Reservation() {
 								<Form.Label className="w-100">Fecha de ingreso</Form.Label>
 								<Form.Control
 									type="date"
-									name="checkIn"
+									name="ingreso"
 									value={formData.ingreso}
 									onChange={handleChange}
 								/>
@@ -99,7 +101,7 @@ function Reservation() {
 								<Form.Label className="w-100">Fecha de egreso</Form.Label>
 								<Form.Control
 									type="date"
-									name="checkOut"
+									name="egreso"
 									value={formData.egreso}
 									onChange={handleChange}
 								/>
@@ -116,8 +118,14 @@ function Reservation() {
 									onChange={handleChange}
 								>
 									<option value="">Seleccione una habitación...</option>
-									{availableRooms.habitaciones.length ? (
-										availableRooms.habitaciones.map((room, Id) => (
+
+									{selected ? (
+										<option value={selected.Id}>
+											{selected.RoomNo} — {selected.Nombre} — {selected.Tipo} (
+											{selected.Capacidad})
+										</option>
+									) : availableRooms.length > 0 ? (
+										availableRooms.map((room) => (
 											<option key={room.Id} value={room.Id}>
 												{room.RoomNo} — {room.Nombre} — {room.Tipo} (
 												{room.Capacidad})

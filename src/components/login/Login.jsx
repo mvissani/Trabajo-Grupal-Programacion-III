@@ -61,6 +61,7 @@ function Login() {
 				data.user.name + " " + data.user.surname
 			);
 			localStorage.setItem("user-email", data.user.email);
+			localStorage.setItem("user-id", data.user.id);
 			navigate("/home");
 		} catch (err) {
 			setError("Error de conexión con el servidor");
