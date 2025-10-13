@@ -1,83 +1,57 @@
-/* 💎 Cards mucho más grandes */
-.room-card-xxl {
+.room-card-xxxl {
   border-radius: 25px;
   overflow: hidden;
-  background-color: #ffffff;
-  height: 750px; /* 🔹 mucho más alto */
+  height: 700px; /* 🔹 más grande */
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.room-card-xxl:hover {
+.room-card-xxxl:hover {
   transform: translateY(-6px);
-  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
 }
 
-/* 📸 Imagen más grande y proporcional */
-.image-container-xxl {
+.image-container-xxxl {
   width: 100%;
-  height: 520px; /* 🔹 gran parte del card */
+  height: 500px; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
   overflow: hidden;
-  border-radius: 25px 25px 0 0;
+  background-color: #000;
 }
 
-.room-img-xxl {
+.room-img-xxxl {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  transition: transform 0.4s ease;
+  object-fit: cover; 
+  object-position: center;
+  transition: transform 0.5s ease;
 }
 
-.room-card-xxl:hover .room-img-xxl {
-  transform: scale(1.08);
+.room-card-xxxl:hover .room-img-xxxl {
+  transform: scale(1.05);
 }
 
-/* 📝 Texto interno */
-.room-card-xxl .card-body {
-  background-color: #f8f9fa;
-  padding: 2rem 1rem;
-}
 
-.room-card-xxl .card-title {
-  font-size: 2rem;
+.hotel-btn-secondary {
+  font-size: 0.9rem;
   font-weight: 600;
-}
-
-.room-card-xxl button {
-  font-size: 1.2rem;
-  font-weight: 500;
+  padding: 7px 26px;
+  border-radius: 50px;
+  border-width: 1.5px;
+  text-transform: uppercase;
   transition: all 0.3s ease;
+  letter-spacing: 0.6px;
+  color: #198754;
+  border-color: #198754;
+  background-color: transparent;
 }
 
-.room-card-xxl button:hover {
-  background-color: #0d6efd;
-  border-color: #0d6efd;
-  transform: scale(1.07);
-}
-
-/* 📱 Responsivo */
-@media (max-width: 1200px) {
-  .room-card-xxl {
-    height: 650px;
-  }
-  .image-container-xxl {
-    height: 450px;
-  }
-}
-
-@media (max-width: 992px) {
-  .room-card-xxl {
-    height: 600px;
-  }
-  .image-container-xxl {
-    height: 420px;
-  }
-}
-
-@media (max-width: 768px) {
-  .room-card-xxl {
-    height: 550px;
-  }
-  .image-container-xxl {
-    height: 380px;
-  }
+.hotel-btn-secondary:hover {
+  background-color: #198754;
+  color: white;
+  border-color: #198754;
 }
