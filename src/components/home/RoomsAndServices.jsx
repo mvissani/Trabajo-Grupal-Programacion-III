@@ -61,7 +61,7 @@ const RoomsAndServices = () => {
                 <Button
                   variant="outline-success"
                   className="hotel-btn-secondary"
-                  onClick={() => navigate("/booking")}
+                  onClick={() => navigate("/rooms")}
                 >
                   Reservar
                 </Button>

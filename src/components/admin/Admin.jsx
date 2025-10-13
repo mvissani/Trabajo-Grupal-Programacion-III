@@ -14,7 +14,7 @@ import {
 } from "react-bootstrap";
 
 import { getRooms } from "../rooms/Rooms.services";
-import { createRoom, updateRoom, deleteRoom } from "./Admin.services";
+import { createRoom, updateRoom, deleteRoom, getServices, createService, updateService, deleteService, restoreService } from "./Admin.services";
 function Admin() {
   const [formData, setFormData] = useState({
     RoomNo: "",
@@ -30,16 +30,28 @@ function Admin() {
     Disponible: true,
   });
 
+  const [serviceFormData, setServiceFormData] = useState({
+    title: "",
+    description: "",
+    icon: "",
+    img: "",
+    isActive: true,
+  });
+
   const [errors, setErrors] = useState({});
+  const [serviceErrors, setServiceErrors] = useState({});
   const [notification, setNotification] = useState({
     show: false,
     message: "",
     type: "",
   });
   const [rooms, setRooms] = useState([]);
+  const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(false);
   const [editingRoom, setEditingRoom] = useState(null);
+  const [editingService, setEditingService] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [isEditingService, setIsEditingService] = useState(false);
   const [activeTab, setActiveTab] = useState("add-room");
 
   const validateField = (field, value) => {
@@ -79,6 +91,21 @@ function Admin() {
     return "";
   };
 
+  // Validación de campos para servicios
+  const validateServiceField = (field, value) => {
+    const requiredFields = ["title", "description", "img"];
+
+    if (requiredFields.includes(field) && !value.toString().trim()) {
+      return `El campo ${field} es obligatorio`;
+    }
+
+    if (field === "img" && value && !value.match(/^https?:\/\/.+\..+/)) {
+      return "La URL de la imagen debe ser válida (http:// o https://)";
+    }
+
+    return "";
+  };
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
 
@@ -97,6 +124,25 @@ function Admin() {
     setErrors((prev) => ({
       ...prev,
       [name]: validateField(name, processedValue),
+    }));
+  };
+
+  const handleServiceChange = (e) => {
+    const { name, value, type, checked } = e.target;
+
+    let processedValue = value;
+    if (type === "checkbox") {
+      processedValue = checked;
+    }
+
+    setServiceFormData((prev) => ({
+      ...prev,
+      [name]: processedValue,
+    }));
+
+    setServiceErrors((prev) => ({
+      ...prev,
+      [name]: validateServiceField(name, processedValue),
     }));
   };
 
@@ -126,6 +172,19 @@ function Admin() {
     setEditingRoom(null);
   };
 
+  const resetServiceForm = () => {
+    setServiceFormData({
+      title: "",
+      description: "",
+      icon: "",
+      img: "",
+      isActive: true,
+    });
+    setServiceErrors({});
+    setIsEditingService(false);
+    setEditingService(null);
+  };
+
   const handleEditRoom = (room) => {
     setEditingRoom(room);
     setIsEditing(true);
@@ -151,6 +210,25 @@ function Admin() {
     resetForm();
   };
 
+  // Funciones para servicios
+  const handleEditService = (service) => {
+    setEditingService(service);
+    setIsEditingService(true);
+    setServiceFormData({
+      title: service.title,
+      description: service.description,
+      icon: service.icon || "",
+      img: service.img,
+      isActive: service.isActive,
+    });
+    setServiceErrors({});
+    setActiveTab("add-service");
+  };
+
+  const handleCancelEditService = () => {
+    resetServiceForm();
+  };
+
   const handleDeleteRoom = (room) => {
     const confirmMessage = `¿Estás seguro de que quieres eliminar la habitación "${room.Nombre}" (ID: ${room.Id})?\n\nEsta acción no se puede deshacer.`;
 
@@ -169,6 +247,45 @@ function Admin() {
           showNotification(`Error al eliminar habitación: ${error}`, "danger");
         }
       );
+    }
+  };
+
+  const handleDeleteService = (service) => {
+    const action = service.isActive ? "desactivar" : "restaurar";
+    const confirmMessage = `¿Estás seguro de que quieres ${action} el servicio "${service.title}" (ID: ${service.Id})?`;
+
+    if (window.confirm(confirmMessage)) {
+      setLoading(true);
+
+      if (service.isActive) {
+        // Soft delete
+        deleteService(
+          service.Id,
+          () => {
+            setLoading(false);
+            showNotification("¡Servicio desactivado exitosamente!", "success");
+            loadServices();
+          },
+          (error) => {
+            setLoading(false);
+            showNotification(`Error al desactivar servicio: ${error}`, "danger");
+          }
+        );
+      } else {
+        // Restore
+        restoreService(
+          service.Id,
+          () => {
+            setLoading(false);
+            showNotification("¡Servicio restaurado exitosamente!", "success");
+            loadServices();
+          },
+          (error) => {
+            setLoading(false);
+            showNotification(`Error al restaurar servicio: ${error}`, "danger");
+          }
+        );
+      }
     }
   };
 
@@ -227,6 +344,61 @@ function Admin() {
     }
   };
 
+  const handleServiceSubmit = (e) => {
+    e.preventDefault();
+
+    const newErrors = Object.keys(serviceFormData).reduce((acc, key) => {
+      acc[key] = validateServiceField(key, serviceFormData[key]);
+      return acc;
+    }, {});
+
+    setServiceErrors(newErrors);
+
+    if (Object.values(newErrors).some((err) => err !== "")) {
+      showNotification(
+        "Por favor corrige los errores en el formulario de servicio",
+        "danger"
+      );
+      return;
+    }
+
+    setLoading(true);
+
+    if (isEditingService && editingService) {
+      updateService(
+        editingService.Id,
+        serviceFormData,
+        (data) => {
+          setLoading(false);
+          showNotification("¡Servicio actualizado exitosamente!", "success");
+          resetServiceForm();
+          loadServices();
+        },
+        (error) => {
+          setLoading(false);
+          showNotification(
+            `Error al actualizar servicio: ${error}`,
+            "danger"
+          );
+        }
+      );
+    } else {
+      createService(
+        serviceFormData,
+        (data) => {
+          setLoading(false);
+          showNotification("¡Servicio agregado exitosamente!", "success");
+          resetServiceForm();
+          loadServices();
+        },
+        (error) => {
+          setLoading(false);
+          showNotification(`Error al agregar servicio: ${error}`, "danger");
+        }
+      );
+    }
+  };
+
   const loadRooms = () => {
     getRooms(
       (data) => {
@@ -238,8 +410,20 @@ function Admin() {
     );
   };
 
+  const loadServices = () => {
+    getServices(
+      (data) => {
+        setServices(data);
+      },
+      (error) => {
+        console.error("Error al cargar servicios:", error);
+      }
+    );
+  };
+
   useEffect(() => {
     loadRooms();
+    loadServices();
   }, []);
 
   return (
@@ -491,6 +675,129 @@ function Admin() {
               </Card>
             </Tab>
 
+            <Tab eventKey="add-service" title="Agregar Servicio">
+              <Card>
+                <Card.Header>
+                  <h4>
+                    {isEditingService ? "Editar Servicio" : "Nuevo Servicio"}
+                  </h4>
+                  {isEditingService && (
+                    <small className="text-muted">
+                      Editando: {editingService?.title} (ID: {editingService?.Id})
+                    </small>
+                  )}
+                </Card.Header>
+                <Card.Body>
+                  <Form onSubmit={handleServiceSubmit}>
+                    <Row>
+                      <Col md={6}>
+                        <Form.Group className="mb-3">
+                          <Form.Label>Título del Servicio *</Form.Label>
+                          <Form.Control
+                            type="text"
+                            name="title"
+                            value={serviceFormData.title}
+                            onChange={handleServiceChange}
+                            isInvalid={!!serviceErrors.title}
+                            placeholder="Ej: Restaurante, Spa, Gimnasio..."
+                          />
+                          <Form.Control.Feedback type="invalid">
+                            {serviceErrors.title}
+                          </Form.Control.Feedback>
+                        </Form.Group>
+                      </Col>
+                      <Col md={6}>
+                        <Form.Group className="mb-3">
+                          <Form.Label>Icono (React Icons)</Form.Label>
+                          <Form.Control
+                            type="text"
+                            name="icon"
+                            value={serviceFormData.icon}
+                            onChange={handleServiceChange}
+                            placeholder="Ej: FaUtensils, FaSpa, FaDumbbell..."
+                          />
+                          <Form.Text className="text-muted">
+                            Nombre del icono de React Icons (opcional)
+                          </Form.Text>
+                        </Form.Group>
+                      </Col>
+                    </Row>
+
+                    <Form.Group className="mb-3">
+                      <Form.Label>Descripción *</Form.Label>
+                      <Form.Control
+                        as="textarea"
+                        rows={3}
+                        name="description"
+                        value={serviceFormData.description}
+                        onChange={handleServiceChange}
+                        isInvalid={!!serviceErrors.description}
+                        placeholder="Describe las características del servicio..."
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {serviceErrors.description}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+
+                    <Form.Group className="mb-3">
+                      <Form.Label>URL de Imagen *</Form.Label>
+                      <Form.Control
+                        type="url"
+                        name="img"
+                        value={serviceFormData.img}
+                        onChange={handleServiceChange}
+                        isInvalid={!!serviceErrors.img}
+                        placeholder="https://ejemplo.com/imagen.jpg"
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {serviceErrors.img}
+                      </Form.Control.Feedback>
+                      <Form.Text className="text-muted">
+                        URL completa de la imagen del servicio
+                      </Form.Text>
+                    </Form.Group>
+
+                    <Form.Group className="mb-3">
+                      <Form.Check
+                        type="checkbox"
+                        name="isActive"
+                        checked={serviceFormData.isActive}
+                        onChange={handleServiceChange}
+                        label="Servicio activo (visible para los usuarios)"
+                      />
+                    </Form.Group>
+
+                    <div className="d-flex gap-2">
+                      <Button
+                        type="submit"
+                        variant="primary"
+                        disabled={loading}
+                        className="flex-fill"
+                      >
+                        {loading
+                          ? isEditingService
+                            ? "Actualizando..."
+                            : "Agregando..."
+                          : isEditingService
+                          ? "Actualizar Servicio"
+                          : "Agregar Servicio"}
+                      </Button>
+                      {isEditingService && (
+                        <Button
+                          type="button"
+                          variant="secondary"
+                          onClick={handleCancelEditService}
+                          disabled={loading}
+                        >
+                          Cancelar
+                        </Button>
+                      )}
+                    </div>
+                  </Form>
+                </Card.Body>
+              </Card>
+            </Tab>
+
             <Tab eventKey="rooms-list" title="Lista de Habitaciones">
               <Card>
                 <Card.Header>
@@ -569,6 +876,93 @@ function Admin() {
                         <tr>
                           <td colSpan="9" className="text-center">
                             No hay habitaciones registradas
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </Table>
+                </Card.Body>
+              </Card>
+            </Tab>
+
+            <Tab eventKey="services-list" title="Lista de Servicios">
+              <Card>
+                <Card.Header>
+                  <h4>Servicios Registrados</h4>
+                </Card.Header>
+                <Card.Body>
+                  <Table striped bordered hover responsive>
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>Título</th>
+                        <th>Descripción</th>
+                        <th>Icono</th>
+                        <th>Estado</th>
+                        <th>Creado</th>
+                        <th style={{ width: "150px" }}>Acciones</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {services.length > 0 ? (
+                        services.map((service) => (
+                          <tr key={service.Id}>
+                            <td>{service.Id}</td>
+                            <td>
+                              <strong>{service.title}</strong>
+                            </td>
+                            <td>
+                              <small className="text-muted">
+                                {service.description.length > 50
+                                  ? `${service.description.substring(0, 50)}...`
+                                  : service.description}
+                              </small>
+                            </td>
+                            <td>
+                              <code>{service.icon || "N/A"}</code>
+                            </td>
+                            <td>
+                              <Badge
+                                bg={service.isActive ? "success" : "secondary"}
+                              >
+                                {service.isActive ? "Activo" : "Inactivo"}
+                              </Badge>
+                            </td>
+                            <td>
+                              <small>
+                                {new Date(service.createdAt).toLocaleDateString()}
+                              </small>
+                            </td>
+                            <td>
+                              <div className="d-flex gap-2">
+                                <Button
+                                  variant="outline-primary"
+                                  size="sm"
+                                  onClick={() => handleEditService(service)}
+                                  disabled={isEditingService || loading}
+                                >
+                                  ✏️ Editar
+                                </Button>
+                                <Button
+                                  variant={
+                                    service.isActive
+                                      ? "outline-warning"
+                                      : "outline-success"
+                                  }
+                                  size="sm"
+                                  onClick={() => handleDeleteService(service)}
+                                  disabled={isEditingService || loading}
+                                >
+                                  {service.isActive ? "🗑️ Desactivar" : "♻️ Restaurar"}
+                                </Button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan="7" className="text-center">
+                            No hay servicios registrados
                           </td>
                         </tr>
                       )}

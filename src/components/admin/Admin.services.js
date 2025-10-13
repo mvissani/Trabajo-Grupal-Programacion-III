@@ -177,3 +177,150 @@ export const testBackendConnection = () => {
       console.log("❌ Error en POST /api/rooms:", error);
     });
 };
+export const getServices = (onSuccess, onError) => {
+  fetch("/api/services/admin/all")
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Servicios obtenidos exitosamente:", data);
+      if (onSuccess) {
+        onSuccess(data);
+      }
+    })
+    .catch((error) => {
+      console.error("Error al obtener servicios:", error);
+      if (onError) {
+        onError(error);
+      }
+    });
+};
+
+export const createService = (serviceData, onSuccess, onError) => {
+  console.log("Enviando datos de servicio al backend:", serviceData);
+  console.log("URL de destino:", "/api/services/admin/create");
+  
+  fetch("/api/services/admin/create", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(serviceData),
+  })
+    .then((response) => {
+      console.log(
+        "Respuesta del servidor (SERVICE):",
+        response.status,
+        response.statusText
+      );
+
+      if (!response.ok) {
+        return response.text().then((text) => {
+          console.log("Contenido de la respuesta de error (SERVICE):", text);
+          throw new Error(
+            `HTTP ${response.status}: ${
+              response.statusText
+            }. Contenido: ${text.substring(0, 200)}`
+          );
+        });
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Servicio creado exitosamente:", data);
+      if (onSuccess) {
+        onSuccess(data);
+      }
+    })
+    .catch((error) => {
+      console.error("Error de red al crear servicio:", error);
+      if (onError) {
+        onError(error);
+      }
+    });
+};
+
+export const updateService = (serviceId, serviceData, onSuccess, onError) => {
+  console.log("Actualizando servicio ID:", serviceId, "con datos:", serviceData);
+  console.log("URL de destino:", `/api/services/admin/update/${serviceId}`);
+
+  fetch(`/api/services/admin/update/${serviceId}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(serviceData),
+  })
+    .then((response) => {
+      console.log(
+        "Respuesta del servidor (UPDATE SERVICE):",
+        response.status,
+        response.statusText
+      );
+
+      if (!response.ok) {
+        return response.text().then((text) => {
+          console.log("Contenido de la respuesta de error (UPDATE SERVICE):", text);
+          throw new Error(
+            `HTTP ${response.status}: ${
+              response.statusText
+            }. Contenido: ${text.substring(0, 200)}`
+          );
+        });
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Servicio actualizado exitosamente:", data);
+      if (onSuccess) {
+        onSuccess(data);
+      }
+    })
+    .catch((error) => {
+      console.error("Error de red al actualizar servicio:", error);
+      if (onError) {
+        onError(error);
+      }
+    });
+};
+
+export const deleteService = (serviceId, onSuccess, onError) => {
+  fetch(`/api/services/admin/delete/${serviceId}`, {
+    method: "DELETE",
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Servicio eliminado exitosamente");
+      if (onSuccess) {
+        onSuccess();
+      }
+    })
+    .catch((error) => {
+      console.error("Error de red al eliminar servicio:", error);
+      if (onError) {
+        onError(error);
+      }
+    });
+};
+
+export const restoreService = (serviceId, onSuccess, onError) => {
+  fetch(`/api/services/admin/restore/${serviceId}`, {
+    method: "PUT",
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Servicio restaurado exitosamente");
+      if (onSuccess) {
+        onSuccess();
+      }
+    })
+    .catch((error) => {
+      console.error("Error de red al restaurar servicio:", error);
+      if (onError) {
+        onError(error);
+      }
+    });
+};
