@@ -4,17 +4,23 @@ import hotelName from "../../images/hotel-name.png";
 import { useContext, useState } from "react";
 import { AuthenticationContex } from "../services/Auth/Auth.context";
 import "./header.css";
+import { UserTypeContext } from "../services/Auth/UserType.context";
 
 const Header = () => {
 	const navigate = useNavigate();
-
+	const { userType } = useContext(UserTypeContext);
 	const { token, handleLogOut } = useContext(AuthenticationContex);
-
 	const [showCuenta, setShowCuenta] = useState(false);
 
 	const LogOut = () => {
 		navigate("/home");
 		handleLogOut();
+	};
+	const isAdmin = () => {
+		userType == "Admin" ? true : null;
+	};
+	const isSysadmin = () => {
+		userType === "sysadmin" ? true : false;
 	};
 
 	const handleNavDropdownClick = (route, e) => {
@@ -94,19 +100,23 @@ const Header = () => {
 										</NavDropdown.Item>
 										<NavDropdown.Divider />
 										<NavDropdown.Item
-											onClick={() => navigate("/Reservation")}
-											className="dropdown-item-custom text-dark"
-										>
-											Reservar
-										</NavDropdown.Item>
-										<NavDropdown.Divider />
-										<NavDropdown.Item
 											onClick={() => navigate("/MyReservation")}
 											className="dropdown-item-custom text-dark"
 										>
 											Mis Reservas
 										</NavDropdown.Item>
 										<NavDropdown.Divider />
+										{isAdmin ? (
+											<>
+												<NavDropdown.Item
+													onClick={() => navigate("/admin")}
+													className="dropdown-item-custom text-dark"
+												>
+													Panel de administracion
+												</NavDropdown.Item>
+												<NavDropdown.Divider />
+											</>
+										) : null}
 										<NavDropdown.Item
 											onClick={LogOut}
 											className="dropdown-item-custom text-dark"

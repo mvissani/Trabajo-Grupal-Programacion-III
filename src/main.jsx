@@ -4,11 +4,15 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./index.css";
 import App from "./App.jsx";
 import AuthenticationContextProvider from "./components/services/Auth/AuthContextProvider.jsx";
+import UserTypeContextProvider from "./components/services/Auth/UserTypeContextProvider.jsx";
+UserTypeContextProvider;
 
 createRoot(document.getElementById("root")).render(
 	<StrictMode>
 		<AuthenticationContextProvider>
-			<App />
+			<UserTypeContextProvider>
+				<App />
+			</UserTypeContextProvider>
 		</AuthenticationContextProvider>
 	</StrictMode>
 );

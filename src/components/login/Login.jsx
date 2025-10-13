@@ -2,10 +2,11 @@ import { useContext, useState } from "react";
 import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
 import { Navigate, useNavigate } from "react-router";
 import { AuthenticationContex } from "../services/Auth/Auth.context";
-import AuthenticationContextProvider from "../services/Auth/AuthContextProvider";
+import { UserTypeContext } from "../services/Auth/UserType.context";
 
 function Login() {
 	const { handleLogin } = useContext(AuthenticationContex);
+	const { userTokenType } = useContext(UserTypeContext);
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState("");
@@ -55,13 +56,14 @@ function Login() {
 				setError(data.message || "Error desconocido");
 				return;
 			}
-			handleLogin(data);
+			handleLogin(data.token);
 			localStorage.setItem(
 				"user-name",
 				data.user.name + " " + data.user.surname
 			);
 			localStorage.setItem("user-email", data.user.email);
 			localStorage.setItem("user-id", data.user.id);
+			userTokenType(data.token);
 			navigate("/home");
 		} catch (err) {
 			setError("Error de conexión con el servidor");
