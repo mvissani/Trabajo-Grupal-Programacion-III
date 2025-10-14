@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
 
 function Reservation() {
@@ -7,15 +7,17 @@ function Reservation() {
 	const [formData, setFormData] = useState({
 		name: "",
 		email: "",
-		ingreso: "",
-		egreso: "",
-		habitaciones: "",
+		checkIn: "",
+		checkOut: "",
+		room_Id: "",
 		guest: "",
 		comments: "",
 	});
 	const bookingData = location.state?.bookingData || {};
 	const availableRooms = location.state?.availabilityData || [];
 	const selected = location.state?.selectedRoom || null;
+	const navigate = useNavigate();
+	const [Error, setError] = useState();
 
 	useEffect(() => {
 		const storedName = localStorage.getItem("user-name") || "";
@@ -24,9 +26,11 @@ function Reservation() {
 		setFormData({
 			name: storedName,
 			email: storedEmail,
-			ingreso: bookingData.ingreso || "",
-			egreso: bookingData.egreso || "",
-			habitaciones: selected ? selected.Id : "",
+			checkIn: bookingData.ingreso || "",
+			checkOut: bookingData.egreso || "",
+			room_Id: availableRooms?.habitaciones?.Id
+				? availableRooms.habitaciones.Id
+				: selected?.Id,
 			guest: bookingData.guests || "",
 			comments: "",
 		});
@@ -37,10 +41,29 @@ function Reservation() {
 		setFormData((prev) => ({ ...prev, [name]: value }));
 	};
 
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
-		console.log("Reserva enviada:", formData);
-		// Acá podrías hacer un fetch POST a tu backend
+		try {
+			const res = await fetch("http://localhost:3000/login", {
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: "Bearer ${token}",
+				},
+				method: "POST",
+				body: JSON.stringify(formData),
+			});
+
+			const data = await res.json();
+
+			if (!res.ok) {
+				setError(data.message || "Error desconocido");
+				return;
+			}
+			navigate("/home");
+		} catch (err) {
+			setError("Error de conexión con el servidor");
+			console.error(err);
+		}
 	};
 
 	return (
@@ -90,8 +113,8 @@ function Reservation() {
 								<Form.Label className="w-100">Fecha de ingreso</Form.Label>
 								<Form.Control
 									type="date"
-									name="ingreso"
-									value={formData.ingreso}
+									name="checkIn"
+									value={formData.checkIn}
 									onChange={handleChange}
 								/>
 							</Form.Group>
@@ -101,8 +124,8 @@ function Reservation() {
 								<Form.Label className="w-100">Fecha de egreso</Form.Label>
 								<Form.Control
 									type="date"
-									name="egreso"
-									value={formData.egreso}
+									name="checkOut"
+									value={formData.checkOut}
 									onChange={handleChange}
 								/>
 							</Form.Group>
@@ -124,8 +147,8 @@ function Reservation() {
 											{selected.RoomNo} — {selected.Nombre} — {selected.Tipo} (
 											{selected.Capacidad})
 										</option>
-									) : availableRooms.length > 0 ? (
-										availableRooms.map((room) => (
+									) : availableRooms ? (
+										availableRooms.habitaciones.map((room) => (
 											<option key={room.Id} value={room.Id}>
 												{room.RoomNo} — {room.Nombre} — {room.Tipo} (
 												{room.Capacidad})

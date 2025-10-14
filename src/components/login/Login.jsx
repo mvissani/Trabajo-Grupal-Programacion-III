@@ -7,8 +7,7 @@ import { UserTypeContext } from "../services/Auth/UserType.context";
 function Login() {
 	const { handleLogin } = useContext(AuthenticationContex);
 	const { userTokenType } = useContext(UserTypeContext);
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
+
 	const [error, setError] = useState("");
 	const [formData, setFormData] = useState({
 		email: "",

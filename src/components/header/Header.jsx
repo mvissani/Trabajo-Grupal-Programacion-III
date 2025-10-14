@@ -1,26 +1,32 @@
 import { Navbar, Container, NavDropdown } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import hotelName from "../../images/hotel-name.png";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthenticationContex } from "../services/Auth/Auth.context";
 import "./header.css";
 import { UserTypeContext } from "../services/Auth/UserType.context";
 
 const Header = () => {
 	const navigate = useNavigate();
-	const { userType } = useContext(UserTypeContext);
+	const { userType, userTokenType } = useContext(UserTypeContext);
 	const { token, handleLogOut } = useContext(AuthenticationContex);
 	const [showCuenta, setShowCuenta] = useState(false);
-
+	useEffect(() => {
+		userTokenType(token);
+	});
 	const LogOut = () => {
 		navigate("/home");
 		handleLogOut();
 	};
 	const isAdmin = () => {
-		userType == "Admin" ? true : null;
+		if (userType == "Admin") {
+			return true;
+		} else return "";
 	};
 	const isSysadmin = () => {
-		userType === "sysadmin" ? true : false;
+		if (userType == "User") {
+			return true;
+		} else return "";
 	};
 
 	const handleNavDropdownClick = (route, e) => {
@@ -106,7 +112,20 @@ const Header = () => {
 											Mis Reservas
 										</NavDropdown.Item>
 										<NavDropdown.Divider />
-										{isAdmin ? (
+										{isSysadmin() ? (
+											<>
+												<NavDropdown.Item
+													onClick={() => navigate("/admin")}
+													className="dropdown-item-custom text-dark"
+												>
+													Panel de administracion de usuarios
+												</NavDropdown.Item>
+												<NavDropdown.Divider />
+											</>
+										) : (
+											""
+										)}
+										{isAdmin() || isSysadmin() ? (
 											<>
 												<NavDropdown.Item
 													onClick={() => navigate("/admin")}
@@ -116,7 +135,9 @@ const Header = () => {
 												</NavDropdown.Item>
 												<NavDropdown.Divider />
 											</>
-										) : null}
+										) : (
+											""
+										)}
 										<NavDropdown.Item
 											onClick={LogOut}
 											className="dropdown-item-custom text-dark"
