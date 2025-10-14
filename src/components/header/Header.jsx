@@ -99,7 +99,7 @@ const Header = () => {
 								{token ? (
 									<>
 										<NavDropdown.Item
-											onClick={() => navigate("/perfil")}
+											onClick={() => navigate("/profile")}
 											className="dropdown-item-custom text-dark"
 										>
 											Mi Perfil

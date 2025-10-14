@@ -15,6 +15,7 @@ import Rooms from "./components/rooms/Rooms";
 import Footer from "./components/footer/Footer";
 import Admin from "./components/admin/Admin";
 import Protected from "./components/Protected/Protected";
+import Profile from "./components/profile/Profile";
 
 function App() {
 	return (
@@ -28,6 +29,7 @@ function App() {
 				<Route path="/register" element={<Register />} />
 				<Route element={<Protected />}>
 					<Route path="/reservation" element={<Reservation />} />
+					<Route path="/profile" element={<Profile />} />
 				</Route>
 				<Route path="/sales" element={<Sales />} />
 				<Route path="/services" element={<Services />} />
