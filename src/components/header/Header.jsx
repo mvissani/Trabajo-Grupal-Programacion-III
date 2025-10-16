@@ -104,13 +104,7 @@ const Header = () => {
 										>
 											Mi Perfil
 										</NavDropdown.Item>
-										<NavDropdown.Divider />
-										<NavDropdown.Item
-											onClick={() => navigate("/MyReservation")}
-											className="dropdown-item-custom text-dark"
-										>
-											Mis Reservas
-										</NavDropdown.Item>
+
 										<NavDropdown.Divider />
 										{isSysadmin() ? (
 											<>

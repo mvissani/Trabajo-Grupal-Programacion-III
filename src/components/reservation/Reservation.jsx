@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
+import { AuthenticationContex } from "../services/Auth/Auth.context";
 
 function Reservation() {
 	const location = useLocation();
@@ -18,7 +19,7 @@ function Reservation() {
 	const selected = location.state?.selectedRoom || null;
 	const navigate = useNavigate();
 	const [Error, setError] = useState();
-
+	const { token } = useContext(AuthenticationContex);
 	useEffect(() => {
 		const storedName = localStorage.getItem("user-name") || "";
 		const storedEmail = localStorage.getItem("user-email") || "";
@@ -44,10 +45,10 @@ function Reservation() {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		try {
-			const res = await fetch("http://localhost:3000/login", {
+			const res = await fetch("http://localhost:3000/Reservation", {
 				headers: {
 					"Content-Type": "application/json",
-					Authorization: "Bearer ${token}",
+					Authorization: `Bearer ${token}`,
 				},
 				method: "POST",
 				body: JSON.stringify(formData),
