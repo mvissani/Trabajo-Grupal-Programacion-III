@@ -35,6 +35,7 @@ function Admin() {
 		dni: "",
 		email: "",
 		class: "",
+		active: "",
 	});
 	const [newRole, setNewRole] = useState("");
 	const [emailError, setEmailError] = useState("");
@@ -67,6 +68,7 @@ function Admin() {
 				dni: data.user.dni,
 				email: data.user.email,
 				class: decodedToken.typeUser,
+				active: data.user.active,
 			});
 		} catch (err) {
 			setEmailError("Error de conexión con el servidor");
@@ -96,8 +98,6 @@ function Admin() {
 
 			const data = await res.json();
 			alert("Rol actualizado correctamente.");
-
-			// actualiza visualmente el rol
 			setQueryUser((prev) => ({ ...prev, class: newRole }));
 			setNewRole("");
 		} catch (err) {
@@ -105,6 +105,8 @@ function Admin() {
 			alert("Hubo un problema al actualizar el rol del usuario.");
 		}
 	};
+
+	const handleDeshabilitationUser = () => {};
 
 	const [formData, setFormData] = useState({
 		RoomNo: "",
@@ -1105,6 +1107,7 @@ function Admin() {
 														<th>Dni</th>
 														<th>Email</th>
 														<th>Rol Actual</th>
+														<th>Estado</th>
 														<th style={{ width: "200px" }}>Acciones</th>
 													</tr>
 												</thead>
@@ -1128,8 +1131,14 @@ function Admin() {
 															</Badge>
 														</td>
 														<td>
+															<Badge
+																bg={queryUser.active ? "secondary" : "warning"}
+															>
+																{queryUser.active ? "Activo" : "inactivo"}
+															</Badge>
+														</td>
+														<td>
 															<div className="d-flex gap-2">
-																{/* Selección de rol */}
 																<Form.Select
 																	value={newRole}
 																	onChange={(e) => setNewRole(e.target.value)}
@@ -1142,7 +1151,6 @@ function Admin() {
 																	<option value="sysadmin">SysAdmin</option>
 																</Form.Select>
 
-																{/* Botón de editar permisos */}
 																<Button
 																	variant="outline-success"
 																	size="sm"
@@ -1151,9 +1159,11 @@ function Admin() {
 																	✏️ Cambiar rol
 																</Button>
 
-																{/* Botón de deshabilitar */}
 																<Button variant="outline-danger" size="sm">
 																	🗑️ Deshabilitar usuario
+																</Button>
+																<Button variant="outline-danger" size="sm">
+																	❌ Eliminar usuario
 																</Button>
 															</div>
 														</td>

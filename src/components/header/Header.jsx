@@ -19,11 +19,11 @@ const Header = () => {
 		handleLogOut();
 	};
 	const isAdmin = () => {
-		if (userType == "User") {
+		if (userType === "Admin") {
 			return true;
-		} else if (userType == "sysAdmin") {
+		} else if (userType === "sysadmin") {
 			return true;
-		} else return "";
+		} else return false;
 	};
 
 	const handleNavDropdownClick = (route, e) => {
