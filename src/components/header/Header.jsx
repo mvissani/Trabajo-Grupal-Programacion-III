@@ -19,12 +19,9 @@ const Header = () => {
 		handleLogOut();
 	};
 	const isAdmin = () => {
-		if (userType == "Admin") {
-			return true;
-		} else return "";
-	};
-	const isSysadmin = () => {
 		if (userType == "User") {
+			return true;
+		} else if (userType == "sysAdmin") {
 			return true;
 		} else return "";
 	};
@@ -106,20 +103,7 @@ const Header = () => {
 										</NavDropdown.Item>
 
 										<NavDropdown.Divider />
-										{isSysadmin() ? (
-											<>
-												<NavDropdown.Item
-													onClick={() => navigate("/admin")}
-													className="dropdown-item-custom text-dark"
-												>
-													Panel de administracion de usuarios
-												</NavDropdown.Item>
-												<NavDropdown.Divider />
-											</>
-										) : (
-											""
-										)}
-										{isAdmin() || isSysadmin() ? (
+										{isAdmin() ? (
 											<>
 												<NavDropdown.Item
 													onClick={() => navigate("/admin")}

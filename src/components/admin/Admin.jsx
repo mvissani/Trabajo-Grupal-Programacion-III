@@ -31,6 +31,8 @@ function Admin() {
 	const [queryEmail, setQueryEmail] = useState("");
 	const [queryUser, setQueryUser] = useState({
 		Name: "",
+		surname: "",
+		dni: "",
 		email: "",
 		class: "",
 	});
@@ -61,6 +63,8 @@ function Admin() {
 			const decodedToken = jwtDecode(adminToken);
 			setQueryUser({
 				Name: data.user.name,
+				surname: data.user.surname,
+				dni: data.user.dni,
 				email: data.user.email,
 				class: decodedToken.typeUser,
 			});
@@ -69,7 +73,38 @@ function Admin() {
 			console.error(err);
 		}
 	};
-	const handleUpdateRole = () => {};
+	const handleUpdateRole = async () => {
+		try {
+			if (!queryUser?.email || !newRole) {
+				alert("Debe seleccionar un usuario y un nuevo rol.");
+				return;
+			}
+
+			const res = await fetch("http://localhost:3000/updateRole", {
+				method: "PUT",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${token}`,
+				},
+				body: JSON.stringify({
+					email: queryUser.email,
+					newRole,
+				}),
+			});
+
+			if (!res.ok) throw new Error(`Error HTTP ${res.status}`);
+
+			const data = await res.json();
+			alert("Rol actualizado correctamente.");
+
+			// actualiza visualmente el rol
+			setQueryUser((prev) => ({ ...prev, class: newRole }));
+			setNewRole("");
+		} catch (err) {
+			console.error("Error al actualizar el rol:", err);
+			alert("Hubo un problema al actualizar el rol del usuario.");
+		}
+	};
 
 	const [formData, setFormData] = useState({
 		RoomNo: "",
@@ -1028,14 +1063,16 @@ function Admin() {
 								</Card.Body>
 							</Card>
 						</Tab>
-						<Tab eventKey="user-role" title="Administrar permisos de usuario">
-							<Card className="p-4 shadow-sm">
-								<Card.Header as="h5">
-									Gestión de Permisos de Usuario
+
+						<Tab eventKey="user-role" title="Administración de Usuarios">
+							<Card>
+								<Card.Header>
+									<h4>Gestión de Permisos de Usuario</h4>
 								</Card.Header>
+
 								<Card.Body>
 									{/* Formulario de búsqueda */}
-									<Form>
+									<Form className="mb-4">
 										<Form.Group controlId="searchEmail" className="mb-3">
 											<Form.Label>
 												Ingrese el email del usuario a buscar:
@@ -1048,38 +1085,82 @@ function Admin() {
 											/>
 										</Form.Group>
 
-										<Button variant="primary" onClick={handleEmailSearch}>
-											Buscar
-										</Button>
+										<div className="d-flex justify-content-end">
+											<Button variant="primary" onClick={handleEmailSearch}>
+												🔍 Buscar
+											</Button>
+										</div>
 									</Form>
 
-									{/* Resultado de búsqueda (solo se muestra si hay datos) */}
-									{queryUser && (
-										<Card className="mt-4 bg-light p-3">
-											<p>
-												<strong>Nombre:</strong> {queryUser.Name} <br />
-												<strong>Email:</strong> {queryUser.email} <br />
-												<strong>Rol actual:</strong> {queryUser.class}
-											</p>
+									{/* Resultado de búsqueda */}
+									{queryUser?.email && (
+										<>
+											<h5 className="mt-4 mb-3">Resultado de búsqueda</h5>
 
-											<div className="d-flex align-items-center gap-3">
-												<Form.Select
-													value={newRole}
-													onChange={(e) => setNewRole(e.target.value)}
-													style={{ width: "200px" }}
-												>
-													<option value="">Seleccionar nuevo rol</option>
-													<option value="user">User</option>
-													<option value="admin">Admin</option>
-													<option value="sysadmin">SysAdmin</option>
-												</Form.Select>
+											<Table striped bordered hover responsive>
+												<thead>
+													<tr>
+														<th>ID</th>
+														<th>Nombre y Apellido</th>
+														<th>Dni</th>
+														<th>Email</th>
+														<th>Rol Actual</th>
+														<th style={{ width: "200px" }}>Acciones</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td>{queryUser.id || "—"}</td>
+														<td>{queryUser.Name + " " + queryUser.surname}</td>
+														<td>{queryUser.dni}</td>
+														<td>{queryUser.email}</td>
+														<td>
+															<Badge
+																bg={
+																	queryUser.class === "sysadmin"
+																		? "danger"
+																		: queryUser.class === "admin"
+																		? "warning"
+																		: "secondary"
+																}
+															>
+																{queryUser.class || "Desconocido"}
+															</Badge>
+														</td>
+														<td>
+															<div className="d-flex gap-2">
+																{/* Selección de rol */}
+																<Form.Select
+																	value={newRole}
+																	onChange={(e) => setNewRole(e.target.value)}
+																	size="sm"
+																	style={{ width: "130px" }}
+																>
+																	<option value="">Nuevo rol</option>
+																	<option value="user">User</option>
+																	<option value="admin">Admin</option>
+																	<option value="sysadmin">SysAdmin</option>
+																</Form.Select>
 
-												<Button variant="success" onClick={handleUpdateRole}>
-													<i className="bi bi-pencil-square me-1"></i>
-													Editar permisos de usuario
-												</Button>
-											</div>
-										</Card>
+																{/* Botón de editar permisos */}
+																<Button
+																	variant="outline-success"
+																	size="sm"
+																	onClick={handleUpdateRole}
+																>
+																	✏️ Cambiar rol
+																</Button>
+
+																{/* Botón de deshabilitar */}
+																<Button variant="outline-danger" size="sm">
+																	🗑️ Deshabilitar usuario
+																</Button>
+															</div>
+														</td>
+													</tr>
+												</tbody>
+											</Table>
+										</>
 									)}
 								</Card.Body>
 							</Card>
