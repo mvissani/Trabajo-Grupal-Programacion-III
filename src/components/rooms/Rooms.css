@@ -11,10 +11,10 @@
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
 }
 
-/* 📸 Imagen más grande para 2 columnas */
+
 .image-container {
   width: 100%;
-  height: 320px; /* Aumentamos el alto */
+  height: 320px; 
   overflow: hidden;
   border-bottom: 3px solid #0d6efd;
 }
@@ -27,7 +27,7 @@
 }
 
 .room-card:hover .room-img {
-  transform: scale(1.05); /* Zoom suave */
+  transform: scale(1.05); 
 }
 
 .room-card .card-body {
@@ -42,7 +42,6 @@
   margin-bottom: 0.3rem;
 }
 
-/* 🖥️ Ajuste responsivo */
 @media (max-width: 768px) {
   .image-container {
     height: 250px;

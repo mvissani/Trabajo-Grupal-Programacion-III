@@ -19,7 +19,7 @@ export const getUserProfile = async (dni) => {
     }
 
     const data = await response.json();
-    return data;
+    return data.data;
   } catch (error) {
     console.error("Error al obtener perfil de usuario:", error);
     throw error;
@@ -35,20 +35,21 @@ export const getUserReservations = async (dni) => {
       throw new Error("No hay token de autenticación");
     }
 
-    const response = await fetch(`http://localhost:3000/api/reservations/user/${dni}`, {
+    const response = await fetch(`http://localhost:3000/api/users/${dni}/reservations`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`
       }
     });
-
+   console.log('[Frontend][Reservations][REQUEST]', { dni });
     if (!response.ok) {
       throw new Error(`Error ${response.status}: ${response.statusText}`);
     }
 
     const data = await response.json();
-    return data;
+    console.log('[Frontend][Reservations][RESPONSE]', data?.data?.length);
+    return data.data;
   } catch (error) {
     console.error("Error al obtener reservas del usuario:", error);
     throw error;

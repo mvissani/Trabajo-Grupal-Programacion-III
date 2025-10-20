@@ -26,6 +26,12 @@ const reviews = [
     author: "THIAGO M.",
     image: "https://ik.imagekit.io/rooxjlwlq/568.jpg?updatedAt=1759274667196",
   },
+  {
+    rating: 8.9,
+    text: "Muy buena la atencion del personal !!! . Las actividades para los chicos, habitaciones espaciosas y la limpieza que tiene el hotel , de lujo !!!! , Lo recomiendo 100%",
+    author: "THIAGO M.",
+    image: "https://ik.imagekit.io/rooxjlwlq/premium_photo-1681491753003-24189282741f.avif?updatedAt=1760640215008",
+  },
     {
     rating: 8.8,
     text: "“Un lugar soñado. Me sorprendió la decoración moderna y elegante. El servicio de transfer al aeropuerto fue muy puntual. Sin dudas, volveré a alojarme aquí en mi próximo viaje.”",
@@ -45,11 +51,12 @@ const reviews = [
     author: "MARTINA V.",
     image: "https://ik.imagekit.io/rooxjlwlq/24-hours-gym-r0lg4mkl4m.jpeg?updatedAt=1759175524156",
   },
+  
   {
-    rating: 8.2,
-    text: "La ubicación es excelente, cerca de todo. El servicio de limpieza muy bueno y rápido. Lo único que mejoraría sería el WiFi, que a veces se cortaba. Por lo demás, todo perfecto”",
+    rating: 9.7,
+    text: "la experiencia fue única, nos encanto el Hotel , su ubicacion y la ciudad ni hablar , el Monumento a la Bandera es impresionante, volveremos sin lugar a dudas.",
     author: "JORGELINA.",
-    image: "https://ik.imagekit.io/rooxjlwlq/laoliviaspa-1024x683.jpg?updatedAt=1759274320069",
+    image: "https://ik.imagekit.io/rooxjlwlq/63727c96e75d1-scaled.jpg?updatedAt=1760642696374",
   },
 ];
 

@@ -98,12 +98,12 @@ background-color: rgb(223, 231, 232); }
 
 
 .booking-over-hero { margin-top: -18px; }
-.patrocinadores-section {
+.sponsors-section {
   background: #fff;   
 }
 
-.patrocinadores-section img {
-  max-height: 80px;   
+.sponsors-section img {
+  max-height: 80px;
   object-fit: contain;
 }
 .carousel .carousel-item img,

@@ -14,24 +14,26 @@ import "./Services.css";
 const services = [
   {
     title: "Restaurante",
-    description: "Alta cocina internacional con vista panorámica.",
+    description: "Tres tipos de Restaurantes de alta cocina internacional y uno con vista panorámica.",
     icon: <FaUtensils aria-hidden="true" />,
     img: "https://ik.imagekit.io/rooxjlwlq/intercontinental-buenos-aires-3613454368-2x1.jpeg?updatedAt=1759175197436",
   },
   {
     title: "Gimnasio",
-    description: "Equipado con la última tecnología fitness.",
+    description:
+      "Equipado con la última tecnología fitness , incluyendo máquinas de última generación y un ambiente motivador.",
     icon: <FaDumbbell aria-hidden="true" />,
     img: "https://ik.imagekit.io/rooxjlwlq/24-hours-gym-r0lg4mkl4m.jpeg?updatedAt=1759175524156",
   },
   {
     title: "Spa",
-    description: "Masajes y tratamientos relajantes.",
+    description:
+      "Masajes , tratamientos faciales, tratamientos corporales, hidroterapia y servicios de belleza .",
     icon: <FaSpa aria-hidden="true" />,
     img: "https://ik.imagekit.io/rooxjlwlq/Industry_Spa_Software_Fresha.b66df7eb.avif?updatedAt=1759175940203",
   },
   {
-    title: "Pileta",
+    title: "Pileta Climatizada",
     description: "Piscina climatizada con vista panorámica.",
     icon: <FaSwimmer aria-hidden="true" />,
     img: "https://ik.imagekit.io/rooxjlwlq/Spa-InterContinental-Buenos-Aires-Pileta-3.jpg?updatedAt=1759175290150",
@@ -40,20 +42,20 @@ const services = [
     title: "Lavandería",
     description: "Servicio de lavado y planchado en el día.",
     icon: <FaTshirt aria-hidden="true" />,
-    img: "https://ik.imagekit.io/rooxjlwlq/washwoman-mayor-en-el-lavadero-109389985.webp?updatedAt=1760325067641",
+    img: "https://ik.imagekit.io/rooxjlwlq/premium_photo-1682129238377-97a15f0073eb.avif?updatedAt=1760640215676",
   },
   {
     title: "Centro de Convenciones",
-    description: "Salones modulares con equipamiento audiovisual.",
+    description:
+      "Salones modulares con equipamiento audiovisual de última generación.",
     icon: <FaBuilding aria-hidden="true" />,
-    img: "https://ik.imagekit.io/rooxjlwlq/1-5.jpg?updatedAt=1760325202895",
+    img: "https://ik.imagekit.io/rooxjlwlq/photo-1736963808415-63bc6cc4a5a3.avif?updatedAt=1760640215750",
   },
 ];
 
 function ServicesModern() {
   return (
     <>
-    
       <Carousel className="mb-5">
         {services.map((s) => (
           <Carousel.Item key={`slide-${s.title}`}>
@@ -70,9 +72,10 @@ function ServicesModern() {
         ))}
       </Carousel>
 
-      
       <Container className="py-5">
-        <h2 className="text-center mb-5 fw-bold text-success">Nuestros Servicios</h2>
+        <h2 className="text-center mb-5 fw-bold text-success">
+          Nuestros Servicios
+        </h2>
         <Row className="g-4">
           {services.map((service) => (
             <Col key={service.title} xl={4} lg={6} md={6} sm={12}>

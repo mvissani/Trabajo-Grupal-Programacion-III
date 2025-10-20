@@ -3,7 +3,7 @@ import { Container, Row, Col, Image, Card } from "react-bootstrap";
 import Map from "./Map";
 import Reviews from "./Reviews";
 import BookingBar from "./BookingBar";
-import Patrocinadores from "./Patrocinadores";
+import Sponsors from "./Sponsors";
 import Carrusel from "./Carrusel";
 import { FaWhatsapp } from "react-icons/fa";
 import WhatsAppButton from "./WhatsAppButton";
@@ -33,7 +33,7 @@ function Home() {
         />
         <h5 className="fw-semibold">Rosario - Santa Fe - Argentina</h5>
         <p className="fw-light fst-italic fs-5 mt-3 text-dark">
-          Hotel Pullman Rosario se encuentra en el ingreso a la ciudad de
+          Hotel Starlight Rosario se encuentra en el ingreso a la ciudad de
           Rosario. Cuenta con habitaciones modernas, el Casino más grande de
           Sudamérica y una variedad de instalaciones y servicios pensados para
           que tenga una estadía única.
@@ -170,7 +170,7 @@ function Home() {
         <Reviews />
       </div>
 
-      <Patrocinadores />
+      <Sponsors />
       <WhatsAppButton />
     </div>
   );
