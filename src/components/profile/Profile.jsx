@@ -100,7 +100,7 @@ const Profile = () => {
         setLoading(false);
         return;
       }
-      console.log('[Frontend][Profile][LOAD]', { dni });
+      console.log("[Frontend][Profile][LOAD]", { dni });
       const profileData = await getUserProfile(dni);
       setUserProfile(profileData);
       setEditFormData({
@@ -112,7 +112,7 @@ const Profile = () => {
 
       try {
         const reservationsData = await getUserReservations(dni);
-        console.log('[Frontend][Reservations][SET]', reservationsData?.length);
+        console.log("[Frontend][Reservations][SET]", reservationsData?.length);
         setUserReservations(reservationsData);
       } catch (reservationError) {
         console.warn("No se pudieron cargar las reservas:", reservationError);

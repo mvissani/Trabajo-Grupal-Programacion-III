@@ -14,7 +14,8 @@ import "./Services.css";
 const services = [
   {
     title: "Restaurante",
-    description: "Tres tipos de Restaurantes de alta cocina internacional y uno con vista panorámica.",
+    description:
+      "Tres tipos de Restaurantes de alta cocina internacional y uno con vista panorámica.",
     icon: <FaUtensils aria-hidden="true" />,
     img: "https://ik.imagekit.io/rooxjlwlq/intercontinental-buenos-aires-3613454368-2x1.jpeg?updatedAt=1759175197436",
   },
