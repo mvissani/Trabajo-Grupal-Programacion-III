@@ -19,7 +19,7 @@ const Header = () => {
 		handleLogOut();
 	};
 	const isAdmin = () => {
-		if (userType === "Admin") {
+		if (userType === "admin") {
 			return true;
 		} else if (userType === "sysadmin") {
 			return true;

@@ -12,6 +12,7 @@ import {
 	Tabs,
 	Table,
 	Badge,
+	Modal,
 } from "react-bootstrap";
 import { jwtDecode } from "jwt-decode";
 import { getRooms } from "../rooms/Rooms.services";
@@ -26,6 +27,7 @@ import {
 	restoreService,
 } from "./Admin.services";
 import { AuthenticationContex } from "../services/Auth/Auth.context";
+import { UserTypeContext } from "../services/Auth/UserType.context";
 
 function Admin() {
 	const [queryEmail, setQueryEmail] = useState("");
@@ -41,6 +43,11 @@ function Admin() {
 	const [emailError, setEmailError] = useState("");
 	const { token } = useContext(AuthenticationContex);
 	const [adminToken, setAdminToken] = useState(null);
+	const { userType } = useContext(UserTypeContext);
+
+	const [showConfirmModal, setShowConfirmModal] = useState(null);
+	const [showResultModal, setShowResultModal] = useState(false);
+	const [modalMessage, setModalMessage] = useState("");
 
 	const handleEmailSearch = async (e) => {
 		e.preventDefault();
@@ -75,6 +82,7 @@ function Admin() {
 			console.error(err);
 		}
 	};
+
 	const handleUpdateRole = async () => {
 		try {
 			if (!queryUser?.email || !newRole) {
@@ -106,7 +114,41 @@ function Admin() {
 		}
 	};
 
-	const handleDeshabilitationUser = () => {};
+	const handleDeshabilitationUser = async () => {
+		try {
+			const response = await fetch(
+				`http://localhost:3000/${queryUser.dni}/toggle-active`,
+				{
+					method: "PUT",
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${token}`,
+					},
+				}
+			);
+
+			if (!response.ok)
+				throw new Error("No se pudo actualizar el estado del usuario");
+
+			const data = await response.json();
+			setQueryUser((prev) => ({ ...prev, active: data.user.active }));
+			setModalMessage(
+				`Usuario ${
+					data.user.active ? "habilitado" : "deshabilitado"
+				} correctamente.`
+			);
+		} catch (error) {
+			setModalMessage(`Error al cambiar el estado: ${error.message}`);
+		} finally {
+			setShowResultModal(true);
+		}
+	};
+
+	const isAdmin = () => {
+		if (userType == "sysadmin") {
+			return true;
+		} else return false;
+	};
 
 	const [formData, setFormData] = useState({
 		RoomNo: "",
@@ -1065,116 +1107,228 @@ function Admin() {
 								</Card.Body>
 							</Card>
 						</Tab>
+						{isAdmin() ? (
+							<Tab eventKey="user-role" title="Administración de Usuarios">
+								<Card className="shadow-sm">
+									<Card.Header>
+										<h4>Gestión de Permisos de Usuario</h4>
+									</Card.Header>
 
-						<Tab eventKey="user-role" title="Administración de Usuarios">
-							<Card>
-								<Card.Header>
-									<h4>Gestión de Permisos de Usuario</h4>
-								</Card.Header>
+									<Card.Body>
+										{/* Formulario de búsqueda */}
+										<Form className="mb-4">
+											<Form.Group controlId="searchEmail" className="mb-3">
+												<Form.Label>
+													Ingrese el email del usuario a buscar:
+												</Form.Label>
+												<Form.Control
+													type="email"
+													placeholder="usuario@correo.com"
+													value={queryEmail}
+													onChange={(e) => setQueryEmail(e.target.value)}
+												/>
+											</Form.Group>
 
-								<Card.Body>
-									{/* Formulario de búsqueda */}
-									<Form className="mb-4">
-										<Form.Group controlId="searchEmail" className="mb-3">
-											<Form.Label>
-												Ingrese el email del usuario a buscar:
-											</Form.Label>
-											<Form.Control
-												type="email"
-												placeholder="usuario@correo.com"
-												value={queryEmail}
-												onChange={(e) => setQueryEmail(e.target.value)}
-											/>
-										</Form.Group>
+											<div className="d-flex justify-content-end">
+												<Button variant="primary" onClick={handleEmailSearch}>
+													🔍 Buscar
+												</Button>
+											</div>
+										</Form>
 
-										<div className="d-flex justify-content-end">
-											<Button variant="primary" onClick={handleEmailSearch}>
-												🔍 Buscar
-											</Button>
-										</div>
-									</Form>
+										{/* Resultado de búsqueda */}
+										{queryUser?.email && (
+											<>
+												<h5 className="mt-4 mb-3">Resultado de búsqueda</h5>
 
-									{/* Resultado de búsqueda */}
-									{queryUser?.email && (
-										<>
-											<h5 className="mt-4 mb-3">Resultado de búsqueda</h5>
-
-											<Table striped bordered hover responsive>
-												<thead>
-													<tr>
-														<th>ID</th>
-														<th>Nombre y Apellido</th>
-														<th>Dni</th>
-														<th>Email</th>
-														<th>Rol Actual</th>
-														<th>Estado</th>
-														<th style={{ width: "200px" }}>Acciones</th>
-													</tr>
-												</thead>
-												<tbody>
-													<tr>
-														<td>{queryUser.id || "—"}</td>
-														<td>{queryUser.Name + " " + queryUser.surname}</td>
-														<td>{queryUser.dni}</td>
-														<td>{queryUser.email}</td>
-														<td>
-															<Badge
-																bg={
-																	queryUser.class === "sysadmin"
-																		? "danger"
-																		: queryUser.class === "admin"
-																		? "warning"
-																		: "secondary"
-																}
-															>
-																{queryUser.class || "Desconocido"}
-															</Badge>
-														</td>
-														<td>
-															<Badge
-																bg={queryUser.active ? "secondary" : "warning"}
-															>
-																{queryUser.active ? "Activo" : "inactivo"}
-															</Badge>
-														</td>
-														<td>
-															<div className="d-flex gap-2">
-																<Form.Select
-																	value={newRole}
-																	onChange={(e) => setNewRole(e.target.value)}
-																	size="sm"
-																	style={{ width: "130px" }}
+												<Table striped bordered hover responsive>
+													<thead>
+														<tr>
+															<th>ID</th>
+															<th>Nombre y Apellido</th>
+															<th>DNI</th>
+															<th>Email</th>
+															<th>Rol Actual</th>
+															<th>Estado</th>
+															<th style={{ width: "200px" }}>Acciones</th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr>
+															<td>{queryUser.id || "—"}</td>
+															<td>{`${queryUser.Name} ${queryUser.surname}`}</td>
+															<td>{queryUser.dni}</td>
+															<td>{queryUser.email}</td>
+															<td>
+																<Badge
+																	bg={
+																		queryUser.class === "sysadmin"
+																			? "danger"
+																			: queryUser.class === "admin"
+																			? "warning"
+																			: "secondary"
+																	}
 																>
-																	<option value="">Nuevo rol</option>
-																	<option value="user">User</option>
-																	<option value="admin">Admin</option>
-																	<option value="sysadmin">SysAdmin</option>
-																</Form.Select>
-
-																<Button
-																	variant="outline-success"
-																	size="sm"
-																	onClick={handleUpdateRole}
+																	{queryUser.class || "Desconocido"}
+																</Badge>
+															</td>
+															<td>
+																<Badge
+																	bg={
+																		queryUser.active ? "success" : "secondary"
+																	}
 																>
-																	✏️ Cambiar rol
-																</Button>
+																	{queryUser.active ? "Activo" : "Inactivo"}
+																</Badge>
+															</td>
+															<td>
+																<div className="d-flex gap-2">
+																	<Form.Select
+																		value={newRole}
+																		onChange={(e) => setNewRole(e.target.value)}
+																		size="sm"
+																		style={{ width: "130px" }}
+																	>
+																		<option value="">Nuevo rol</option>
+																		<option value="user">User</option>
+																		<option value="admin">Admin</option>
+																		<option value="sysadmin">SysAdmin</option>
+																	</Form.Select>
 
-																<Button variant="outline-danger" size="sm">
-																	🗑️ Deshabilitar usuario
-																</Button>
-																<Button variant="outline-danger" size="sm">
-																	❌ Eliminar usuario
-																</Button>
-															</div>
-														</td>
-													</tr>
-												</tbody>
-											</Table>
-										</>
-									)}
-								</Card.Body>
-							</Card>
-						</Tab>
+																	<Button
+																		variant="outline-success"
+																		size="sm"
+																		onClick={() => setShowConfirmModal("role")}
+																	>
+																		✏️ Cambiar rol
+																	</Button>
+
+																	<Button
+																		variant="outline-warning"
+																		size="sm"
+																		onClick={
+																			(() => setShowConfirmModal("disable"),
+																			handleDeshabilitationUser)
+																		}
+																	>
+																		🗑️{" "}
+																		{queryUser.active
+																			? "Deshabilitar"
+																			: "Habilitar"}{" "}
+																		usuario
+																	</Button>
+
+																	<Button
+																		variant="outline-danger"
+																		size="sm"
+																		onClick={() =>
+																			setShowConfirmModal("delete")
+																		}
+																	>
+																		❌ Eliminar usuario
+																	</Button>
+																</div>
+															</td>
+														</tr>
+													</tbody>
+												</Table>
+											</>
+										)}
+									</Card.Body>
+								</Card>
+
+								{/* MODAL DE CONFIRMACIÓN */}
+								<Modal
+									show={!!showConfirmModal}
+									onHide={() => setShowConfirmModal(null)}
+									centered
+								>
+									<Modal.Header closeButton>
+										<Modal.Title>Confirmar acción</Modal.Title>
+									</Modal.Header>
+									<Modal.Body>
+										{showConfirmModal === "role" && (
+											<>
+												¿Deseas cambiar el rol del usuario{" "}
+												<strong>{queryUser.email}</strong> a{" "}
+												<strong>{newRole}</strong>?
+											</>
+										)}
+										{showConfirmModal === "disable" && (
+											<>
+												¿Seguro que deseas{" "}
+												{queryUser.active ? "deshabilitar" : "habilitar"} al
+												usuario <strong>{queryUser.email}</strong>?
+											</>
+										)}
+										{showConfirmModal === "delete" && (
+											<>
+												Esta acción <strong>no se puede deshacer.</strong>{" "}
+												¿Seguro que deseas eliminar al usuario{" "}
+												<strong>{queryUser.email}</strong>?
+											</>
+										)}
+									</Modal.Body>
+									<Modal.Footer>
+										<Button
+											variant="secondary"
+											onClick={() => setShowConfirmModal(null)}
+										>
+											Cancelar
+										</Button>
+										<Button
+											variant={
+												showConfirmModal === "delete"
+													? "danger"
+													: showConfirmModal === "disable"
+													? "warning"
+													: "success"
+											}
+											onClick={async () => {
+												setShowConfirmModal(null);
+												try {
+													if (showConfirmModal === "role")
+														await handleUpdateRole();
+													if (showConfirmModal === "disable")
+														await handleDeshabilitationUser();
+													if (showConfirmModal === "delete")
+														await handleDeleteUser();
+													setModalMessage("Acción completada correctamente.");
+												} catch (err) {
+													setModalMessage("Error: " + err.message);
+												} finally {
+													setShowResultModal(true);
+												}
+											}}
+										>
+											Confirmar
+										</Button>
+									</Modal.Footer>
+								</Modal>
+
+								{/* MODAL DE RESULTADO */}
+								<Modal
+									show={showResultModal}
+									onHide={() => setShowResultModal(false)}
+									centered
+								>
+									<Modal.Header closeButton>
+										<Modal.Title>Resultado</Modal.Title>
+									</Modal.Header>
+									<Modal.Body>{modalMessage}</Modal.Body>
+									<Modal.Footer>
+										<Button
+											variant="primary"
+											onClick={() => setShowResultModal(false)}
+										>
+											Aceptar
+										</Button>
+									</Modal.Footer>
+								</Modal>
+							</Tab>
+						) : (
+							""
+						)}
 					</Tabs>
 				</Col>
 			</Row>
