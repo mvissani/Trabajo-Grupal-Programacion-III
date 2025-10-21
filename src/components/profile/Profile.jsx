@@ -515,7 +515,7 @@ const Profile = () => {
                           <th>Check-out</th>
                           <th>Habitación</th>
                           <th>Estado</th>
-                          <th>Acciones</th>
+                          
                         </tr>
                       </thead>
                       <tbody>
@@ -532,11 +532,7 @@ const Profile = () => {
                             <td>
                               <Badge bg="success">Confirmada</Badge>
                             </td>
-                            <td>
-                              <Button variant="outline-info" size="sm">
-                                👁️ Ver Detalles
-                              </Button>
-                            </td>
+                           
                           </tr>
                         ))}
                       </tbody>
