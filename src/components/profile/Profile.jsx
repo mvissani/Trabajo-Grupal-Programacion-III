@@ -145,31 +145,40 @@ const Profile = () => {
         if (!value.trim()) {
           return `${field === "name" ? "Nombre" : "Apellido"} es obligatorio`;
         }
-        // Validar que solo contenga letras, espacios y algunos caracteres especiales
+
         if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s'-]+$/.test(value.trim())) {
-          return `${field === "name" ? "Nombre" : "Apellido"} solo puede contener letras, espacios, guiones y apostrofes`;
+          return `${
+            field === "name" ? "Nombre" : "Apellido"
+          } solo puede contener letras, espacios, guiones y apostrofes`;
         }
-        // Validar longitud mínima y máxima
+
         if (value.trim().length < 2) {
-          return `${field === "name" ? "Nombre" : "Apellido"} debe tener al menos 2 caracteres`;
+          return `${
+            field === "name" ? "Nombre" : "Apellido"
+          } debe tener al menos 2 caracteres`;
         }
         if (value.trim().length > 50) {
-          return `${field === "name" ? "Nombre" : "Apellido"} no puede tener más de 50 caracteres`;
+          return `${
+            field === "name" ? "Nombre" : "Apellido"
+          } no puede tener más de 50 caracteres`;
         }
         return "";
       case "email":
         if (!value.trim()) return "Email es obligatorio";
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return "Email debe ser válido";
-        if (value.length > 100) return "Email no puede tener más de 100 caracteres";
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
+          return "Email debe ser válido";
+        if (value.length > 100)
+          return "Email no puede tener más de 100 caracteres";
         return "";
-      case "cellNumber":
-        { if (!value.trim()) return "Número de celular es obligatorio";
-        
+      case "cellNumber": {
+        if (!value.trim()) return "Número de celular es obligatorio";
+
         const cleanNumber = value.replace(/\D/g, "");
         if (!/^\d{10,15}$/.test(cleanNumber)) {
           return "Número de celular debe tener entre 10 y 15 dígitos";
         }
-        return ""; }
+        return "";
+      }
       default:
         return "";
     }
@@ -178,19 +187,15 @@ const Profile = () => {
   const handleEditChange = (e) => {
     const { name, value } = e.target;
     let processedValue = value;
-    
-    // Limpiar caracteres no válidos para nombre y apellido
+
     if (name === "name" || name === "surname") {
-      // Permitir solo letras, espacios, guiones y apostrofes
       processedValue = value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s'-]/g, "");
     }
-    
-    // Limpiar caracteres no válidos para celular
+
     if (name === "cellNumber") {
-      // Permitir solo dígitos
       processedValue = value.replace(/\D/g, "");
     }
-    
+
     setEditFormData((prev) => ({
       ...prev,
       [name]: processedValue,
@@ -242,29 +247,22 @@ const Profile = () => {
       showNotification("Perfil actualizado exitosamente", "success");
     } catch (error) {
       console.error("Error al actualizar perfil:", error);
-      
-      // Intentar extraer el mensaje de error del backend
+
       let errorMessage = "Error al actualizar el perfil";
-      // Si el error viene del backend con un mensaje específico
+
       if (error.message) {
-        // Si es un mensaje de email duplicado
         if (error.message.includes("Este email ya está en uso")) {
-          errorMessage = "❌ Este email ya está registrado por otro usuario. Por favor, usa un email diferente.";
-        }
-        // Si es un mensaje de formato inválido
-        else if (error.message.includes("Formato")) {
+          errorMessage =
+            "❌ Este email ya está registrado por otro usuario. Por favor, usa un email diferente.";
+        } else if (error.message.includes("Formato")) {
           errorMessage = `❌ ${error.message}`;
-        }
-        // Si es un mensaje de campos obligatorios
-        else if (error.message.includes("obligatorio")) {
+        } else if (error.message.includes("obligatorio")) {
           errorMessage = `❌ ${error.message}`;
-        }
-        // Si es otro tipo de error
-        else if (!error.message.includes("Error")) {
+        } else if (!error.message.includes("Error")) {
           errorMessage = `❌ ${error.message}`;
         }
       }
-      
+
       showNotification(errorMessage, "danger");
     }
   };
@@ -568,7 +566,6 @@ const Profile = () => {
                           <th>Check-out</th>
                           <th>Habitación</th>
                           <th>Estado</th>
-                          
                         </tr>
                       </thead>
                       <tbody>
@@ -585,7 +582,6 @@ const Profile = () => {
                             <td>
                               <Badge bg="success">Confirmada</Badge>
                             </td>
-                            
                           </tr>
                         ))}
                       </tbody>

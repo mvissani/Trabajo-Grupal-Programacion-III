@@ -29,7 +29,7 @@ const reviews = [
   {
     rating: 8.9,
     text: "Muy buena la atencion del personal !!! . Las actividades para los chicos, habitaciones espaciosas y la limpieza que tiene el hotel , de lujo !!!! , Lo recomiendo 100%",
-    author: "THIAGO M.",
+    author: "MARISA F.",
     image: "https://ik.imagekit.io/rooxjlwlq/premium_photo-1681491753003-24189282741f.avif?updatedAt=1760640215008",
   },
     {

@@ -82,7 +82,7 @@ export const updateUserProfile = async (dni, userData) => {
     });
 
     if (!response.ok) {
-      // Intentar obtener el mensaje de error del backend
+    
       let errorMessage = `Error ${response.status}: ${response.statusText}`;
       try {
         const errorData = await response.json();

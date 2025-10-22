@@ -201,8 +201,8 @@ export default function BookingBar({ onSearch }) {
               <Button
                 type="submit"
                 className="px-4 fw-bold"
-                style={{ 
-                  background: "#48c5b7", 
+                style={{
+                  background: "#48c5b7",
                   border: "none",
                   height: "28px",
                   marginTop: "0px",

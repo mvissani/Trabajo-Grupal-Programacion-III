@@ -153,20 +153,19 @@ function Home() {
         </Row>
       </Container>
 
-      
-      <div style={{ marginBottom: '5px' , marginTop: '200px' }}>
+      <div style={{ marginBottom: "5px", marginTop: "200px" }}>
         <Carrusel />
       </div>
 
-      <div style={{ marginTop: '1px', marginBottom: '1px' }}>
+      <div style={{ marginTop: "1px", marginBottom: "1px" }}>
         <Map />
       </div>
 
-       <div style={{ marginTop: '1px', marginBottom: '1px' }}>
+      <div style={{ marginTop: "1px", marginBottom: "1px" }}>
         <RoomsAndServices />
       </div>
 
-      <div style={{ marginTop: '1px', marginBottom: '10px' }}>
+      <div style={{ marginTop: "1px", marginBottom: "10px" }}>
         <Reviews />
       </div>
 

@@ -37,39 +37,49 @@ function Register() {
         if (!value.trim()) {
           return `${field === "name" ? "Nombre" : "Apellido"} es obligatorio`;
         }
-        // Validar que solo contenga letras, espacios y algunos caracteres especiales
+
         if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s'-]+$/.test(value.trim())) {
-          return `${field === "name" ? "Nombre" : "Apellido"} solo puede contener letras, espacios, guiones y apostrofes`;
+          return `${
+            field === "name" ? "Nombre" : "Apellido"
+          } solo puede contener letras, espacios, guiones y apostrofes`;
         }
-        // Validar longitud mínima y máxima
+
         if (value.trim().length < 2) {
-          return `${field === "name" ? "Nombre" : "Apellido"} debe tener al menos 2 caracteres`;
+          return `${
+            field === "name" ? "Nombre" : "Apellido"
+          } debe tener al menos 2 caracteres`;
         }
         if (value.trim().length > 50) {
-          return `${field === "name" ? "Nombre" : "Apellido"} no puede tener más de 50 caracteres`;
+          return `${
+            field === "name" ? "Nombre" : "Apellido"
+          } no puede tener más de 50 caracteres`;
         }
         return "";
       case "email":
         if (!value.trim()) return "Email es obligatorio";
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return "Email debe ser válido";
-        if (value.length > 100) return "Email no puede tener más de 100 caracteres";
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
+          return "Email debe ser válido";
+        if (value.length > 100)
+          return "Email no puede tener más de 100 caracteres";
         return "";
-      case "cellNumber":
-        { if (!value.trim()) return "Número de celular es obligatorio";
-        // Limpiar el número (solo dígitos)
+      case "cellNumber": {
+        if (!value.trim()) return "Número de celular es obligatorio";
+
         const cleanNumber = value.replace(/\D/g, "");
         if (!/^\d{10,15}$/.test(cleanNumber)) {
           return "Número de celular debe tener entre 10 y 15 dígitos";
         }
-        return ""; }
-      case "dni":
-        { if (!value.trim()) return "DNI es obligatorio";
-        // Limpiar el DNI (solo dígitos)
+        return "";
+      }
+      case "dni": {
+        if (!value.trim()) return "DNI es obligatorio";
+
         const cleanDni = value.replace(/\D/g, "");
         if (!/^\d{7,8}$/.test(cleanDni)) {
           return "DNI debe tener entre 7 y 8 dígitos";
         }
-        return ""; }
+        return "";
+      }
       case "password":
         if (!value.trim()) return "Contraseña es obligatoria";
         if (value.length < 6) {
@@ -87,20 +97,15 @@ function Register() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     let processedValue = value;
-    
-    // Limpiar caracteres no válidos para nombre y apellido
+
     if (name === "name" || name === "surname") {
-      // Permitir solo letras, espacios, guiones y apostrofes
       processedValue = value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s'-]/g, "");
     }
-    
-    // Limpiar caracteres no válidos para celular y DNI
+
     if (name === "cellNumber" || name === "dni") {
-      // Permitir solo dígitos
       processedValue = value.replace(/\D/g, "");
     }
-    
-    // Para email, mantener como está pero validar formato
+
     if (name === "email") {
       processedValue = value.toLowerCase().trim();
     }
@@ -127,13 +132,16 @@ function Register() {
     setErrors(newErrors);
 
     if (Object.values(newErrors).some((err) => err !== "")) {
-      console.log("❌ [REGISTER] Errores de validación encontrados:", newErrors);
+      console.log(
+        "❌ [REGISTER] Errores de validación encontrados:",
+        newErrors
+      );
       return;
     }
 
     try {
       console.log("🚀 [REGISTER] Enviando datos de registro:", formData);
-      
+
       const res = await fetch("http://localhost:3000/api/register", {
         headers: { "Content-Type": "application/json" },
         method: "POST",
@@ -141,11 +149,14 @@ function Register() {
       });
 
       const data = await res.json();
-      console.log("📊 [REGISTER] Respuesta del servidor:", { status: res.status, data });
+      console.log("📊 [REGISTER] Respuesta del servidor:", {
+        status: res.status,
+        data,
+      });
 
       if (!res.ok) {
         console.error("❌ [REGISTER] Error en registro:", data.message);
-        // Mostrar error específico al usuario
+
         if (data.message) {
           alert(`❌ Error: ${data.message}`);
         } else {
