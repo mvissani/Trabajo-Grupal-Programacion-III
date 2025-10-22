@@ -65,6 +65,8 @@ export const updateUserProfile = async (dni, userData) => {
       throw new Error("No hay token de autenticación");
     }
 
+    console.log('[Frontend][Profile][UPDATE_REQUEST]', { dni, userData });
+
     const response = await fetch(`http://localhost:3000/api/users/${dni}`, {
       method: "PUT",
       headers: {
@@ -74,11 +76,28 @@ export const updateUserProfile = async (dni, userData) => {
       body: JSON.stringify(userData)
     });
 
+    console.log('[Frontend][Profile][UPDATE_RESPONSE]', { 
+      status: response.status, 
+      statusText: response.statusText 
+    });
+
     if (!response.ok) {
-      throw new Error(`Error ${response.status}: ${response.statusText}`);
+      // Intentar obtener el mensaje de error del backend
+      let errorMessage = `Error ${response.status}: ${response.statusText}`;
+      try {
+        const errorData = await response.json();
+        console.log('[Frontend][Profile][UPDATE_ERROR_DATA]', errorData);
+        if (errorData.message) {
+          errorMessage = errorData.message;
+        }
+      } catch (parseError) {
+        console.warn("No se pudo parsear el error del backend:", parseError);
+      }
+      throw new Error(errorMessage);
     }
 
     const data = await response.json();
+    console.log('[Frontend][Profile][UPDATE_SUCCESS]', data);
     return data;
   } catch (error) {
     console.error("Error al actualizar perfil de usuario:", error);

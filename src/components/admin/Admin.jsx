@@ -41,10 +41,14 @@ function Admin() {
   const [newRole, setNewRole] = useState("");
   const [emailError, setEmailError] = useState("");
   const { token } = useContext(AuthenticationContex);
+  const { userType } = useContext(UserTypeContext);
   const [adminToken, setAdminToken] = useState(null);
 
   const handleEmailSearch = async (e) => {
     e.preventDefault();
+    setEmailError(""); // Limpiar errores previos
+    setQueryUser({ Name: "", surname: "", dni: "", email: "", class: "", active: "" }); // Limpiar usuario previo
+    
     try {
       const res = await fetch("http://localhost:3000/admin/searchemail", {
         headers: {
@@ -57,12 +61,16 @@ function Admin() {
       const data = await res.json();
 
       if (!res.ok) {
-        setEmailError(data.message || "Error desconocido");
+        if (res.status === 404) {
+          setEmailError("❌ Usuario no encontrado. Verifica que el email sea correcto.");
+        } else {
+          setEmailError(data.message || "Error desconocido");
+        }
         return;
       }
 
       setAdminToken(data.token);
-      const decodedToken = jwtDecode(adminToken);
+      const decodedToken = jwtDecode(data.token);
       setQueryUser({
         Name: data.user.name,
         surname: data.user.surname,
@@ -72,7 +80,7 @@ function Admin() {
         active: data.user.active,
       });
     } catch (err) {
-      setEmailError("Error de conexión con el servidor");
+      setEmailError("❌ Error de conexión con el servidor");
       console.error(err);
     }
   };
@@ -515,11 +523,72 @@ function Admin() {
     loadServices();
   }, []);
 
+  // Verificar permisos de acceso
+  const hasAccess = () => {
+    return userType === "admin" || userType === "sysadmin";
+  };
+
+  const canManageUsers = () => {
+    return userType === "sysadmin";
+  };
+
+  // Componente de acceso restringido
+  const AccessDenied = () => (
+    <Container className="py-5">
+      <Row className="justify-content-center">
+        <Col md={8} lg={6}>
+          <Card className="text-center border-danger">
+            <Card.Body className="py-5">
+              <div className="mb-4">
+                <i className="fas fa-ban text-danger" style={{ fontSize: "4rem" }}></i>
+              </div>
+              <h2 className="text-danger mb-3">🚫 Acceso Restringido</h2>
+              <p className="lead mb-4">
+                No tienes permisos para acceder a esta sección.
+              </p>
+              <p className="text-muted mb-4">
+                Solo los administradores pueden acceder al panel administrativo.
+              </p>
+              <Button 
+                variant="primary" 
+                onClick={() => window.history.back()}
+                className="px-4"
+              >
+                ← Volver Atrás
+              </Button>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+    </Container>
+  );
+
+  // Si no tiene acceso, mostrar mensaje de restricción
+  if (!hasAccess()) {
+    return <AccessDenied />;
+  }
+
   return (
     <Container className="py-4">
       <Row>
         <Col>
-          <h1 className="text-center mb-4">Panel Administrativo</h1>
+          <div className="d-flex justify-content-between align-items-center mb-4">
+            <h1 className="text-center mb-0">Panel Administrativo</h1>
+            <Badge 
+              bg={
+                userType === "sysadmin" 
+                  ? "danger" 
+                  : userType === "admin" 
+                  ? "warning" 
+                  : "secondary"
+              }
+              className="px-3 py-2"
+            >
+              {userType === "sysadmin" && "🔧 SysAdmin"}
+              {userType === "admin" && "👑 Admin"}
+              {userType === "user" && "👤 User"}
+            </Badge>
+          </div>
 
           {notification.show && (
             <Alert
@@ -1065,113 +1134,124 @@ function Admin() {
               </Card>
             </Tab>
 
-            <Tab eventKey="user-role" title="Administración de Usuarios">
-              <Card>
-                <Card.Header>
-                  <h4>Gestión de Permisos de Usuario</h4>
-                </Card.Header>
+            {canManageUsers() && (
+              <Tab eventKey="user-role" title="Administración de Usuarios">
+                <Card>
+                  <Card.Header>
+                    <h4>Gestión de Permisos de Usuario</h4>
+                    <small className="text-muted">
+                      Solo disponible para SysAdmin
+                    </small>
+                  </Card.Header>
 
-                <Card.Body>
-                  <Form className="mb-4">
-                    <Form.Group controlId="searchEmail" className="mb-3">
-                      <Form.Label>
-                        Ingrese el email del usuario a buscar:
-                      </Form.Label>
-                      <Form.Control
-                        type="email"
-                        placeholder="usuario@correo.com"
-                        value={queryEmail}
-                        onChange={(e) => setQueryEmail(e.target.value)}
-                      />
-                    </Form.Group>
+                  <Card.Body>
+                    <Form className="mb-4">
+                      <Form.Group controlId="searchEmail" className="mb-3">
+                        <Form.Label>
+                          Ingrese el email del usuario a buscar:
+                        </Form.Label>
+                        <Form.Control
+                          type="email"
+                          placeholder="usuario@correo.com"
+                          value={queryEmail}
+                          onChange={(e) => setQueryEmail(e.target.value)}
+                        />
+                      </Form.Group>
 
-                    <div className="d-flex justify-content-end">
-                      <Button variant="primary" onClick={handleEmailSearch}>
-                        🔍 Buscar
-                      </Button>
-                    </div>
-                  </Form>
+                      <div className="d-flex justify-content-end">
+                        <Button variant="primary" onClick={handleEmailSearch}>
+                          🔍 Buscar
+                        </Button>
+                      </div>
+                    </Form>
 
-                  {queryUser?.email && (
-                    <>
-                      <h5 className="mt-4 mb-3">Resultado de búsqueda</h5>
+                    {emailError && (
+                      <Alert variant="danger" className="mb-4">
+                        {emailError}
+                      </Alert>
+                    )}
 
-                      <Table striped bordered hover responsive>
-                        <thead>
-                          <tr>
-                            <th>ID</th>
-                            <th>Nombre y Apellido</th>
-                            <th>Dni</th>
-                            <th>Email</th>
-                            <th>Rol Actual</th>
-                            <th>Estado</th>
-                            <th style={{ width: "200px" }}>Acciones</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td>{queryUser.id || "—"}</td>
-                            <td>{queryUser.Name + " " + queryUser.surname}</td>
-                            <td>{queryUser.dni}</td>
-                            <td>{queryUser.email}</td>
-                            <td>
-                              <Badge
-                                bg={
-                                  queryUser.class === "sysadmin"
-                                    ? "danger"
-                                    : queryUser.class === "admin"
-                                    ? "warning"
-                                    : "secondary"
-                                }
-                              >
-                                {queryUser.class || "Desconocido"}
-                              </Badge>
-                            </td>
-                            <td>
-                              <Badge
-                                bg={queryUser.active ? "secondary" : "warning"}
-                              >
-                                {queryUser.active ? "Activo" : "inactivo"}
-                              </Badge>
-                            </td>
-                            <td>
-                              <div className="d-flex gap-2">
-                                <Form.Select
-                                  value={newRole}
-                                  onChange={(e) => setNewRole(e.target.value)}
-                                  size="sm"
-                                  style={{ width: "130px" }}
+                    {queryUser?.email && (
+                      <>
+                        <h5 className="mt-4 mb-3">Resultado de búsqueda</h5>
+
+                        <Table striped bordered hover responsive>
+                          <thead>
+                            <tr>
+                              <th>ID</th>
+                              <th>Nombre y Apellido</th>
+                              <th>Dni</th>
+                              <th>Email</th>
+                              <th>Rol Actual</th>
+                              <th>Estado</th>
+                              <th style={{ width: "200px" }}>Acciones</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>{queryUser.id || "—"}</td>
+                              <td>{queryUser.Name + " " + queryUser.surname}</td>
+                              <td>{queryUser.dni}</td>
+                              <td>{queryUser.email}</td>
+                              <td>
+                                <Badge
+                                  bg={
+                                    queryUser.class === "sysadmin"
+                                      ? "danger"
+                                      : queryUser.class === "admin"
+                                      ? "warning"
+                                      : "secondary"
+                                  }
                                 >
-                                  <option value="">Nuevo rol</option>
-                                  <option value="user">User</option>
-                                  <option value="admin">Admin</option>
-                                  <option value="sysadmin">SysAdmin</option>
-                                </Form.Select>
-
-                                <Button
-                                  variant="outline-success"
-                                  size="sm"
-                                  onClick={handleUpdateRole}
+                                  {queryUser.class || "Desconocido"}
+                                </Badge>
+                              </td>
+                              <td>
+                                <Badge
+                                  bg={queryUser.active ? "secondary" : "warning"}
                                 >
-                                  ✏️ Cambiar rol
-                                </Button>
+                                  {queryUser.active ? "Activo" : "inactivo"}
+                                </Badge>
+                              </td>
+                              <td>
+                                <div className="d-flex gap-2">
+                                  <Form.Select
+                                    value={newRole}
+                                    onChange={(e) => setNewRole(e.target.value)}
+                                    size="sm"
+                                    style={{ width: "130px" }}
+                                  >
+                                    <option value="">Nuevo rol</option>
+                                    <option value="user">User</option>
+                                    <option value="admin">Admin</option>
+                                    <option value="sysadmin">SysAdmin</option>
+                                  </Form.Select>
 
-                                <Button variant="outline-danger" size="sm">
-                                  🗑️ Deshabilitar usuario
-                                </Button>
-                                <Button variant="outline-danger" size="sm">
-                                  ❌ Eliminar usuario
-                                </Button>
-                              </div>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </Table>
-                    </>
-                  )}
-                </Card.Body>
-              </Card>
-            </Tab>
+                                  <Button
+                                    variant="outline-success"
+                                    size="sm"
+                                    onClick={handleUpdateRole}
+                                  >
+                                    ✏️ Cambiar rol
+                                  </Button>
+
+                                  <Button variant="outline-danger" size="sm">
+                                    🗑️ Deshabilitar usuario
+                                  </Button>
+                                  <Button variant="outline-danger" size="sm">
+                                    ❌ Eliminar usuario
+                                  </Button>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </Table>
+                      </>
+                    )}
+                  </Card.Body>
+                </Card>
+              </Tab>
+            )}
           </Tabs>
         </Col>
       </Row>

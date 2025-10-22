@@ -31,23 +31,88 @@ function Register() {
   });
 
   const validateField = (field, value) => {
-    if (!value.trim()) {
-      return `El campo ${field} es obligatorio`;
+    switch (field) {
+      case "name":
+      case "surname":
+        if (!value.trim()) {
+          return `${field === "name" ? "Nombre" : "Apellido"} es obligatorio`;
+        }
+        // Validar que solo contenga letras, espacios y algunos caracteres especiales
+        if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s'-]+$/.test(value.trim())) {
+          return `${field === "name" ? "Nombre" : "Apellido"} solo puede contener letras, espacios, guiones y apostrofes`;
+        }
+        // Validar longitud mínima y máxima
+        if (value.trim().length < 2) {
+          return `${field === "name" ? "Nombre" : "Apellido"} debe tener al menos 2 caracteres`;
+        }
+        if (value.trim().length > 50) {
+          return `${field === "name" ? "Nombre" : "Apellido"} no puede tener más de 50 caracteres`;
+        }
+        return "";
+      case "email":
+        if (!value.trim()) return "Email es obligatorio";
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return "Email debe ser válido";
+        if (value.length > 100) return "Email no puede tener más de 100 caracteres";
+        return "";
+      case "cellNumber":
+        { if (!value.trim()) return "Número de celular es obligatorio";
+        // Limpiar el número (solo dígitos)
+        const cleanNumber = value.replace(/\D/g, "");
+        if (!/^\d{10,15}$/.test(cleanNumber)) {
+          return "Número de celular debe tener entre 10 y 15 dígitos";
+        }
+        return ""; }
+      case "dni":
+        { if (!value.trim()) return "DNI es obligatorio";
+        // Limpiar el DNI (solo dígitos)
+        const cleanDni = value.replace(/\D/g, "");
+        if (!/^\d{7,8}$/.test(cleanDni)) {
+          return "DNI debe tener entre 7 y 8 dígitos";
+        }
+        return ""; }
+      case "password":
+        if (!value.trim()) return "Contraseña es obligatoria";
+        if (value.length < 6) {
+          return "La contraseña debe tener al menos 6 caracteres";
+        }
+        if (value.length > 50) {
+          return "La contraseña no puede tener más de 50 caracteres";
+        }
+        return "";
+      default:
+        return "";
     }
-    return "";
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    let processedValue = value;
+    
+    // Limpiar caracteres no válidos para nombre y apellido
+    if (name === "name" || name === "surname") {
+      // Permitir solo letras, espacios, guiones y apostrofes
+      processedValue = value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s'-]/g, "");
+    }
+    
+    // Limpiar caracteres no válidos para celular y DNI
+    if (name === "cellNumber" || name === "dni") {
+      // Permitir solo dígitos
+      processedValue = value.replace(/\D/g, "");
+    }
+    
+    // Para email, mantener como está pero validar formato
+    if (name === "email") {
+      processedValue = value.toLowerCase().trim();
+    }
 
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: processedValue,
     }));
 
     setErrors((prev) => ({
       ...prev,
-      [name]: validateField(name, value),
+      [name]: validateField(name, processedValue),
     }));
   };
 
@@ -61,25 +126,40 @@ function Register() {
 
     setErrors(newErrors);
 
-    if (Object.values(newErrors).some((err) => err !== "")) return;
+    if (Object.values(newErrors).some((err) => err !== "")) {
+      console.log("❌ [REGISTER] Errores de validación encontrados:", newErrors);
+      return;
+    }
 
     try {
-      const res = await fetch("http://localhost:3000/register", {
+      console.log("🚀 [REGISTER] Enviando datos de registro:", formData);
+      
+      const res = await fetch("http://localhost:3000/api/register", {
         headers: { "Content-Type": "application/json" },
         method: "POST",
         body: JSON.stringify(formData),
       });
 
       const data = await res.json();
+      console.log("📊 [REGISTER] Respuesta del servidor:", { status: res.status, data });
 
       if (!res.ok) {
-        console.error(data.message);
+        console.error("❌ [REGISTER] Error en registro:", data.message);
+        // Mostrar error específico al usuario
+        if (data.message) {
+          alert(`❌ Error: ${data.message}`);
+        } else {
+          alert("❌ Error al registrar usuario. Inténtalo de nuevo.");
+        }
         return;
       }
 
+      console.log("✅ [REGISTER] Usuario registrado exitosamente");
+      alert("✅ Usuario registrado exitosamente. Redirigiendo al login...");
       navigate("/login");
     } catch (err) {
-      console.error("Error al registrar:", err);
+      console.error("❌ [REGISTER] Error de conexión:", err);
+      alert("❌ Error de conexión. Verifica que el servidor esté funcionando.");
     }
   };
 
@@ -105,11 +185,12 @@ function Register() {
 
                     <Form.Control
                       type="text"
-                      placeholder="Nombre"
+                      placeholder="Ej: Juan"
                       className={errors.name && "bg-warning"}
                       onChange={handleChange}
                       name="name"
                       value={formData.name}
+                      maxLength={50}
                     />
                     {errors.name && (
                       <p className="mt-2 text-danger">{errors.name}</p>
@@ -122,10 +203,11 @@ function Register() {
                     <Form.Control
                       type="text"
                       name="surname"
-                      placeholder="Apellido"
+                      placeholder="Ej: Pérez"
                       className={errors.surname && "bg-warning"}
                       onChange={handleChange}
                       value={formData.surname}
+                      maxLength={50}
                     />
                     {errors.surname && (
                       <p className="mt-2 text-danger">{errors.surname}</p>
@@ -141,10 +223,11 @@ function Register() {
                     <Form.Control
                       type="text"
                       name="cellNumber"
-                      placeholder="Ingrese su numero"
+                      placeholder="Ej: 1123456789"
                       className={errors.cellNumber && "bg-warning"}
                       onChange={handleChange}
                       value={formData.cellNumber}
+                      maxLength={15}
                     ></Form.Control>
                     <br></br>
                     {errors.cellNumber && (
@@ -157,12 +240,13 @@ function Register() {
                 <Form.Group>
                   <Form.Label>Ingrese su DNI</Form.Label>
                   <Form.Control
-                    placeholder="DNI"
+                    placeholder="Ej: 12345678"
                     name="dni"
                     type="text"
                     onChange={handleChange}
                     value={formData.dni}
                     className={errors.dni && "bg-warning"}
+                    maxLength={8}
                   ></Form.Control>
                   {errors.dni && (
                     <p className="mt-2 text-danger">{errors.dni}</p>
@@ -174,11 +258,12 @@ function Register() {
                   <Form.Label>Ingrese su email</Form.Label>
                   <Form.Control
                     type="email"
-                    placeholder="Email"
+                    placeholder="Ej: usuario@email.com"
                     name="email"
                     onChange={handleChange}
                     value={formData.email}
                     className={errors.email && "bg-warning"}
+                    maxLength={100}
                   ></Form.Control>
                   {errors.email && (
                     <p className="mt-2 text-danger">{errors.email}</p>
@@ -190,11 +275,12 @@ function Register() {
                   <Form.Label>Ingrese su contraseña</Form.Label>
                   <Form.Control
                     type="password"
-                    placeholder="contraseña"
+                    placeholder="Mínimo 6 caracteres"
                     name="password"
                     onChange={handleChange}
                     value={formData.password}
                     className={errors.password && "bg-warning"}
+                    maxLength={50}
                   ></Form.Control>
                   {errors.password && (
                     <p className="mt-2 text-danger">{errors.password}</p>
