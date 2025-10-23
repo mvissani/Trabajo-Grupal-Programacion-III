@@ -24,6 +24,7 @@ import {
   updateService,
   deleteService,
   restoreService,
+  getAllReservations,
 } from "./Admin.services";
 import { AuthenticationContex } from "../services/Auth/Auth.context";
 import { UserTypeContext } from "../services/Auth/UserType.context";
@@ -46,8 +47,8 @@ function Admin() {
 
   const handleEmailSearch = async (e) => {
     e.preventDefault();
-    setEmailError(""); // Limpiar errores previos
-    setQueryUser({ Name: "", surname: "", dni: "", email: "", class: "", active: "" }); // Limpiar usuario previo
+    setEmailError(""); 
+    setQueryUser({ Name: "", surname: "", dni: "", email: "", class: "", active: "" }); 
     
     try {
       const res = await fetch("http://localhost:3000/admin/searchemail", {
@@ -148,6 +149,7 @@ function Admin() {
   });
   const [rooms, setRooms] = useState([]);
   const [services, setServices] = useState([]);
+  const [reservations, setReservations] = useState([]);
   const [loading, setLoading] = useState(false);
   const [editingRoom, setEditingRoom] = useState(null);
   const [editingService, setEditingService] = useState(null);
@@ -518,9 +520,22 @@ function Admin() {
     );
   };
 
+  const loadReservations = () => {
+    getAllReservations(
+      (data) => {
+        setReservations(data.data || []);
+      },
+      (error) => {
+        console.error("Error al cargar reservas:", error);
+        showNotification(`Error al cargar reservas: ${error}`, "danger");
+      }
+    );
+  };
+
   useEffect(() => {
     loadRooms();
     loadServices();
+    loadReservations();
   }, []);
 
   // Verificar permisos de acceso
@@ -1125,6 +1140,89 @@ function Admin() {
                         <tr>
                           <td colSpan="7" className="text-center">
                             No hay servicios registrados
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </Table>
+                </Card.Body>
+              </Card>
+            </Tab>
+
+            <Tab eventKey="reservations-list" title="Lista de Reservas">
+              <Card>
+                <Card.Header>
+                  <h4>Todas las Reservas</h4>
+                  <small className="text-muted">
+                    Vista completa de todas las reservas del sistema
+                  </small>
+                </Card.Header>
+                <Card.Body>
+                  <Table striped bordered hover responsive>
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>Usuario</th>
+                        <th>Email</th>
+                        <th>Teléfono</th>
+                        <th>Habitación</th>
+                        <th>Tipo</th>
+                        <th>Check-in</th>
+                        <th>Check-out</th>
+                        <th>Tarifa</th>
+                        <th>Estado</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {reservations.length > 0 ? (
+                        reservations.map((reservation) => (
+                          <tr key={reservation.Id}>
+                            <td>{reservation.Id}</td>
+                            <td>
+                              <strong>{reservation.User?.name} {reservation.User?.surname}</strong>
+                            </td>
+                            <td>
+                              <small>{reservation.User?.email}</small>
+                            </td>
+                            <td>
+                              <small>{reservation.User?.cellNumber}</small>
+                            </td>
+                            <td>
+                              <Badge bg="info">
+                                #{reservation.Room?.RoomNo}
+                              </Badge>
+                              <br />
+                              <small>{reservation.Room?.Nombre}</small>
+                            </td>
+                            <td>
+                              <Badge
+                                bg={
+                                  reservation.Room?.Tipo === "Suite" ? "warning" : "success"
+                                }
+                              >
+                                {reservation.Room?.Tipo}
+                              </Badge>
+                            </td>
+                            <td>
+                              <small>{reservation.checkIn}</small>
+                            </td>
+                            <td>
+                              <small>{reservation.checkOut}</small>
+                            </td>
+                            <td>
+                              <strong>${reservation.Room?.Tarifa}</strong>
+                            </td>
+                            <td>
+                              <Badge bg="primary">
+                                Activa
+                              </Badge>
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan="10" className="text-center">
+                            No hay reservas registradas
                           </td>
                         </tr>
                       )}

@@ -332,3 +332,46 @@ export const restoreService = (serviceId, onSuccess, onError) => {
 			}
 		});
 };
+export const getAllReservations = (onSuccess, onError) => {
+	console.log("Obteniendo todas las reservas...");
+	console.log("URL de destino:", "/api/admin/reservations");
+
+	fetch("/api/admin/reservations", {
+		method: "GET",
+		headers: {
+			"Content-Type": "application/json",
+			Authorization: `Bearer ${localStorage.getItem("login-token")}`,
+		},
+	})
+		.then((response) => {
+			console.log(
+				"Respuesta del servidor (RESERVATIONS):",
+				response.status,
+				response.statusText
+			);
+
+			if (!response.ok) {
+				return response.text().then((text) => {
+					console.log("Contenido de la respuesta de error (RESERVATIONS):", text);
+					throw new Error(
+						`HTTP ${response.status}: ${
+							response.statusText
+						}. Contenido: ${text.substring(0, 200)}`
+					);
+				});
+			}
+			return response.json();
+		})
+		.then((data) => {
+			console.log("Reservas obtenidas exitosamente:", data);
+			if (onSuccess) {
+				onSuccess(data);
+			}
+		})
+		.catch((error) => {
+			console.error("Error de red al obtener reservas:", error);
+			if (onError) {
+				onError(error);
+			}
+		});
+};

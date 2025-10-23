@@ -35,18 +35,7 @@ function Footer() {
             <p className="small">Hotels and Resorts</p>
           </Col>
 
-          <Col md={4} className="text-center text-md-end">
-            <h6 className="fw-bold mb-2">SUSCRIBITE A NUESTRO NEWSLETTER</h6>
-            <form className="d-flex justify-content-center justify-content-md-end">
-              <input
-                type="email"
-                placeholder="Ingresa tu Email"
-                className="form-control me-2"
-                style={{ maxWidth: "220px" }}
-              />
-              <button className="btn btn-outline-light">Suscribirse</button>
-            </form>
-          </Col>
+        
         </Row>
 
         <Row className="pt-4 mt-4 border-top">
