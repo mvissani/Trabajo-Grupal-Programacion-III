@@ -124,7 +124,16 @@ export const changePassword = async (dni, passwordData) => {
     });
 
     if (!response.ok) {
-      throw new Error(`Error ${response.status}: ${response.statusText}`);
+      let errorMessage = `Error ${response.status}: ${response.statusText}`;
+      try {
+        const errorData = await response.json();
+        if (errorData.message) {
+          errorMessage = errorData.message;
+        }
+      } catch (parseError) {
+        console.warn("No se pudo parsear el error del backend:", parseError);
+      }
+      throw new Error(errorMessage);
     }
 
     const data = await response.json();
@@ -140,7 +149,7 @@ export const getUserDataFromStorage = () => {
   return {
     name: localStorage.getItem("user-name") || "",
     email: localStorage.getItem("user-email") || "",
-    id: localStorage.getItem("user-id") || "",
+    dni: localStorage.getItem("user-dni") || "",
   };
 };
 
@@ -152,7 +161,7 @@ export const updateUserDataInStorage = (userData) => {
   if (userData.email) {
     localStorage.setItem("user-email", userData.email);
   }
-  if (userData.id) {
-    localStorage.setItem("user-id", userData.id);
+  if (userData.dni) {
+    localStorage.setItem("user-dni", userData.dni);
   }
 };

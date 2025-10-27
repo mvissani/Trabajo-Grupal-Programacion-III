@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
+import { Button, Card, Col, Container, Form, Row ,Alert } from "react-bootstrap";
 import { Navigate, useNavigate } from "react-router";
 import { AuthenticationContex } from "../services/Auth/Auth.context";
 import { UserTypeContext } from "../services/Auth/UserType.context";
@@ -13,7 +13,18 @@ function Login() {
     email: "",
     password: "",
   });
+  const [notification, setNotification] = useState({
+    show: false,
+    message: "",
+    type: "",
+  });
   const navigate = useNavigate();
+  const showNotification = (message, type) => {
+    setNotification({ show: true, message, type });
+    setTimeout(() => {
+      setNotification({ show: false, message: "", type: "" });
+    }, 5000);
+  };
 
   const navigateToRegister = () => {
     navigate("/register");
@@ -52,7 +63,9 @@ function Login() {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.message || "Error desconocido");
+        const errorMessage = data.message || "Error desconocido";
+        setError("");
+        showNotification(errorMessage, "danger");
         return;
       }
       handleLogin(data.token);
@@ -61,11 +74,15 @@ function Login() {
         data.user.name + " " + data.user.surname
       );
       localStorage.setItem("user-email", data.user.email);
-      localStorage.setItem("user-id", data.user.id);
+      localStorage.setItem("user-dni", data.user.dni);
       userTokenType(data.token);
-      navigate("/home");
+      showNotification("Inicio de sesión exitoso", "success");
+      setTimeout(() => {
+        navigate("/home");
+      }, 1000);
     } catch (err) {
-      setError("Error de conexión con el servidor");
+      setError("");
+      showNotification("Error de conexión con el servidor", "danger");
       console.error(err);
     }
   };
@@ -80,6 +97,18 @@ function Login() {
           className="mb-3 w-50 bg-secondary text-white p-3 border-1 shadow"
         >
           <Card.Body className=" justify-content-center border-1 ">
+            {notification.show && (
+              <Alert
+                variant={notification.type}
+                dismissible
+                onClose={() =>
+                  setNotification({ show: false, message: "", type: "" })
+                }
+                className="mb-4"
+              >
+                {notification.message}
+              </Alert>
+            )}
             <form onSubmit={handleSubmit}>
               <Row>
                 <Card.Title className="text-center fw-bold shadow fs-2">

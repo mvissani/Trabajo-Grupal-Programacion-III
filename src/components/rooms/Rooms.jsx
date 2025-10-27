@@ -60,9 +60,9 @@ const Rooms = () => {
   if (loading) {
     return (
       <div className="container mt-4 text-center">
-        <h2 className="mb-4 text-center">Habitaciones Disponibles</h2>
+        <h2 className="mb-4 text-center">Habitaciones </h2>
         <Spinner animation="border" role="status" />
-        <p className="mt-2">Cargando habitaciones disponibles...</p>
+        <p className="mt-2">Cargando habitaciones ...</p>
       </div>
     );
   }
@@ -70,7 +70,7 @@ const Rooms = () => {
   if (error) {
     return (
       <div className="container mt-4">
-        <h2 className="mb-4 text-center">Habitaciones Disponibles</h2>
+        <h2 className="mb-4 text-center">Habitaciones</h2>
         <Alert variant="danger" className="text-center">
           <Alert.Heading>Error al cargar las habitaciones</Alert.Heading>
           <p>{error instanceof Error ? error.message : String(error)}</p>
@@ -85,7 +85,7 @@ const Rooms = () => {
   if (habitaciones.length === 0) {
     return (
       <div className="container mt-4">
-        <h2 className="mb-4 text-center">Habitaciones Disponibles</h2>
+        <h2 className="mb-4 text-center">Habitaciones</h2>
         <Alert variant="info" className="text-center">
           <Alert.Heading>No hay habitaciones disponibles</Alert.Heading>
           <p>No se encontraron habitaciones en este momento.</p>
@@ -93,14 +93,18 @@ const Rooms = () => {
       </div>
     );
   }
-
+  const habitacionesOrdenadas = [...habitaciones].sort((a, b) => {
+    if (a.Disponible && !b.Disponible) return -1;
+    if (!a.Disponible && b.Disponible) return 1;
+    return 0;
+  });
   return (
     <div className="container mt-4">
       <h2 className="mb-4 text-center text-uppercase fw-bold">
-        Habitaciones Disponibles
+        Habitaciones
       </h2>
       <Row className="g-4">
-        {habitaciones.map((hab) => (
+        {habitacionesOrdenadas.map((hab) => (
           <Col key={hab.Id} md={6} className="d-flex">
             <Card className="room-card flex-fill shadow-sm">
               <div className="image-container">

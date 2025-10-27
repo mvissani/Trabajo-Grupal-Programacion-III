@@ -91,7 +91,7 @@ const Profile = () => {
             surname: storedData.name.split(" ")[1] || "",
             email: storedData.email || "",
             cellNumber: "No disponible",
-            dni: storedData.id || "No disponible",
+            dni: storedData.dni || "No disponible",
             class: userType || "User",
           });
         } else {
@@ -287,6 +287,9 @@ const Profile = () => {
     } else if (passwordData.newPassword.length < 6) {
       errors.newPassword = "La contraseña debe tener al menos 6 caracteres";
     }
+    else if (passwordData.newPassword === passwordData.currentPassword) {
+      errors.newPassword = "La nueva contraseña debe ser diferente a la actual";
+    }
 
     if (passwordData.newPassword !== passwordData.confirmPassword) {
       errors.confirmPassword = "Las contraseñas no coinciden";
@@ -330,7 +333,27 @@ const Profile = () => {
       showNotification("Contraseña cambiada exitosamente", "success");
     } catch (error) {
       console.error("Error al cambiar contraseña:", error);
-      showNotification("Error al cambiar la contraseña", "danger");
+      let errorMessage = "Error al cambiar la contraseña";
+      
+      if (error.message) {
+        if (error.message.includes("actual incorrecta")) {
+          errorMessage = "Contraseña actual incorrecta";
+        } else if (error.message.includes("obligatorias")) {
+          errorMessage = "Debes completar todos los campos";
+        } else if (error.message.includes("al menos 6")) {
+          errorMessage = "La nueva contraseña debe tener al menos 6 caracteres";
+        } else if (error.message.includes("mismo")) {
+          errorMessage = "La nueva contraseña debe ser diferente a la actual";
+        } else if (error.message.includes("permisos")) {
+          errorMessage = "No tienes permisos para cambiar esta contraseña";
+        } else if (error.message.includes("Error 400")) {
+          errorMessage = "Error en la solicitud. Verifica los datos ingresados";
+        } else {
+          errorMessage = error.message;
+        }
+      }
+      
+      showNotification(errorMessage, "danger");
     }
   };
 

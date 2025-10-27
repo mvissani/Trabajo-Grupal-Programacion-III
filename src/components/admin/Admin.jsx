@@ -49,6 +49,8 @@ function Admin() {
 	const [showConfirmModal, setShowConfirmModal] = useState(null);
 	const [showResultModal, setShowResultModal] = useState(false);
 	const [modalMessage, setModalMessage] = useState("");
+	const [deleteRoomConfirm, setDeleteRoomConfirm] = useState(null);
+	const [deleteServiceConfirm, setDeleteServiceConfirm] = useState(null);
 
 	const handleEmailSearch = async (e) => {
 		e.preventDefault();
@@ -102,7 +104,7 @@ function Admin() {
 	const handleUpdateRole = async () => {
 		try {
 			if (!queryUser?.email || !newRole) {
-				alert("Debe seleccionar un usuario y un nuevo rol.");
+				showNotification("Debe seleccionar un usuario y un nuevo rol.", "warning");
 				return;
 			}
 
@@ -121,12 +123,12 @@ function Admin() {
 			if (!res.ok) throw new Error(`Error HTTP ${res.status}`);
 
 			const data = await res.json();
-			alert("Rol actualizado correctamente.");
+			showNotification("Rol actualizado correctamente.", "success");
 			setQueryUser((prev) => ({ ...prev, class: newRole }));
 			setNewRole("");
 		} catch (err) {
 			console.error("Error al actualizar el rol:", err);
-			alert("Hubo un problema al actualizar el rol del usuario.");
+			showNotification("Hubo un problema al actualizar el rol del usuario.", "danger");
 		}
 	};
 	const isAdmin = () => {
@@ -377,32 +379,36 @@ function Admin() {
 	};
 
 	const handleDeleteRoom = (room) => {
-		const confirmMessage = `¿Estás seguro de que quieres eliminar la habitación "${room.Nombre}" (ID: ${room.Id})?\n\nEsta acción no se puede deshacer.`;
-
-		if (window.confirm(confirmMessage)) {
+		setDeleteRoomConfirm(room);
+	};
+	const confirmDeleteRoom = () => {
+		if (deleteRoomConfirm) {
 			setLoading(true);
 
 			deleteRoom(
-				room.Id,
+				deleteRoomConfirm.Id,
 				() => {
 					setLoading(false);
 					showNotification("¡Habitación eliminada exitosamente!", "success");
 					loadRooms();
+					setDeleteRoomConfirm(null);
 				},
 				(error) => {
 					setLoading(false);
 					showNotification(`Error al eliminar habitación: ${error}`, "danger");
+					setDeleteRoomConfirm(null);
 				}
 			);
 		}
 	};
 
 	const handleDeleteService = (service) => {
-		const action = service.isActive ? "desactivar" : "restaurar";
-		const confirmMessage = `¿Estás seguro de que quieres ${action} el servicio "${service.title}" (ID: ${service.Id})?`;
-
-		if (window.confirm(confirmMessage)) {
+		setDeleteServiceConfirm(service);
+        	};
+	const confirmDeleteService = () => {
+		if (deleteServiceConfirm) {
 			setLoading(true);
+			const service = deleteServiceConfirm;
 
 			if (service.isActive) {
 				deleteService(
@@ -411,6 +417,7 @@ function Admin() {
 						setLoading(false);
 						showNotification("¡Servicio desactivado exitosamente!", "success");
 						loadServices();
+						setDeleteServiceConfirm(null);
 					},
 					(error) => {
 						setLoading(false);
@@ -418,6 +425,7 @@ function Admin() {
 							`Error al desactivar servicio: ${error}`,
 							"danger"
 						);
+						setDeleteServiceConfirm(null);
 					}
 				);
 			} else {
@@ -427,10 +435,12 @@ function Admin() {
 						setLoading(false);
 						showNotification("¡Servicio restaurado exitosamente!", "success");
 						loadServices();
+						setDeleteServiceConfirm(null);
 					},
 					(error) => {
 						setLoading(false);
 						showNotification(`Error al restaurar servicio: ${error}`, "danger");
+						setDeleteServiceConfirm(null);
 					}
 				);
 			}
@@ -1508,6 +1518,60 @@ function Admin() {
 					</Tabs>
 				</Col>
 			</Row>
+			
+			<Modal
+				show={!!deleteRoomConfirm}
+				onHide={() => setDeleteRoomConfirm(null)}
+				centered
+			>
+				<Modal.Header closeButton>
+					<Modal.Title>Confirmar eliminación</Modal.Title>
+				</Modal.Header>
+				<Modal.Body>
+					¿Estás seguro de que quieres eliminar la habitación{" "}
+					<strong>{deleteRoomConfirm?.Nombre}</strong> (ID: {deleteRoomConfirm?.Id})
+					?
+					<br />
+					<br />
+					Esta acción no se puede deshacer.
+				</Modal.Body>
+				<Modal.Footer>
+					<Button variant="secondary" onClick={() => setDeleteRoomConfirm(null)}>
+						Cancelar
+					</Button>
+					<Button variant="danger" onClick={confirmDeleteRoom}>
+						Eliminar
+					</Button>
+				</Modal.Footer>
+			</Modal>
+
+			{/* Modal de confirmación para eliminar/restaurar servicio */}
+			<Modal
+				show={!!deleteServiceConfirm}
+				onHide={() => setDeleteServiceConfirm(null)}
+				centered
+			>
+				<Modal.Header closeButton>
+					<Modal.Title>Confirmar acción</Modal.Title>
+				</Modal.Header>
+				<Modal.Body>
+					¿Estás seguro de que quieres{" "}
+					{deleteServiceConfirm?.isActive ? "desactivar" : "restaurar"} el servicio{" "}
+					<strong>{deleteServiceConfirm?.title}</strong> (ID: {deleteServiceConfirm?.Id})
+					?
+				</Modal.Body>
+				<Modal.Footer>
+					<Button variant="secondary" onClick={() => setDeleteServiceConfirm(null)}>
+						Cancelar
+					</Button>
+					<Button
+						variant={deleteServiceConfirm?.isActive ? "warning" : "success"}
+						onClick={confirmDeleteService}
+					>
+						{deleteServiceConfirm?.isActive ? "Desactivar" : "Restaurar"}
+					</Button>
+				</Modal.Footer>
+			</Modal>
 		</Container>
 	);
 }

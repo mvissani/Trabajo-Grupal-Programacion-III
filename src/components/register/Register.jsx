@@ -7,6 +7,7 @@ import {
   Form,
   InputGroup,
   Row,
+  Alert,
 } from "react-bootstrap";
 import InputGroupText from "react-bootstrap/esm/InputGroupText";
 import { useNavigate } from "react-router";
@@ -28,6 +29,11 @@ function Register() {
     dni: "",
     email: "",
     password: "",
+  });
+  const [notification, setNotification] = useState({
+    show: false,
+    message: "",
+    type: "",
   });
 
   const validateField = (field, value) => {
@@ -94,6 +100,13 @@ function Register() {
     }
   };
 
+  const showNotification = (message, type) => {
+    setNotification({ show: true, message, type });
+    setTimeout(() => {
+      setNotification({ show: false, message: "", type: "" });
+    }, 5000);
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     let processedValue = value;
@@ -157,20 +170,34 @@ function Register() {
       if (!res.ok) {
         console.error("❌ [REGISTER] Error en registro:", data.message);
 
+        let errorMessage = "Error al registrar usuario. Inténtalo de nuevo.";
+        
         if (data.message) {
-          alert(`❌ Error: ${data.message}`);
-        } else {
-          alert("❌ Error al registrar usuario. Inténtalo de nuevo.");
+          if (data.message.includes("Usuario existente") || data.message.includes("existente")) {
+            errorMessage = "Este email ya está registrado. Por favor, usa otro email o inicia sesión.";
+          } else if (data.message.includes("Email")) {
+            errorMessage = "Error con el email. Verifica que sea válido.";
+          } else if (data.message.includes("Contraseña")) {
+            errorMessage = "Error con la contraseña. Debe tener al menos 6 caracteres.";
+          } else if (data.message.includes("DNI")) {
+            errorMessage = "Este DNI ya está registrado.";
+          } else {
+            errorMessage = data.message;
+          }
         }
+        
+        showNotification(errorMessage, "danger");
         return;
       }
 
       console.log("✅ [REGISTER] Usuario registrado exitosamente");
-      alert("✅ Usuario registrado exitosamente. Redirigiendo al login...");
-      navigate("/login");
+      showNotification("Usuario registrado exitosamente. Redirigiendo al login...", "success");
+      setTimeout(() => {
+        navigate("/login");
+      }, 1500);
     } catch (err) {
       console.error("❌ [REGISTER] Error de conexión:", err);
-      alert("❌ Error de conexión. Verifica que el servidor esté funcionando.");
+      showNotification("Error de conexión. Verifica que el servidor esté funcionando.", "danger");
     }
   };
 
@@ -188,6 +215,20 @@ function Register() {
             <Card.Title className="text-center fw-bold shadow fs-2">
               Registrarme
             </Card.Title>
+
+            {notification.show && (
+              <Alert
+                variant={notification.type}
+                dismissible
+                onClose={() =>
+                  setNotification({ show: false, message: "", type: "" })
+                }
+                className="mb-4"
+              >
+                {notification.message}
+              </Alert>
+            )}
+
             <form onSubmit={handleSubmit}>
               <Row>
                 <Col>
