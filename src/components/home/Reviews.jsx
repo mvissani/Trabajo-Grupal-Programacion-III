@@ -6,55 +6,64 @@ const reviews = [
     rating: 9.4,
     text: "Muy bien estado de las habitaciones, muy buena la pileta climatizada y la atención del personal. Nos comentaron que estuvimos en un sector que había sido renovado. Buena decisión la de no permitir menores en el spa después de las 18.00. Mucho lujo , mi novia feliz de la vida ! La pasamos genial !!",
     author: "CHINO HOFFMAN",
-    image: "https://ik.imagekit.io/rooxjlwlq/13706584104d365df4ff159e616f7458991198a25d2.jpg?updatedAt=1759274525392",
+    image:
+      "https://ik.imagekit.io/rooxjlwlq/13706584104d365df4ff159e616f7458991198a25d2.jpg?updatedAt=1759274525392",
   },
   {
     rating: 9.4,
     text: "Un hotel que guarda buena relación entre categoría, precio, oferta y servicios. La atención es destacada, el ambiente moderno y distendido, el restaurant muy bueno, el desayuno continental sin palabras. Me he hospedado muchas veces y siempre quiero volver.",
     author: "JAVIER LAMPA",
-    image: "https://ik.imagekit.io/rooxjlwlq/termal-brihuega-1-1024x683.jpg?updatedAt=1759273489389",
+    image:
+      "https://ik.imagekit.io/rooxjlwlq/termal-brihuega-1-1024x683.jpg?updatedAt=1759273489389",
   },
   {
     rating: 9.8,
     text: "Estuvimos en una suite, muy amplia, buenas camas y servicios. Detalles en la atención. Excelentes instalaciones del hotel, spa y piscinas. Muy cómodo el acceso a Rosario por Oroño. Excelente atención del personal; mención especial para Pehuén, siempre atento a lo que necesitáramos.",
     author: "IGNACIO M.",
-    image: "https://ik.imagekit.io/rooxjlwlq/1555945783-5cbdd93772607-thumb.jpg?updatedAt=1759273490403",
+    image:
+      "https://ik.imagekit.io/rooxjlwlq/1555945783-5cbdd93772607-thumb.jpg?updatedAt=1759273490403",
   },
   {
     rating: 8.9,
-    text: "Viajamos en familia y quedamos fascinados. Las actividades para los chicos, habitaciones espaciosas y un trato excelente por parte de todo el personal. Lo recomiendo 100%",
+    text: "Me toco visitar el hotel debido a un Congreso de empresarios textiles en la ciudad de Rosario y la verdad que la pasé de maravillas en Starlight Hotel.",
     author: "THIAGO M.",
-    image: "https://ik.imagekit.io/rooxjlwlq/568.jpg?updatedAt=1759274667196",
+    image:
+      "https://ik.imagekit.io/rooxjlwlq/photo-1736963808415-63bc6cc4a5a3.avif?updatedAt=1760640215750",
   },
   {
-    rating: 8.9,
-    text: "Muy buena la atencion del personal !!! . Las actividades para los chicos, habitaciones espaciosas y la limpieza que tiene el hotel , de lujo !!!! , Lo recomiendo 100%",
+    rating: 10.0,
+    text: "Soy nacida en Rosario y me toco visitar de nuevo mi hermosa ciudad , su rambla , la Florida y de lejos ver el puente que nos une con Victoria. El hotel es de otra galaxia , bello por donde se lo mire , me quedaria a vivir en el hotel y en mi ciudad ",
     author: "MARISA F.",
-    image: "https://ik.imagekit.io/rooxjlwlq/Captura%20de%20pantalla%202025-10-22%20213350.png?updatedAt=1761179671174",
+    image:
+      "https://ik.imagekit.io/rooxjlwlq/5ffe0b61553e8.webp?updatedAt=1761619223337",
   },
   {
     rating: 8.8,
     text: "“Un lugar soñado. Me sorprendió la decoración moderna y elegante. El servicio de transfer al aeropuerto fue muy puntual. Sin dudas, volveré a alojarme aquí en mi próximo viaje.”",
-    author: "SOFIA SUAREZ.",
-    image: "https://ik.imagekit.io/rooxjlwlq/20f6593f-6f02-4e98-bd3c-f3d1a3091ba0.jpg?updatedAt=1759274962232",
+    author: "JENIFER RODRIGUEZ.",
+    image:
+      "https://ik.imagekit.io/rooxjlwlq/20f6593f-6f02-4e98-bd3c-f3d1a3091ba0.jpg?updatedAt=1759274962232",
   },
   {
     rating: 9.8,
     text: "“Todo muy bien organizado. El check-in fue rápido y sencillo. El gimnasio está muy bien equipado y el casino es impresionante. La habitación era espaciosa y cómoda, con una vista increíble de la ciudad. El personal fue muy amable y atento durante toda nuestra estancia.”",
     author: "FRANCO P",
-    image: "https://ik.imagekit.io/rooxjlwlq/10-oria-berasateguijpg-1640773358.avif?updatedAt=1757456274226",
+    image:
+      "https://ik.imagekit.io/rooxjlwlq/10-oria-berasateguijpg-1640773358.avif?updatedAt=1757456274226",
   },
   {
     rating: 8.6,
     text: "“La experiencia fue increíble. La habitación impecable, el personal muy amable y siempre dispuesto a ayudar. El desayuno superó mis expectativas, muy variado y fresco. Definitivamente volvería.”",
-    author: "MARTINA V.",
-    image: "https://ik.imagekit.io/rooxjlwlq/24-hours-gym-r0lg4mkl4m.jpeg?updatedAt=1759175524156",
+    author: "MARTINA N.",
+    image:
+      "https://ik.imagekit.io/rooxjlwlq/24-hours-gym-r0lg4mkl4m.jpeg?updatedAt=1759175524156",
   },
   {
     rating: 9.7,
     text: "la experiencia fue única, nos encanto el Hotel , su ubicacion y la ciudad ni hablar , el Monumento a la Bandera es impresionante, volveremos sin lugar a dudas.",
     author: "JORGELINA.",
-    image: "https://ik.imagekit.io/rooxjlwlq/Monumento_Nacional_a_la_Bandera_Rosario_SF_Argentina.jpg?updatedAt=1761180395484",
+    image:
+      "https://ik.imagekit.io/rooxjlwlq/istockphoto-150888803-612x612.jpg?updatedAt=1761614605598",
   },
 ];
 
@@ -65,13 +74,12 @@ export default function Reviews() {
         <Carousel fade interval={6000} controls indicators={false}>
           {reviews.map((review, index) => (
             <Carousel.Item key={index}>
-              {/* Imagen dentro del contorno del carrusel */}
               <div
                 className="d-flex justify-content-center align-items-center"
                 style={{
                   width: "100%",
-                  height: "650px", // alto del carrusel
-                  backgroundColor: "#000", // fondo negro para los bordes
+                  height: "650px",
+                  backgroundColor: "#000",
                 }}
               >
                 <img
@@ -80,13 +88,12 @@ export default function Reviews() {
                   style={{
                     maxWidth: "100%",
                     maxHeight: "100%",
-                    objectFit: "contain", // imagen completa sin cortarse
-                    objectPosition: "center", // centrada
+                    objectFit: "contain",
+                    objectPosition: "center",
                   }}
                 />
               </div>
 
-              {/* Texto superpuesto */}
               <div
                 className="position-absolute top-50 start-50 translate-middle text-center bg-dark bg-opacity-50 p-4 rounded shadow-lg"
                 style={{ maxWidth: "700px" }}

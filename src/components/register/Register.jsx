@@ -171,33 +171,44 @@ function Register() {
         console.error("❌ [REGISTER] Error en registro:", data.message);
 
         let errorMessage = "Error al registrar usuario. Inténtalo de nuevo.";
-        
+
         if (data.message) {
-          if (data.message.includes("Usuario existente") || data.message.includes("existente")) {
-            errorMessage = "Este email ya está registrado. Por favor, usa otro email o inicia sesión.";
+          if (
+            data.message.includes("Usuario existente") ||
+            data.message.includes("existente")
+          ) {
+            errorMessage =
+              "Este email ya está registrado. Por favor, usa otro email o inicia sesión.";
           } else if (data.message.includes("Email")) {
             errorMessage = "Error con el email. Verifica que sea válido.";
           } else if (data.message.includes("Contraseña")) {
-            errorMessage = "Error con la contraseña. Debe tener al menos 6 caracteres.";
+            errorMessage =
+              "Error con la contraseña. Debe tener al menos 6 caracteres.";
           } else if (data.message.includes("DNI")) {
             errorMessage = "Este DNI ya está registrado.";
           } else {
             errorMessage = data.message;
           }
         }
-        
+
         showNotification(errorMessage, "danger");
         return;
       }
 
       console.log("✅ [REGISTER] Usuario registrado exitosamente");
-      showNotification("Usuario registrado exitosamente. Redirigiendo al login...", "success");
+      showNotification(
+        "Usuario registrado exitosamente. Redirigiendo al login...",
+        "success"
+      );
       setTimeout(() => {
         navigate("/login");
       }, 1500);
     } catch (err) {
       console.error("❌ [REGISTER] Error de conexión:", err);
-      showNotification("Error de conexión. Verifica que el servidor esté funcionando.", "danger");
+      showNotification(
+        "Error de conexión. Verifica que el servidor esté funcionando.",
+        "danger"
+      );
     }
   };
 

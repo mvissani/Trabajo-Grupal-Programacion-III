@@ -165,3 +165,40 @@ export const updateUserDataInStorage = (userData) => {
     localStorage.setItem("user-dni", userData.dni);
   }
 };
+
+export const cancelUserReservation = async (reservationId) => {
+  try {
+    const token = localStorage.getItem("login-token");
+    
+    if (!token) {
+      throw new Error("No hay token de autenticación");
+    }
+
+    const response = await fetch(`http://localhost:3000/api/users/reservations/${reservationId}/cancel`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+
+    if (!response.ok) {
+      let errorMessage = `Error ${response.status}: ${response.statusText}`;
+      try {
+        const errorData = await response.json();
+        if (errorData.message) {
+          errorMessage = errorData.message;
+        }
+      } catch (parseError) {
+        console.warn("No se pudo parsear el error del backend:", parseError);
+      }
+      throw new Error(errorMessage);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error al cancelar reserva:", error);
+    throw error;
+  }
+};

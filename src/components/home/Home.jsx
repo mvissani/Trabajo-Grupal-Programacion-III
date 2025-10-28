@@ -23,7 +23,8 @@ function Home() {
       </div>
 
       <Container className="text-center my-4">
-        <h2 className="fw-light fst-italic mb-3">Bienvenido a</h2>
+        <h2 className="fw-light fst-italic mb-6">Bienvenido a</h2>
+
         <Image
           src={hotelName}
           alt="Logo Hotel"
@@ -31,38 +32,42 @@ function Home() {
           style={{ maxWidth: "250px" }}
           className="mb-3"
         />
+
         <h5 className="fw-semibold">Rosario - Santa Fe - Argentina</h5>
-        <p className="fw-light fst-italic fs-5 mt-3 text-dark">
+
+        <p className="fw-light fst-italic fs-4 text-dark mt-3 mb-3">
           Hotel Starlight Rosario se encuentra en el ingreso a la ciudad de
-          Rosario. Cuenta con habitaciones modernas, el Casino más grande de
-          Sudamérica y una variedad de instalaciones y servicios pensados para
-          que tenga una estadía única.
+          Rosario. Cuenta con habitaciones modernas, una variedad de
+          instalaciones y servicios pensados para que tenga una estadía única.
         </p>
       </Container>
 
       <Container className="mb-4">
         <Row>
           <Col>
-            <div className="mb-3">
-              <p className="fw-light fst-italic fs-5 text-dark mt-3 mb-3">
+            <div className="text-center mx-auto" style={{ maxWidth: "800px" }}>
+              <p className="fw-light fst-italic fs-4 text-dark mt-3 mb-3">
                 En pleno corazón de Rosario, este hotel 5 estrellas combina
-                elegancia y modernidad para ofrecer una experiencia única. Su
-                diseño sofisticado y ambientes amplios brindan el máximo confort
-                tanto para viajes de negocios como para escapadas de placer.
+                elegancia y modernidad para ofrecer una experiencia única.
+                Su diseño sofisticado y ambientes amplios brindan el máximo
+                confort tanto para viajes de negocios como para escapadas de
+                placer.
               </p>
-              <p className="fw-light fst-italic fs-5 text-dark mb-3">
+
+              <p className="fw-light fst-italic fs-4 text-dark mb-3">
                 A 2 km del Monumento a la Bandera y a pocas cuadras de la
                 peatonal Córdoba, la ubicación es ideal para quienes buscan
-                comodidad y cercanía a los principales atractivos turísticos y
-                comerciales de la ciudad. Cada detalle está pensado para
+                comodidad y cercanía a los principales atractivos turísticos
+                y comerciales de la ciudad. Cada detalle está pensado para
                 garantizar bienestar y exclusividad.
               </p>
-              <p className="fw-light fst-italic fs-5 text-dark mb-3">
-                El hotel cuenta con habitaciones de lujo, spa, piscina
-                climatizada y servicio de primer nivel. Además, se encuentra muy
-                cerca de la vibrante avenida Pellegrini, reconocida por su
-                variada oferta gastronómica, lo que permite disfrutar de la
-                mejor cocina local a pasos del alojamiento.
+
+              <p className="fw-light fst-italic fs-4 text-dark mb-3">
+                El hotel cuenta con habitaciones de lujo, spa, piscina climatizada
+                y servicio de primer nivel. Además, se encuentra muy cerca de la
+                vibrante avenida Pellegrini, reconocida por su variada oferta
+                gastronómica, lo que permite disfrutar de la mejor cocina local a
+                pasos del alojamiento.
               </p>
             </div>
 
@@ -117,7 +122,9 @@ function Home() {
                     <div className="fw-bold text-primary">Check in</div>
                     <div className="fs-4">14:00</div>
                   </div>
+
                   <div className="text-muted fs-3">|</div>
+
                   <div className="text-end">
                     <div className="fw-bold text-primary">Check out</div>
                     <div className="fs-4">10:00</div>

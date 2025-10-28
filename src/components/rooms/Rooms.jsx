@@ -50,7 +50,7 @@ const Rooms = () => {
       return amenitiesString.map((amenity) => String(amenity).trim());
     }
 
-    let processedString = String(amenitiesString).replace(/[\[\]]/g, "");
+    let processedString = String(amenitiesString).replace(/\[|\]/g, "");
     return processedString
       .split(",")
       .map((a) => a.trim())
@@ -100,9 +100,7 @@ const Rooms = () => {
   });
   return (
     <div className="container mt-4">
-      <h2 className="mb-4 text-center text-uppercase fw-bold">
-        Habitaciones
-      </h2>
+      <h2 className="mb-4 text-center text-uppercase fw-bold">Habitaciones</h2>
       <Row className="g-4">
         {habitacionesOrdenadas.map((hab) => (
           <Col key={hab.Id} md={6} className="d-flex">

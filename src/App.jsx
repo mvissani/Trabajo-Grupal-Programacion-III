@@ -35,8 +35,9 @@ function App() {
         <Route path="/services" element={<Services />} />
         <Route path="/reviews" element={<Reviews />} />
         <Route path="/rooms" element={<Rooms />} />
-        <Route path="*" element={<ErrorNotFound />} />
+        
         <Route path="/admin" element={<Admin />} />
+        <Route path="*" element={<ErrorNotFound />} />
       </Routes>
       <Footer />
     </BrowserRouter>

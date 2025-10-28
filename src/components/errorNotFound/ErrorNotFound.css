@@ -1,0 +1,104 @@
+.error-not-found-container {
+	height: calc(100vh - 200px);
+	width: 100%;
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 2rem;
+}
+
+.error-content {
+	text-align: center;
+	color: white;
+	max-width: 600px;
+	animation: fadeInUp 0.6s ease-out;
+}
+
+.error-code {
+	font-size: 10rem;
+	font-weight: 900;
+	line-height: 1;
+	margin-bottom: 1rem;
+	text-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+	animation: pulse 2s ease-in-out infinite;
+}
+
+.error-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-bottom: 1rem;
+	text-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.error-message {
+	font-size: 1.25rem;
+	margin-bottom: 2rem;
+	opacity: 0.95;
+	line-height: 1.6;
+}
+
+.error-buttons {
+	display: flex;
+	gap: 1rem;
+	justify-content: center;
+	flex-wrap: wrap;
+}
+
+.error-btn {
+	min-width: 200px;
+	padding: 0.75rem 2rem;
+	font-size: 1.1rem;
+	font-weight: 600;
+	border-radius: 50px;
+	transition: all 0.3s ease;
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.error-btn:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes fadeInUp {
+	from {
+		opacity: 0;
+		transform: translateY(30px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes pulse {
+	0%, 100% {
+		transform: scale(1);
+	}
+	50% {
+		transform: scale(1.05);
+	}
+}
+
+@media (max-width: 768px) {
+	.error-code {
+		font-size: 6rem;
+	}
+
+	.error-title {
+		font-size: 1.75rem;
+	}
+
+	.error-message {
+		font-size: 1rem;
+	}
+
+	.error-buttons {
+		flex-direction: column;
+	}
+
+	.error-btn {
+		width: 100%;
+		min-width: auto;
+	}
+}

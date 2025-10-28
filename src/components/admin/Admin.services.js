@@ -375,3 +375,46 @@ export const getAllReservations = (onSuccess, onError) => {
 			}
 		});
 };
+
+export const cancelReservation = (reservationId, onSuccess, onError) => {
+	
+
+	fetch(`http://localhost:3000/api/reservations/${reservationId}/cancel`, {
+		method: "PUT",
+		headers: {
+			"Content-Type": "application/json",
+			Authorization: `Bearer ${localStorage.getItem("login-token")}`,
+		},
+	})
+		.then((response) => {
+			console.log(
+				"Respuesta del servidor (CANCEL_RESERVATION):",
+				response.status,
+				response.statusText
+			);
+
+			if (!response.ok) {
+				return response.text().then((text) => {
+					console.log("Contenido de la respuesta de error (CANCEL_RESERVATION):", text);
+					throw new Error(
+						`HTTP ${response.status}: ${
+							response.statusText
+						}. Contenido: ${text.substring(0, 200)}`
+					);
+				});
+			}
+			return response.json();
+		})
+		.then((data) => {
+			console.log("Reserva cancelada exitosamente:", data);
+			if (onSuccess) {
+				onSuccess(data);
+			}
+		})
+		.catch((error) => {
+			console.error("Error de red al cancelar reserva:", error);
+			if (onError) {
+				onError(error);
+			}
+		});
+};

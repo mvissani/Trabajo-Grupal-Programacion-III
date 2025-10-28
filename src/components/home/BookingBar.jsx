@@ -132,147 +132,138 @@ export default function BookingBar({ onSearch }) {
   return (
     <div className="booking-bar py-2 bg-secondary">
       <Container fluid>
-  <Form onSubmit={submit}>
-  <Row className="g-0 justify-content-center text-center align-items-end">
-    {/* INGRESO */}
-    <Col xs="auto" className="booking-box px-2">
-      <Form.Label
-        className="d-block fw-semibold text-light"
-        style={{ fontSize: "1.05rem", marginBottom: "8px" }}
-      >
-        INGRESO
-      </Form.Label>
-      <div
-        className="d-flex align-items-center bg-light px-3"
-        style={{ height: "48px", width: "260px", borderRadius: "8px" }}
-      >
-        <BsCalendarEvent className="me-2" />
-        <Form.Control
-          type="date"
-          value={form.ingreso}
-          onChange={handle("ingreso")}
-          className="border-0 bg-light p-0"
-          style={{
-            height: "100%",
-            fontSize: "0.95rem",
-            flex: 1,
-            background: "transparent",
-          }}
-        />
-      </div>
-    </Col>
+        <Form onSubmit={submit}>
+          <Row className="g-0 justify-content-center text-center align-items-end">
+            <Col xs="auto" className="booking-box px-2">
+              <Form.Label
+                className="d-block fw-semibold text-light"
+                style={{ fontSize: "1.05rem", marginBottom: "8px" }}
+              >
+                INGRESO
+              </Form.Label>
+              <div
+                className="d-flex align-items-center bg-light px-3"
+                style={{ height: "48px", width: "260px", borderRadius: "8px" }}
+              >
+                <BsCalendarEvent className="me-2" />
+                <Form.Control
+                  type="date"
+                  value={form.ingreso}
+                  onChange={handle("ingreso")}
+                  className="border-0 bg-light p-0"
+                  style={{
+                    height: "100%",
+                    fontSize: "0.95rem",
+                    flex: 1,
+                    background: "transparent",
+                  }}
+                />
+              </div>
+            </Col>
 
-    {/* EGRESO */}
-    <Col xs="auto" className="booking-box px-2">
-      <Form.Label
-        className="d-block fw-semibold text-light"
-        style={{ fontSize: "1.05rem", marginBottom: "8px" }}
-      >
-        EGRESO
-      </Form.Label>
-      <div
-        className="d-flex align-items-center bg-light px-3"
-        style={{ height: "48px", width: "260px", borderRadius: "8px" }}
-      >
-        <BsCalendarEvent className="me-2" />
-        <Form.Control
-          type="date"
-          value={form.egreso}
-          onChange={handle("egreso")}
-          className="border-0 bg-light p-0"
-          style={{
-            height: "100%",
-            fontSize: "0.95rem",
-            flex: 1,
-            background: "transparent",
-          }}
-        />
-      </div>
-    </Col>
+            <Col xs="auto" className="booking-box px-2">
+              <Form.Label
+                className="d-block fw-semibold text-light"
+                style={{ fontSize: "1.05rem", marginBottom: "8px" }}
+              >
+                EGRESO
+              </Form.Label>
+              <div
+                className="d-flex align-items-center bg-light px-3"
+                style={{ height: "48px", width: "260px", borderRadius: "8px" }}
+              >
+                <BsCalendarEvent className="me-2" />
+                <Form.Control
+                  type="date"
+                  value={form.egreso}
+                  onChange={handle("egreso")}
+                  className="border-0 bg-light p-0"
+                  style={{
+                    height: "100%",
+                    fontSize: "0.95rem",
+                    flex: 1,
+                    background: "transparent",
+                  }}
+                />
+              </div>
+            </Col>
 
-    {/* HABITACIONES */}
-    <Col xs="auto" className="booking-box px-2">
-      <Form.Label
-        className="d-block fw-semibold text-light"
-        style={{ fontSize: "1.05rem", marginBottom: "8px" }}
-      >
-        HABITACIONES
-      </Form.Label>
-      <div
-        className="d-flex align-items-center bg-light px-3"
-        style={{ height: "48px", width: "180px", borderRadius: "8px" }}
-      >
-        <BsHouseDoor className="me-2" />
-        <Form.Control
-          type="number"
-          min={1}
-          value={form.rooms}
-          onChange={handle("rooms")}
-          className="border-0 bg-light p-0 text-center"
-          style={{
-            height: "100%",
-            fontSize: "0.95rem",
-            flex: 1,
-            background: "transparent",
-          }}
-        />
-      </div>
-    </Col>
+            <Col xs="auto" className="booking-box px-2">
+              <Form.Label
+                className="d-block fw-semibold text-light"
+                style={{ fontSize: "1.05rem", marginBottom: "8px" }}
+              >
+                HABITACIONES
+              </Form.Label>
+              <div
+                className="d-flex align-items-center bg-light px-3"
+                style={{ height: "48px", width: "180px", borderRadius: "8px" }}
+              >
+                <BsHouseDoor className="me-2" />
+                <Form.Control
+                  type="number"
+                  min={1}
+                  value={form.rooms}
+                  onChange={handle("rooms")}
+                  className="border-0 bg-light p-0 text-center"
+                  style={{
+                    height: "100%",
+                    fontSize: "0.95rem",
+                    flex: 1,
+                    background: "transparent",
+                  }}
+                />
+              </div>
+            </Col>
 
-    {/* HUÉSPEDES */}
-    <Col xs="auto" className="booking-box px-2">
-      <Form.Label
-        className="d-block fw-semibold text-light"
-        style={{ fontSize: "1.05rem", marginBottom: "8px" }}
-      >
-        HUÉSPEDES
-      </Form.Label>
-      <div
-        className="d-flex align-items-center bg-light px-3"
-        style={{ height: "48px", width: "180px", borderRadius: "8px" }}
-      >
-        <BsPerson className="me-2" />
-        <Form.Control
-          type="number"
-          min={0}
-          value={form.guests}
-          onChange={handle("guests")}
-          className="border-0 bg-light p-0 text-center"
-          style={{
-            height: "100%",
-            fontSize: "0.95rem",
-            flex: 1,
-            background: "transparent",
-          }}
-        />
-      </div>
-    </Col>
+            <Col xs="auto" className="booking-box px-2">
+              <Form.Label
+                className="d-block fw-semibold text-light"
+                style={{ fontSize: "1.05rem", marginBottom: "8px" }}
+              >
+                HUÉSPEDES
+              </Form.Label>
+              <div
+                className="d-flex align-items-center bg-light px-3"
+                style={{ height: "48px", width: "180px", borderRadius: "8px" }}
+              >
+                <BsPerson className="me-2" />
+                <Form.Control
+                  type="number"
+                  min={0}
+                  value={form.guests}
+                  onChange={handle("guests")}
+                  className="border-0 bg-light p-0 text-center"
+                  style={{
+                    height: "100%",
+                    fontSize: "0.95rem",
+                    flex: 1,
+                    background: "transparent",
+                  }}
+                />
+              </div>
+            </Col>
 
-    {/* BOTÓN */}
-    <Col xs="auto" className="px-2">
-      <Form.Label className="d-block">&nbsp;</Form.Label>
-      <Button
-        type="submit"
-        className="fw-bold"
-        style={{
-          background: "#48c5b7",
-          border: "none",
-          height: "48px",
-          width: "180px", // 👈 botón más ancho
-          borderRadius: "8px",
-          fontSize: "1rem",
-        }}
-        disabled={loading}
-      >
-        {loading ? "VERIFICANDO..." : "BUSCAR"}
-      </Button>
-    </Col>
-  </Row>
-</Form>
-
-
-
-
+            <Col xs="auto" className="px-2">
+              <Form.Label className="d-block">&nbsp;</Form.Label>
+              <Button
+                type="submit"
+                className="fw-bold"
+                style={{
+                  background: "#48c5b7",
+                  border: "none",
+                  height: "48px",
+                  width: "180px", 
+                  borderRadius: "8px",
+                  fontSize: "1rem",
+                }}
+                disabled={loading}
+              >
+                {loading ? "VERIFICANDO..." : "BUSCAR"}
+              </Button>
+            </Col>
+          </Row>
+        </Form>
 
         {availabilityResult && (
           <Row className="mt-3 justify-content-center">
