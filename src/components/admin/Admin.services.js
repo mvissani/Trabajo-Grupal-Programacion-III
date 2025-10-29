@@ -418,3 +418,46 @@ export const cancelReservation = (reservationId, onSuccess, onError) => {
 			}
 		});
 };
+export const refreshRoomAvailability = (onSuccess, onError) => {
+	console.log("Refrescando disponibilidades de habitaciones...");
+	console.log("URL de destino:", "/api/admin/refresh-availability");
+
+	fetch("http://localhost:3000/api/admin/refresh-availability", {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+			Authorization: `Bearer ${localStorage.getItem("login-token")}`,
+		},
+	})
+		.then((response) => {
+			console.log(
+				"Respuesta del servidor (REFRESH_AVAILABILITY):",
+				response.status,
+				response.statusText
+			);
+
+			if (!response.ok) {
+				return response.text().then((text) => {
+					console.log("Contenido de la respuesta de error (REFRESH_AVAILABILITY):", text);
+					throw new Error(
+						`HTTP ${response.status}: ${
+							response.statusText
+						}. Contenido: ${text.substring(0, 200)}`
+					);
+				});
+			}
+			return response.json();
+		})
+		.then((data) => {
+			console.log("Disponibilidades actualizadas exitosamente:", data);
+			if (onSuccess) {
+				onSuccess(data);
+			}
+		})
+		.catch((error) => {
+			console.error("Error de red al refrescar disponibilidades:", error);
+			if (onError) {
+				onError(error);
+			}
+		});
+};

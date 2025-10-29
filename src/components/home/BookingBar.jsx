@@ -29,7 +29,10 @@ export default function BookingBar({ onSearch }) {
       availabilityResult &&
       !availabilityResult.disponible &&
       availabilityResult.mensaje &&
-      availabilityResult.mensaje.includes("anterior a la fecha actual")
+      (availabilityResult.mensaje.includes("anterior a la fecha actual") ||
+        availabilityResult.mensaje.includes(
+          "debe ser posterior a la fecha de ingreso"
+        ))
     ) {
       const timer = setTimeout(() => {
         setAvailabilityResult(null);

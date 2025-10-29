@@ -27,6 +27,7 @@ import {
   restoreService,
   getAllReservations,
   cancelReservation,
+  refreshRoomAvailability,
 } from "./Admin.services";
 import { AuthenticationContex } from "../services/Auth/Auth.context";
 import { UserTypeContext } from "../services/Auth/UserType.context";
@@ -472,6 +473,7 @@ function Admin() {
           setLoading(false);
           showNotification("¡Reserva cancelada exitosamente!", "success");
           loadReservations();
+          loadRooms();
           setCancelReservationConfirm(null);
         },
         (error) => {
@@ -620,6 +622,30 @@ function Admin() {
       (error) => {
         console.error("Error al cargar reservas:", error);
         showNotification(`Error al cargar reservas: ${error}`, "danger");
+      }
+    );
+  };
+
+  const handleRefreshAvailability = () => {
+    setLoading(true);
+    refreshRoomAvailability(
+      (data) => {
+        setLoading(false);
+        loadRooms();
+        showNotification(
+          `${
+            data.data.message ||
+            `Se actualizaron ${data.data.updatedCount || 0} habitaciones`
+          }`,
+          "success"
+        );
+      },
+      (error) => {
+        setLoading(false);
+        showNotification(
+          `Error al refrescar disponibilidades: ${error}`,
+          "danger"
+        );
       }
     );
   };
@@ -1065,8 +1091,21 @@ function Admin() {
 
             <Tab eventKey="rooms-list" title="Lista de Habitaciones">
               <Card>
-                <Card.Header>
-                  <h4>Habitaciones Registradas</h4>
+                <Card.Header className="d-flex justify-content-between align-items-center">
+                  <h4 className="mb-0">Habitaciones Registradas</h4>
+                  <Button
+                    variant="info"
+                    size="sm"
+                    onClick={handleRefreshAvailability}
+                    disabled={loading}
+                    className="d-flex align-items-center gap-2"
+                  >
+                    {loading ? (
+                      <>⏳ Refrescando...</>
+                    ) : (
+                      <>🔄 Refrescar Disponibilidades</>
+                    )}
+                  </Button>
                 </Card.Header>
                 <Card.Body>
                   <Table striped bordered hover responsive>
@@ -1074,6 +1113,7 @@ function Admin() {
                       <tr>
                         <th>ID</th>
                         <th>Nombre</th>
+                        <th>Número</th>
                         <th>Personas</th>
                         <th>Capacidad</th>
                         <th>Tipo</th>
@@ -1089,6 +1129,9 @@ function Admin() {
                           <tr key={room.Id}>
                             <td>{room.Id}</td>
                             <td>{room.Nombre}</td>
+                            <td>
+                              <Badge bg="secondary">#{room.RoomNo}</Badge>
+                            </td>
                             <td>{room.Personas}</td>
                             <td>
                               <Badge bg="info">{room.Capacidad}</Badge>
@@ -1139,7 +1182,7 @@ function Admin() {
                         ))
                       ) : (
                         <tr>
-                          <td colSpan="9" className="text-center">
+                          <td colSpan="10" className="text-center">
                             No hay habitaciones registradas
                           </td>
                         </tr>
@@ -1162,7 +1205,8 @@ function Admin() {
                         <th>ID</th>
                         <th>Título</th>
                         <th>Descripción</th>
-
+                        <th>Icono</th>
+                        <th>Estado</th>
                         <th>Creado</th>
                         <th style={{ width: "150px" }}>Acciones</th>
                       </tr>
@@ -1182,7 +1226,16 @@ function Admin() {
                                   : service.description}
                               </small>
                             </td>
-
+                            <td>
+                              <code>{service.icon || "N/A"}</code>
+                            </td>
+                            <td>
+                              <Badge
+                                bg={service.isActive ? "success" : "secondary"}
+                              >
+                                {service.isActive ? "Activo" : "Inactivo"}
+                              </Badge>
+                            </td>
                             <td>
                               <small>
                                 {new Date(
@@ -1304,14 +1357,14 @@ function Admin() {
                               <Badge
                                 bg={
                                   reservation.status === "cancelled"
-                                    ? "secondary"
+                                    ? "danger"
                                     : reservation.displayStatus === "expired"
                                     ? "warning"
                                     : "success"
                                 }
                               >
                                 {reservation.status === "cancelled"
-                                  ? "Cancelado"
+                                  ? "Cancelada"
                                   : reservation.displayStatus === "expired"
                                   ? "No Vigente"
                                   : "Activa"}
