@@ -5,7 +5,6 @@ import Reviews from "./Reviews";
 import BookingBar from "./BookingBar";
 import Sponsors from "./Sponsors";
 import Carrusel from "./Carrusel";
-import { FaWhatsapp } from "react-icons/fa";
 import WhatsAppButton from "./WhatsAppButton";
 import RoomsAndServices from "./RoomsAndServices";
 
@@ -14,7 +13,6 @@ function Home() {
     <div>
       <div className="full-bleed">
         <BookingBar />
-
         <Image
           src="https://ik.imagekit.io/rooxjlwlq/Fachada_Sur_Gran_Hotel_Miramar_(M%C3%A1laga).jpg?updatedAt=1756832780904"
           alt="Hotel - hero"
@@ -23,8 +21,7 @@ function Home() {
       </div>
 
       <Container className="text-center my-4">
-        <h2 className="fw-light fst-italic mb-6">Bienvenido a</h2>
-
+        <h2 className="fw-light fst-italic mb-4">Bienvenido a</h2>
         <Image
           src={hotelName}
           alt="Logo Hotel"
@@ -32,42 +29,45 @@ function Home() {
           style={{ maxWidth: "250px" }}
           className="mb-3"
         />
-
         <h5 className="fw-semibold">Rosario - Santa Fe - Argentina</h5>
-
-        <p className="fw-light fst-italic fs-4 text-dark mt-3 mb-3">
-          Hotel Starlight Rosario se encuentra en el ingreso a la ciudad de
-          Rosario. Cuenta con habitaciones modernas, una variedad de
-          instalaciones y servicios pensados para que tenga una estadía única.
-        </p>
       </Container>
 
       <Container className="mb-4">
-        <Row>
-          <Col>
-            <div className="text-center mx-auto" style={{ maxWidth: "800px" }}>
+        <Row className="align-items-stretch">
+          <Col md={8}>
+            <div
+              className="mx-auto"
+              style={{
+                maxWidth: "800px",
+                textAlign: "justify",
+                textJustify: "inter-word",
+              }}
+            >
               <p className="fw-light fst-italic fs-4 text-dark mt-3 mb-3">
-                En pleno corazón de Rosario, este hotel 5 estrellas combina
-                elegancia y modernidad para ofrecer una experiencia única.
-                Su diseño sofisticado y ambientes amplios brindan el máximo
-                confort tanto para viajes de negocios como para escapadas de
-                placer.
+                Hotel Starlight se encuentra en el ingreso al centro de la
+                ciudad de Rosario. Cuenta con habitaciones modernas, una
+                variedad de instalaciones y servicios pensados para que tenga
+                una estadía única. En pleno corazón de la ciudad, este hotel 5
+                estrellas combina elegancia y modernidad para ofrecer una
+                experiencia única. Su diseño sofisticado y ambientes amplios
+                brindan el máximo confort tanto para viajes de negocios como
+                para escapadas de placer.
               </p>
 
               <p className="fw-light fst-italic fs-4 text-dark mb-3">
                 A 2 km del Monumento a la Bandera y a pocas cuadras de la
                 peatonal Córdoba, la ubicación es ideal para quienes buscan
-                comodidad y cercanía a los principales atractivos turísticos
-                y comerciales de la ciudad. Cada detalle está pensado para
+                comodidad y cercanía a los principales atractivos turísticos y
+                comerciales de la ciudad. Cada detalle está pensado para
                 garantizar bienestar y exclusividad.
               </p>
 
               <p className="fw-light fst-italic fs-4 text-dark mb-3">
-                El hotel cuenta con habitaciones de lujo, spa, piscina climatizada
-                y servicio de primer nivel. Además, se encuentra muy cerca de la
-                vibrante avenida Pellegrini, reconocida por su variada oferta
-                gastronómica, lo que permite disfrutar de la mejor cocina local a
-                pasos del alojamiento.
+                El hotel cuenta con habitaciones de lujo, spa, piscina
+                climatizada y servicio de primer nivel. Además, se encuentra muy
+                cerca de la vibrante avenida Pellegrini, reconocida por su
+                variada oferta gastronómica, lo que permite disfrutar de la
+                mejor cocina local a pasos del alojamiento.
               </p>
             </div>
 
@@ -107,53 +107,77 @@ function Home() {
             </div>
           </Col>
 
-          <Col md={4}>
-            <Card className="hotel-card text-center shadow-lg border-0 rounded-4 p-3">
-              <Card.Body>
+          <Col md={4} className="d-flex">
+            <Card
+              className="shadow border-0 rounded-4 w-100"
+              style={{
+                background: "linear-gradient(145deg, #9ed0f7ff, #e6eef3)",
+                height: "95%",
+                fontSize: "1.1rem",
+                border: "1px solid #d6e0e8",
+              }}
+            >
+              <Card.Body className="p-3 d-flex flex-column justify-content-center align-items-center text-center">
                 <Image
                   src={hotelName}
                   alt="Logo Hotel"
                   fluid
-                  style={{ maxWidth: "200px", margin: "20px auto" }}
+                  style={{
+                    maxWidth: "250px",
+                    marginBottom: "15px",
+                  }}
                 />
 
-                <div className="d-flex justify-content-between align-items-center py-3 border-bottom fs-5">
+                <div
+                  className="d-flex justify-content-between align-items-center py-2 border-bottom w-100"
+                  style={{ maxWidth: "260px" }}
+                >
                   <div>
                     <div className="fw-bold text-primary">Check in</div>
-                    <div className="fs-4">14:00</div>
+                    <div className="fs5">14:00</div>
                   </div>
-
-                  <div className="text-muted fs-3">|</div>
-
+                  <div className="text-muted fs-4">|</div>
                   <div className="text-end">
                     <div className="fw-bold text-primary">Check out</div>
-                    <div className="fs-4">10:00</div>
+                    <div className="fs5">10:00</div>
                   </div>
                 </div>
 
-                <div className="py-3 fs-5">
+                <div className="text-center mt-4" style={{ lineHeight: "1.5" }}>
                   <div className="text-uppercase text-muted small mb-1">
                     Dirección
                   </div>
-                  <div className="fw-semibold">Boulevard Oroño 1234</div>
+                  <div className="fw-semibold fs-5">Boulevard Oroño 1234</div>
                   <div>CP 2000 · Rosario · Santa Fe · Argentina</div>
 
-                  <div className="mt-1">
+                  <div className="mt-2">
                     <div className="text-uppercase text-muted small mb-1">
                       Tel.
                     </div>
-                    <div className="fw-semibold">+54 341 4223456</div>
+                    <div className="fw-semibold fs-5">+54 341 4223456</div>
+                    <div className="fw-semibold fs-5">+54 341 08001110000</div>
                   </div>
 
-                  <div className="mt-1">
+                  <div className="mt-2">
                     <div className="text-uppercase text-muted small mb-1">
                       Reservas
                     </div>
-                    <div className="fw-semibold">
+                    <div className="fw-semibold fs-5">
                       starlighthoteles@gmail.com
                     </div>
                   </div>
                 </div>
+
+                <div
+                  className="mt-3"
+                  style={{
+                    width: "50%",
+                    height: "3px",
+                    background:
+                      "linear-gradient(to right, #6c8bc7, #b4c7e7, #6c8bc7)",
+                    borderRadius: "5px",
+                  }}
+                ></div>
               </Card.Body>
             </Card>
           </Col>
@@ -163,19 +187,15 @@ function Home() {
       <div style={{ marginBottom: "5px", marginTop: "200px" }}>
         <Carrusel />
       </div>
-
       <div style={{ marginTop: "1px", marginBottom: "1px" }}>
         <Map />
       </div>
-
       <div style={{ marginTop: "1px", marginBottom: "1px" }}>
         <RoomsAndServices />
       </div>
-
       <div style={{ marginTop: "1px", marginBottom: "10px" }}>
         <Reviews />
       </div>
-
       <Sponsors />
       <WhatsAppButton />
     </div>

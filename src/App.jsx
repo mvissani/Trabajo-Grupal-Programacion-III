@@ -10,7 +10,7 @@ import ErrorNotFound from "./components/errorNotFound/ErrorNotFound";
 import Sales from "./components/sales/Sales";
 import Services from "./components/services/Services";
 import AboutUs from "./components/aboutUs/aboutUs";
-import Reviews from "./components/reviews/Reviews";
+
 import Rooms from "./components/rooms/Rooms";
 import Footer from "./components/footer/Footer";
 import Admin from "./components/admin/Admin";
@@ -33,7 +33,7 @@ function App() {
         </Route>
         <Route path="/sales" element={<Sales />} />
         <Route path="/services" element={<Services />} />
-        <Route path="/reviews" element={<Reviews />} />
+       
         <Route path="/rooms" element={<Rooms />} />
         
         <Route path="/admin" element={<Admin />} />

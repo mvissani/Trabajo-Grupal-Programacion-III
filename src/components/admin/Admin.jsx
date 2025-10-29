@@ -1162,8 +1162,7 @@ function Admin() {
                         <th>ID</th>
                         <th>Título</th>
                         <th>Descripción</th>
-                        <th>Icono</th>
-                        <th>Estado</th>
+
                         <th>Creado</th>
                         <th style={{ width: "150px" }}>Acciones</th>
                       </tr>
@@ -1183,16 +1182,7 @@ function Admin() {
                                   : service.description}
                               </small>
                             </td>
-                            <td>
-                              <code>{service.icon || "N/A"}</code>
-                            </td>
-                            <td>
-                              <Badge
-                                bg={service.isActive ? "success" : "secondary"}
-                              >
-                                {service.isActive ? "Activo" : "Inactivo"}
-                              </Badge>
-                            </td>
+
                             <td>
                               <small>
                                 {new Date(

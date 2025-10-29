@@ -1,0 +1,67 @@
+.register-container {
+	background: linear-gradient(135deg, #f5f7fa 0%, #e8f0f2 100%);
+	min-height: 84.4vh;
+}
+
+.register-card {
+	background-color: #2e2e318e !important;
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+	border-radius: 12px;
+}
+
+.error-message {
+	font-size: 1.1rem;
+	font-weight: 600;
+	color: #dc3545;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+	margin-top: 0.5rem;
+	padding: 0.5rem;
+	background-color: rgba(220, 53, 69, 0.1);
+	border-left: 4px solid #dc3545;
+	border-radius: 4px;
+}
+
+.register-alert {
+	font-size: 1.15rem;
+	font-weight: 600;
+	padding: 1rem 1.25rem;
+	border-radius: 8px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.alert-danger.register-alert {
+	background-color: #f8d7da;
+	border: 2px solid #dc3545;
+	color: #721c24;
+}
+
+.alert-success.register-alert {
+	background-color: #d1e7dd;
+	border: 2px solid #198754;
+	color: #0f5132;
+}
+
+.register-label {
+	color: #212529 !important;
+	font-weight: 600;
+	font-size: 1rem;
+	margin-bottom: 0.5rem;
+}
+
+.register-input-group {
+	display: flex;
+	justify-content: center;
+	max-width: 400px;
+	margin: 0 auto;
+}
+
+.text-center .form-control {
+	margin: 0 auto;
+	max-width: 100%;
+}
+
+.text-center .input-group {
+	margin: 0 auto;
+	max-width: 400px;
+}
+

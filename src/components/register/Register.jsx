@@ -11,6 +11,7 @@ import {
 } from "react-bootstrap";
 import InputGroupText from "react-bootstrap/esm/InputGroupText";
 import { useNavigate } from "react-router";
+import "./Register.css";
 
 function Register() {
   const navigate = useNavigate();
@@ -171,59 +172,47 @@ function Register() {
         console.error("❌ [REGISTER] Error en registro:", data.message);
 
         let errorMessage = "Error al registrar usuario. Inténtalo de nuevo.";
-
+        
         if (data.message) {
-          if (
-            data.message.includes("Usuario existente") ||
-            data.message.includes("existente")
-          ) {
-            errorMessage =
-              "Este email ya está registrado. Por favor, usa otro email o inicia sesión.";
+          if (data.message.includes("Usuario existente") || data.message.includes("existente")) {
+            errorMessage = "Este email ya está registrado. Por favor, usa otro email o inicia sesión.";
           } else if (data.message.includes("Email")) {
             errorMessage = "Error con el email. Verifica que sea válido.";
           } else if (data.message.includes("Contraseña")) {
-            errorMessage =
-              "Error con la contraseña. Debe tener al menos 6 caracteres.";
+            errorMessage = "Error con la contraseña. Debe tener al menos 6 caracteres.";
           } else if (data.message.includes("DNI")) {
             errorMessage = "Este DNI ya está registrado.";
           } else {
             errorMessage = data.message;
           }
         }
-
+        
         showNotification(errorMessage, "danger");
         return;
       }
 
       console.log("✅ [REGISTER] Usuario registrado exitosamente");
-      showNotification(
-        "Usuario registrado exitosamente. Redirigiendo al login...",
-        "success"
-      );
+      showNotification("Usuario registrado exitosamente. Redirigiendo al login...", "success");
       setTimeout(() => {
         navigate("/login");
       }, 1500);
     } catch (err) {
       console.error("❌ [REGISTER] Error de conexión:", err);
-      showNotification(
-        "Error de conexión. Verifica que el servidor esté funcionando.",
-        "danger"
-      );
+      showNotification("Error de conexión. Verifica que el servidor esté funcionando.", "danger");
     }
   };
 
   return (
     <>
       <Container
-        className="d-flex justify-content-center align-items-center"
-        style={{ minHeight: "84.4vh" }}
+        className="d-flex justify-content-center align-items-center register-container"
       >
         <Card
           style={{ width: "10rem" }}
-          className="mb-3 w-50 bg-dark text-white p-3 border-1 shadow"
+          className="mb-3 w-50 register-card p-3 border-1 shadow"
         >
           <Card.Body className="justify-content-center border-1 ">
-            <Card.Title className="text-center fw-bold shadow fs-2">
+            <Card.Title className="text-center fw-bold shadow fs-2 text-dark">
               Registrarme
             </Card.Title>
 
@@ -234,7 +223,7 @@ function Register() {
                 onClose={() =>
                   setNotification({ show: false, message: "", type: "" })
                 }
-                className="mb-4"
+                className={`mb-4 register-alert alert-${notification.type}`}
               >
                 {notification.message}
               </Alert>
@@ -243,116 +232,109 @@ function Register() {
             <form onSubmit={handleSubmit}>
               <Row>
                 <Col>
-                  <Form.Group>
-                    <Form.Label>Ingrese su nombre</Form.Label>
+                  <Form.Group className="text-center">
+                    <Form.Label className="w-100 register-label">Ingrese su nombre</Form.Label>
 
                     <Form.Control
                       type="text"
                       placeholder="Ej: Juan"
-                      className={errors.name && "bg-warning"}
                       onChange={handleChange}
                       name="name"
                       value={formData.name}
                       maxLength={50}
                     />
                     {errors.name && (
-                      <p className="mt-2 text-danger">{errors.name}</p>
+                      <p className="error-message">{errors.name}</p>
                     )}
                   </Form.Group>
                 </Col>
                 <Col>
-                  <Form.Group>
-                    <Form.Label>Ingrese su apellido</Form.Label>
+                  <Form.Group className="text-center">
+                    <Form.Label className="w-100 register-label">Ingrese su apellido</Form.Label>
                     <Form.Control
                       type="text"
                       name="surname"
                       placeholder="Ej: Pérez"
-                      className={errors.surname && "bg-warning"}
                       onChange={handleChange}
                       value={formData.surname}
                       maxLength={50}
                     />
                     {errors.surname && (
-                      <p className="mt-2 text-danger">{errors.surname}</p>
+                      <p className="error-message">{errors.surname}</p>
                     )}
                   </Form.Group>
                 </Col>
               </Row>
               <Row>
-                <Form.Group>
-                  <Form.Label>Ingrese su número de celular</Form.Label>
-                  <InputGroup>
+                <Form.Group className="text-center">
+                  <Form.Label className="w-100 register-label">Ingrese su número de celular</Form.Label>
+                  <InputGroup className="register-input-group">
                     <InputGroupText>+54</InputGroupText>
                     <Form.Control
                       type="text"
                       name="cellNumber"
                       placeholder="Ej: 1123456789"
-                      className={errors.cellNumber && "bg-warning"}
                       onChange={handleChange}
                       value={formData.cellNumber}
                       maxLength={15}
                     ></Form.Control>
-                    <br></br>
-                    {errors.cellNumber && (
-                      <p className="mt-2 text-danger">{errors.cellNumber}</p>
-                    )}
                   </InputGroup>
+                  {errors.cellNumber && (
+                    <p className="error-message">{errors.cellNumber}</p>
+                  )}
                 </Form.Group>
               </Row>
               <Row>
-                <Form.Group>
-                  <Form.Label>Ingrese su DNI</Form.Label>
+                <Form.Group className="text-center">
+                  <Form.Label className="w-100 register-label">Ingrese su DNI</Form.Label>
                   <Form.Control
                     placeholder="Ej: 12345678"
                     name="dni"
                     type="text"
                     onChange={handleChange}
                     value={formData.dni}
-                    className={errors.dni && "bg-warning"}
                     maxLength={8}
                   ></Form.Control>
                   {errors.dni && (
-                    <p className="mt-2 text-danger">{errors.dni}</p>
+                    <p className="error-message">{errors.dni}</p>
                   )}
                 </Form.Group>
               </Row>
               <Row>
-                <Form.Group>
-                  <Form.Label>Ingrese su email</Form.Label>
+                <Form.Group className="text-center">
+                  <Form.Label className="w-100 register-label">Ingrese su email</Form.Label>
                   <Form.Control
                     type="email"
                     placeholder="Ej: usuario@email.com"
                     name="email"
                     onChange={handleChange}
                     value={formData.email}
-                    className={errors.email && "bg-warning"}
                     maxLength={100}
                   ></Form.Control>
                   {errors.email && (
-                    <p className="mt-2 text-danger">{errors.email}</p>
+                    <p className="error-message">{errors.email}</p>
                   )}
                 </Form.Group>
               </Row>
               <Row>
-                <Form.Group>
-                  <Form.Label>Ingrese su contraseña</Form.Label>
+                <Form.Group className="text-center">
+                  <Form.Label className="w-100 register-label">Ingrese su contraseña</Form.Label>
                   <Form.Control
                     type="password"
                     placeholder="Mínimo 6 caracteres"
                     name="password"
                     onChange={handleChange}
                     value={formData.password}
-                    className={errors.password && "bg-warning"}
                     maxLength={50}
                   ></Form.Control>
                   {errors.password && (
-                    <p className="mt-2 text-danger">{errors.password}</p>
+                    <p className="error-message">{errors.password}</p>
                   )}
                 </Form.Group>
               </Row>
               <Button
                 type="submit"
-                className=" text-light bg-dark fc-black d-block mx-auto mt-3"
+                className="d-block mx-auto mt-3"
                 onClick={handleSubmit}
               >
                 Registrarme

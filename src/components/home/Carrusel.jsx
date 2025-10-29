@@ -22,7 +22,7 @@ const Carrusel = () => (
     <Carousel.Item>
       <img
         className="carousel-img"
-        src="https://ik.imagekit.io/rooxjlwlq/premium_photo-1682097301631-902c29a12a21.avif?updatedAt=1758063154203"
+        src="https://ik.imagekit.io/rooxjlwlq/pexels-reneterp-2977515.jpg?updatedAt=1761707674921"
         alt="Third slide"
       />
       <Carousel.Caption></Carousel.Caption>

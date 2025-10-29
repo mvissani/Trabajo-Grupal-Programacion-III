@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from "react";
+
 import {
   Container,
   Row,
@@ -14,8 +15,11 @@ import {
   Form,
   Modal,
 } from "react-bootstrap";
+
 import { AuthenticationContex } from "../services/Auth/Auth.context";
+
 import { UserTypeContext } from "../services/Auth/UserType.context";
+
 import {
   getUserProfile,
   getUserReservations,
@@ -25,44 +29,76 @@ import {
   updateUserDataInStorage,
   cancelUserReservation,
 } from "./profile.services";
+
 import "./Profile.css";
 
 const Profile = () => {
   const { token } = useContext(AuthenticationContex);
+
   const { userType } = useContext(UserTypeContext);
 
   const [userProfile, setUserProfile] = useState(null);
+
   const [userReservations, setUserReservations] = useState([]);
+
   const [loading, setLoading] = useState(true);
+
   const [error, setError] = useState("");
+
   const [notification, setNotification] = useState({
     show: false,
+
     message: "",
+
     type: "",
   });
 
-  const [isEditing, setIsEditing] = useState(false);
+  const [hasChanges, setHasChanges] = useState(false);
+
   const [editFormData, setEditFormData] = useState({
     name: "",
+
     surname: "",
+
     email: "",
+
+    cellNumber: "",
+  });
+
+  const [originalFormData, setOriginalFormData] = useState({
+    name: "",
+
+    surname: "",
+
+    email: "",
+
     cellNumber: "",
   });
 
   const [showPasswordModal, setShowPasswordModal] = useState(false);
+
   const [passwordData, setPasswordData] = useState({
     currentPassword: "",
+
     newPassword: "",
+
     confirmPassword: "",
   });
 
   const [errors, setErrors] = useState({});
+
   const [passwordErrors, setPasswordErrors] = useState({});
+
   const [cancelReservationConfirm, setCancelReservationConfirm] =
     useState(null);
 
+  const [showErrorsModal, setShowErrorsModal] = useState(false);
+
+  const [validationErrors, setValidationErrors] = useState([]);
+
   const showNotification = (message, type) => {
     setNotification({ show: true, message, type });
+
     setTimeout(() => {
       setNotification({ show: false, message: "", type: "" });
     }, 5000);
@@ -72,69 +108,137 @@ const Profile = () => {
     try {
       if (token) {
         const payload = JSON.parse(atob(token.split(".")[1]));
+
         return payload.dni;
       }
     } catch (error) {
       console.error("Error al decodificar token:", error);
     }
+
     return null;
   };
 
   const loadUserProfile = async () => {
     try {
       setLoading(true);
+
       setError("");
 
       const dni = getDniFromToken();
+
       if (!dni) {
         const storedData = getUserDataFromStorage();
+
         if (storedData.name) {
-          setUserProfile({
-            name: storedData.name.split(" ")[0] || "",
-            surname: storedData.name.split(" ")[1] || "",
+          const nameParts = storedData.name.trim().split(/\s+/);
+
+          const profileData = {
+            name: nameParts[0] || "",
+
+            surname: nameParts.slice(1).join(" ") || "",
+
             email: storedData.email || "",
+
             cellNumber: "No disponible",
-            dni: storedData.dni || "No disponible",
+
+            dni: storedData.dni || "No editable",
             class: userType || "User",
-          });
+          };
+
+          setUserProfile(profileData);
+
+          const initialData = {
+            name: (profileData.name || "").trim(),
+
+            surname: (profileData.surname || "").trim(),
+
+            email: (profileData.email || "").trim(),
+
+            cellNumber: (profileData.cellNumber || "").trim(),
+          };
+
+          setEditFormData(initialData);
+
+          setOriginalFormData(initialData);
         } else {
           setError("No se pudo obtener la información del usuario");
         }
+
         setLoading(false);
+
         return;
       }
+
       console.log("[Frontend][Profile][LOAD]", { dni });
+
       const profileData = await getUserProfile(dni);
+
       setUserProfile(profileData);
-      setEditFormData({
-        name: profileData.name || "",
-        surname: profileData.surname || "",
-        email: profileData.email || "",
-        cellNumber: profileData.cellNumber || "",
-      });
+
+      const initialData = {
+        name: (profileData.name || "").trim(),
+
+        surname: (profileData.surname || "").trim(),
+
+        email: (profileData.email || "").trim(),
+
+        cellNumber: (profileData.cellNumber || "").trim(),
+      };
+
+      setEditFormData(initialData);
+
+      setOriginalFormData(initialData);
 
       try {
         const reservationsData = await getUserReservations(dni);
+
         console.log("[Frontend][Reservations][SET]", reservationsData?.length);
+
         setUserReservations(reservationsData);
       } catch (reservationError) {
         console.warn("No se pudieron cargar las reservas:", reservationError);
+
         setUserReservations([]);
       }
     } catch (error) {
       console.error("Error al cargar perfil:", error);
+
       setError("Error al cargar los datos del perfil");
 
       const storedData = getUserDataFromStorage();
+
       if (storedData.name) {
-        setUserProfile({
-          name: storedData.name.split(" ")[0] || "",
-          surname: storedData.name.split(" ")[1] || "",
-          email: storedData.email,
+        const nameParts = storedData.name.trim().split(/\s+/);
+
+        const profileData = {
+          name: nameParts[0] || "",
+
+          surname: nameParts.slice(1).join(" ") || "",
+
+          email: storedData.email || "",
+
           cellNumber: "No disponible",
-          dni: "No disponible",
+
+          dni: "No editable",
+
           class: userType || "User",
-        });
+        };
+
+        setUserProfile(profileData);
+
+        const initialData = {
+          name: (profileData.name || "").trim(),
+
+          surname: (profileData.surname || "").trim(),
+
+          email: (profileData.email || "").trim(),
+
+          cellNumber: (profileData.cellNumber || "").trim(),
+        };
+
+        setEditFormData(initialData);
+
+        setOriginalFormData(initialData);
       }
     } finally {
       setLoading(false);
@@ -145,7 +249,7 @@ const Profile = () => {
     switch (field) {
       case "name":
       case "surname":
-        if (!value.trim()) {
+        if (!value || !value.trim()) {
           return `${field === "name" ? "Nombre" : "Apellido"} es obligatorio`;
         }
 
@@ -160,35 +264,45 @@ const Profile = () => {
             field === "name" ? "Nombre" : "Apellido"
           } debe tener al menos 2 caracteres`;
         }
+
         if (value.trim().length > 50) {
           return `${
             field === "name" ? "Nombre" : "Apellido"
           } no puede tener más de 50 caracteres`;
         }
+
         return "";
+
       case "email":
-        if (!value.trim()) return "Email es obligatorio";
+        if (!value || !value.trim()) return "Email es obligatorio";
+
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
           return "Email debe ser válido";
+
         if (value.length > 100)
           return "Email no puede tener más de 100 caracteres";
+
         return "";
+
       case "cellNumber": {
-        if (!value.trim()) return "Número de celular es obligatorio";
+        if (!value || !value.trim()) return "Número de celular es obligatorio";
 
         const cleanNumber = value.replace(/\D/g, "");
+
         if (!/^\d{10,15}$/.test(cleanNumber)) {
           return "Número de celular debe tener entre 10 y 15 dígitos";
         }
+
         return "";
       }
+
       default:
         return "";
     }
   };
-
   const handleEditChange = (e) => {
     const { name, value } = e.target;
+
     let processedValue = value;
 
     if (name === "name" || name === "surname") {
@@ -198,82 +312,207 @@ const Profile = () => {
     if (name === "cellNumber") {
       processedValue = value.replace(/\D/g, "");
     }
+    const newFormData = {
+      ...editFormData,
 
-    setEditFormData((prev) => ({
-      ...prev,
       [name]: processedValue,
-    }));
+    };
+
+    setEditFormData(newFormData);
+
     setErrors((prev) => ({
       ...prev,
+
       [name]: validateField(name, processedValue),
     }));
+
+    const hasChangesDetected = Object.keys(newFormData).some(
+      (key) => newFormData[key] !== originalFormData[key]
+    );
+
+    setHasChanges(hasChangesDetected);
   };
 
   const handleEditSubmit = async (e) => {
     e.preventDefault();
 
+    const trimmedFormData = {
+      name: (editFormData.name || "").trim(),
+
+      surname: (editFormData.surname || "").trim(),
+
+      email: (editFormData.email || "").trim(),
+
+      cellNumber: (editFormData.cellNumber || "").trim(),
+    };
+
     const newErrors = {};
-    Object.keys(editFormData).forEach((key) => {
-      newErrors[key] = validateField(key, editFormData[key]);
+
+    Object.keys(trimmedFormData).forEach((key) => {
+      newErrors[key] = validateField(key, trimmedFormData[key]);
     });
 
     setErrors(newErrors);
 
     if (Object.values(newErrors).some((error) => error !== "")) {
-      showNotification(
-        "Por favor corrige los errores en el formulario",
-        "danger"
-      );
+      const errorList = Object.entries(newErrors)
+
+        .filter(([_, error]) => error !== "")
+
+        .map(([field, error]) => {
+          const fieldNames = {
+            name: "Nombre",
+
+            surname: "Apellido",
+
+            email: "Email",
+
+            cellNumber: "Teléfono",
+          };
+
+          return {
+            field: fieldNames[field] || field,
+
+            message: error,
+          };
+        });
+
+      setValidationErrors(errorList);
+
+      setShowErrorsModal(true);
+
       return;
     }
 
     try {
       const dni = getDniFromToken();
+
       if (!dni) {
         showNotification("No se pudo identificar al usuario", "danger");
+
         return;
       }
 
-      await updateUserProfile(dni, editFormData);
+      await updateUserProfile(dni, trimmedFormData);
 
       setUserProfile((prev) => ({
         ...prev,
-        ...editFormData,
+
+        ...trimmedFormData,
       }));
 
+      setEditFormData(trimmedFormData);
+
       updateUserDataInStorage({
-        name: `${editFormData.name} ${editFormData.surname}`,
-        email: editFormData.email,
+        name: `${trimmedFormData.name} ${trimmedFormData.surname}`,
+
+        email: trimmedFormData.email,
       });
 
-      setIsEditing(false);
+      setOriginalFormData(trimmedFormData);
+
+      setHasChanges(false);
+
       showNotification("Perfil actualizado exitosamente", "success");
     } catch (error) {
       console.error("Error al actualizar perfil:", error);
 
-      let errorMessage = "Error al actualizar el perfil";
+      let errorMessages = [];
 
       if (error.message) {
-        if (error.message.includes("Este email ya está en uso")) {
-          errorMessage =
-            "❌ Este email ya está registrado por otro usuario. Por favor, usa un email diferente.";
-        } else if (error.message.includes("Formato")) {
-          errorMessage = `❌ ${error.message}`;
-        } else if (error.message.includes("obligatorio")) {
-          errorMessage = `❌ ${error.message}`;
-        } else if (!error.message.includes("Error")) {
-          errorMessage = `❌ ${error.message}`;
+        const errorText = error.message;
+
+        if (
+          errorText.includes("Este email ya está en uso") ||
+          errorText.includes("email ya está registrado") ||
+          errorText.includes("email ya está en uso por otro usuario")
+        ) {
+          errorMessages.push({
+            field: "Email",
+
+            message:
+              "Este email ya está registrado por otro usuario. Por favor, usa un email diferente.",
+          });
+        } else if (
+          errorText.includes("Formato de email") ||
+          errorText.includes("email inválido")
+        ) {
+          errorMessages.push({
+            field: "Email",
+
+            message:
+              "El formato del email no es válido. Por favor, ingresa un email válido (ejemplo: usuario@email.com).",
+          });
+        } else if (
+          errorText.includes("Formato de número de celular") ||
+          errorText.includes("celular inválido")
+        ) {
+          errorMessages.push({
+            field: "Teléfono",
+
+            message:
+              "El formato del número de celular no es válido. Debe tener entre 10 y 15 dígitos.",
+          });
+        } else if (
+          errorText.includes("Todos los campos son obligatorios") ||
+          errorText.includes("obligatorios")
+        ) {
+          errorMessages.push({
+            field: "Campos requeridos",
+
+            message:
+              "Todos los campos son obligatorios. Por favor, completa todos los campos.",
+          });
+        } else if (
+          errorText.includes("obligatorio") ||
+          errorText.includes("requerido")
+        ) {
+          errorMessages.push({
+            field: "Campo obligatorio",
+
+            message: errorText,
+          });
+        } else if (errorText.includes("No tienes permisos")) {
+          errorMessages.push({
+            field: "Permisos",
+
+            message: "No tienes permisos para actualizar este perfil.",
+          });
+        } else if (errorText.includes("Usuario no encontrado")) {
+          errorMessages.push({
+            field: "Usuario",
+
+            message:
+              "Usuario no encontrado. Por favor, vuelve a iniciar sesión.",
+          });
+        } else {
+          errorMessages.push({
+            field: "Error",
+
+            message: errorText,
+          });
         }
+      } else {
+        errorMessages.push({
+          field: "Error",
+
+          message:
+            "Error desconocido al actualizar el perfil. Por favor, intenta nuevamente.",
+        });
       }
 
-      showNotification(errorMessage, "danger");
+      setValidationErrors(errorMessages);
+
+      setShowErrorsModal(true);
     }
   };
 
   const handlePasswordChange = (e) => {
     const { name, value } = e.target;
+
     setPasswordData((prev) => ({
       ...prev,
+
       [name]: value,
     }));
   };
@@ -304,34 +543,44 @@ const Profile = () => {
     e.preventDefault();
 
     const errors = validatePassword();
+
     setPasswordErrors(errors);
 
     if (Object.keys(errors).length > 0) {
       showNotification(
         "Por favor corrige los errores en el formulario",
+
         "danger"
       );
+
       return;
     }
 
     try {
       const dni = getDniFromToken();
+
       if (!dni) {
         showNotification("No se pudo identificar al usuario", "danger");
+
         return;
       }
 
       await changePassword(dni, {
         currentPassword: passwordData.currentPassword,
+
         newPassword: passwordData.newPassword,
       });
 
       setPasswordData({
         currentPassword: "",
+
         newPassword: "",
+
         confirmPassword: "",
       });
+
       setShowPasswordModal(false);
+
       showNotification("Contraseña cambiada exitosamente", "success");
     } catch (error) {
       console.error("Error al cambiar contraseña:", error);
@@ -392,58 +641,35 @@ const Profile = () => {
 
   if (loading) {
     return (
-      <div className="profile-container">
-        <Container>
-          <div className="profile-loading">
-            <Spinner animation="border" role="status" />
-            <p>Cargando tu perfil...</p>
-          </div>
-        </Container>
-      </div>
+      <Container className="py-5 text-center">
+        <Spinner animation="border" role="status">
+          <span className="visually-hidden">Cargando...</span>
+        </Spinner>
+
+        <p className="mt-3">Cargando tu perfil...</p>
+      </Container>
     );
   }
 
   if (error && !userProfile) {
     return (
-      <div className="profile-container">
-        <Container>
-          <div className="profile-error">
-            <Alert variant="danger">
-              <Alert.Heading>Error</Alert.Heading>
-              <p>{error}</p>
-              <Button
-                variant="primary"
-                onClick={loadUserProfile}
-                className="profile-btn"
-              >
-                🔄 Reintentar
-              </Button>
-            </Alert>
-          </div>
-        </Container>
-      </div>
+      <Container className="py-5">
+        <Alert variant="danger">
+          <Alert.Heading>Error</Alert.Heading>
+
+          <p>{error}</p>
+
+          <Button variant="outline-danger" onClick={loadUserProfile}>
+            Reintentar
+          </Button>
+        </Alert>
+      </Container>
     );
   }
 
   return (
     <div className="profile-container">
       <Container>
-        <div className="profile-header">
-          <div className="profile-avatar">
-            {userProfile?.name?.[0]?.toUpperCase() || "U"}
-          </div>
-          <h1 className="text-center">
-            {userProfile?.name} {userProfile?.surname}
-          </h1>
-          <p className="text-center">{userProfile?.email}</p>
-          <div className="text-center">
-            <span className="profile-type-badge">
-              {userProfile?.class === "Admin" ? "👨‍💼 " : "👤 "}
-              {userProfile?.class || "User"}
-            </span>
-          </div>
-        </div>
-
         {notification.show && (
           <Alert
             variant={notification.type}
@@ -459,243 +685,255 @@ const Profile = () => {
 
         <Tabs defaultActiveKey="profile" className="profile-tabs">
           <Tab eventKey="profile" title="📋 Información Personal">
-            <Card className="profile-card">
-              <Card.Header className="d-flex justify-content-between align-items-center">
-                <h4>Datos Personales</h4>
-                {!isEditing && (
-                  <Button
-                    className="btn-edit"
-                    onClick={() => setIsEditing(true)}
+            <div className="profile-card-custom">
+              <div className="profile-card-header">
+                <div className="profile-name">
+                  {userProfile?.name} {userProfile?.surname}
+                </div>
+
+                <div className="profile-badge-custom">
+                  {userProfile?.class || "User"}
+                </div>
+              </div>
+
+              <Form onSubmit={handleEditSubmit}>
+                <div className="profile-info-grid">
+                  <div className="profile-info-item">
+                    <span className="info-label">Nombre</span>
+
+                    <input
+                      className={`info-value ${
+                        errors.name ? "error-input" : ""
+                      }`}
+                      type="text"
+                      name="name"
+                      value={editFormData.name}
+                      onChange={handleEditChange}
+                    />
+
+                    {errors.name && (
+                      <small
+                        className="text-danger"
+                        style={{
+                          fontSize: "0.75rem",
+                          marginTop: "4px",
+                          display: "block",
+                        }}
+                      >
+                        {errors.name}
+                      </small>
+                    )}
+                  </div>
+
+                  <div className="profile-info-item">
+                    <span className="info-label">Apellido</span>
+
+                    <input
+                      className={`info-value ${
+                        errors.surname ? "error-input" : ""
+                      }`}
+                      type="text"
+                      name="surname"
+                      value={editFormData.surname}
+                      onChange={handleEditChange}
+                    />
+
+                    {errors.surname && (
+                      <small
+                        className="text-danger"
+                        style={{
+                          fontSize: "0.75rem",
+                          marginTop: "4px",
+                          display: "block",
+                        }}
+                      >
+                        {errors.surname}
+                      </small>
+                    )}
+                  </div>
+
+                  <div className="profile-info-item">
+                    <span className="info-label">Teléfono</span>
+
+                    <input
+                      className={`info-value ${
+                        errors.cellNumber ? "error-input" : ""
+                      }`}
+                      type="text"
+                      name="cellNumber"
+                      value={editFormData.cellNumber}
+                      onChange={handleEditChange}
+                    />
+
+                    {errors.cellNumber && (
+                      <small
+                        className="text-danger"
+                        style={{
+                          fontSize: "0.75rem",
+                          marginTop: "4px",
+                          display: "block",
+                        }}
+                      >
+                        {errors.cellNumber}
+                      </small>
+                    )}
+                  </div>
+
+                  <div className="profile-info-item">
+                    <span className="info-label">Email</span>
+
+                    <input
+                      className={`info-value ${
+                        errors.email ? "error-input" : ""
+                      }`}
+                      type="email"
+                      name="email"
+                      value={editFormData.email}
+                      onChange={handleEditChange}
+                    />
+
+                    {errors.email && (
+                      <small
+                        className="text-danger"
+                        style={{
+                          fontSize: "0.75rem",
+                          marginTop: "4px",
+                          display: "block",
+                        }}
+                      >
+                        {errors.email}
+                      </small>
+                    )}
+                  </div>
+
+                  <div className="profile-info-item">
+                    <span className="info-label">DNI</span>
+
+                    <input
+                      className="info-value"
+                      type="text"
+                      value={userProfile?.dni || "No editable"}
+                      readOnly
+                    />
+                  </div>
+
+                  <div className="profile-info-item">
+                    <span className="info-label">Tipo de usuario</span>
+
+                    <input
+                      className="info-value"
+                      type="text"
+                      value={userProfile?.class || "User"}
+                      readOnly
+                    />
+                  </div>
+                </div>
+
+                <div className="profile-buttons-container">
+                  <button
+                    type="button"
+                    className="profile-change-password-btn"
+                    onClick={() => setShowPasswordModal(true)}
                   >
-                    ✏️ Editar Perfil
-                  </Button>
-                )}
-              </Card.Header>
-              <Card.Body>
-                {isEditing ? (
-                  <Form onSubmit={handleEditSubmit}>
-                    <Row>
-                      <Col md={6}>
-                        <Form.Group className="mb-3">
-                          <Form.Label>Nombre *</Form.Label>
-                          <Form.Control
-                            type="text"
-                            name="name"
-                            value={editFormData.name}
-                            onChange={handleEditChange}
-                            isInvalid={!!errors.name}
-                            placeholder="Tu nombre"
-                          />
-                          <Form.Control.Feedback type="invalid">
-                            {errors.name}
-                          </Form.Control.Feedback>
-                        </Form.Group>
-                      </Col>
-                      <Col md={6}>
-                        <Form.Group className="mb-3">
-                          <Form.Label>Apellido *</Form.Label>
-                          <Form.Control
-                            type="text"
-                            name="surname"
-                            value={editFormData.surname}
-                            onChange={handleEditChange}
-                            isInvalid={!!errors.surname}
-                            placeholder="Tu apellido"
-                          />
-                          <Form.Control.Feedback type="invalid">
-                            {errors.surname}
-                          </Form.Control.Feedback>
-                        </Form.Group>
-                      </Col>
-                    </Row>
+                    Cambiar contraseña
+                  </button>
 
-                    <Row>
-                      <Col md={6}>
-                        <Form.Group className="mb-3">
-                          <Form.Label>Email *</Form.Label>
-                          <Form.Control
-                            type="email"
-                            name="email"
-                            value={editFormData.email}
-                            onChange={handleEditChange}
-                            isInvalid={!!errors.email}
-                            placeholder="tu@email.com"
-                          />
-                          <Form.Control.Feedback type="invalid">
-                            {errors.email}
-                          </Form.Control.Feedback>
-                        </Form.Group>
-                      </Col>
-                      <Col md={6}>
-                        <Form.Group className="mb-3">
-                          <Form.Label>Número de Celular *</Form.Label>
-                          <Form.Control
-                            type="tel"
-                            name="cellNumber"
-                            value={editFormData.cellNumber}
-                            onChange={handleEditChange}
-                            isInvalid={!!errors.cellNumber}
-                            placeholder="1234567890"
-                          />
-                          <Form.Control.Feedback type="invalid">
-                            {errors.cellNumber}
-                          </Form.Control.Feedback>
-                        </Form.Group>
-                      </Col>
-                    </Row>
-
-                    <div className="d-flex gap-2">
-                      <Button
-                        type="submit"
-                        className="profile-btn profile-btn-primary"
-                      >
-                        💾 Guardar Cambios
-                      </Button>
-                      <Button
-                        type="button"
-                        className="profile-btn profile-btn-secondary"
-                        onClick={() => setIsEditing(false)}
-                      >
-                        ❌ Cancelar
-                      </Button>
-                    </div>
-                  </Form>
-                ) : (
-                  <div className="profile-info-grid">
-                    <div className="profile-info-item">
-                      <div className="info-label">Nombre</div>
-                      <div className="info-value">
-                        {userProfile?.name || "No disponible"}
-                      </div>
-                    </div>
-                    <div className="profile-info-item">
-                      <div className="info-label">Apellido</div>
-                      <div className="info-value">
-                        {userProfile?.surname || "No disponible"}
-                      </div>
-                    </div>
-                    <div className="profile-info-item">
-                      <div className="info-label">Email</div>
-                      <div className="info-value">
-                        {userProfile?.email || "No disponible"}
-                      </div>
-                    </div>
-                    <div className="profile-info-item">
-                      <div className="info-label">Número de Celular</div>
-                      <div className="info-value">
-                        {userProfile?.cellNumber || "No disponible"}
-                      </div>
-                    </div>
-                    <div className="profile-info-item">
-                      <div className="info-label">DNI</div>
-                      <div className="info-value">
-                        {userProfile?.dni || "No disponible"}
-                      </div>
-                    </div>
-                    <div className="profile-info-item">
-                      <div className="info-label">Tipo de Usuario</div>
-                      <div className="info-value">
-                        <span
-                          className={`profile-badge badge-type-${
-                            userProfile?.class?.toLowerCase() || "user"
-                          }`}
-                        >
-                          {userProfile?.class || "User"}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {!isEditing && (
-                  <div className="text-center mt-4">
-                    <Button
-                      className="btn-password"
-                      onClick={() => setShowPasswordModal(true)}
-                    >
-                      🔐 Cambiar Contraseña
-                    </Button>
-                  </div>
-                )}
-              </Card.Body>
-            </Card>
+                  <button
+                    type="submit"
+                    className={`profile-save-changes-btn ${
+                      hasChanges ? "show" : ""
+                    }`}
+                  >
+                    Guardar cambios
+                  </button>
+                </div>
+              </Form>
+            </div>
           </Tab>
 
-          <Tab eventKey="reservations" title="🏨 Mis Reservas">
-            <Card className="profile-card">
+          <Tab eventKey="reservations" title="Mis Reservas">
+            <Card>
               <Card.Header>
                 <h4>Historial de Reservas</h4>
               </Card.Header>
+
               <Card.Body>
                 {userReservations.length > 0 ? (
-                  <div className="reservations-table">
-                    <Table striped bordered hover responsive>
-                      <thead>
-                        <tr>
-                          <th>ID</th>
-                          <th>Check-in</th>
-                          <th>Check-out</th>
-                          <th>Habitación</th>
-                          <th>Estado</th>
-                          <th style={{ width: "120px" }}>Acciones</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {userReservations.map((reservation) => (
-                          <tr key={reservation.Id}>
-                            <td>
-                              <strong>#{reservation.Id}</strong>
-                            </td>
-                            <td>{reservation.checkIn}</td>
-                            <td>{reservation.checkOut}</td>
-                            <td>
-                              {reservation.Room?.RoomNo
-                                ? `#${reservation.Room.RoomNo} — ${reservation.Room.Nombre} (${reservation.Room.Tipo})`
-                                : `Habitación #${reservation.room_Id}`}
-                            </td>
-                            <td>
-                              <span
-                                className={`profile-badge ${
-                                  reservation.status === "cancelled"
-                                    ? "badge-status-cancelled"
-                                    : reservation.displayStatus === "expired"
-                                    ? "badge-status-expired"
-                                    : "badge-status-active"
-                                }`}
-                              >
-                                {reservation.status === "cancelled"
-                                  ? "Cancelada"
+                  <Table striped bordered hover responsive>
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+
+                        <th>Check-in</th>
+
+                        <th>Check-out</th>
+
+                        <th>Habitación</th>
+
+                        <th>Estado</th>
+
+                        <th style={{ width: "120px" }}>Acciones</th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      {userReservations.map((reservation) => (
+                        <tr key={reservation.Id}>
+                          <td>{reservation.Id}</td>
+
+                          <td>{reservation.checkIn}</td>
+
+                          <td>{reservation.checkOut}</td>
+
+                          <td>
+                            {reservation.Room?.RoomNo
+                              ? `#${reservation.Room.RoomNo} — ${reservation.Room.Nombre} (${reservation.Room.Tipo})`
+                              : `Habitación #${reservation.room_Id}`}
+                          </td>
+
+                          <td>
+                            <Badge
+                              bg={
+                                reservation.status === "cancelled"
+                                  ? "danger"
                                   : reservation.displayStatus === "expired"
-                                  ? "No Vigente"
-                                  : "Activa"}
-                              </span>
-                            </td>
-                            <td>
-                              {reservation.status !== "cancelled" &&
-                                reservation.displayStatus !== "expired" && (
-                                  <Button
-                                    className="btn-action btn-action-cancel"
-                                    size="sm"
-                                    onClick={() =>
-                                      handleCancelReservation(reservation)
-                                    }
-                                  >
-                                    🗑️ Cancelar
-                                  </Button>
-                                )}
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </Table>
-                  </div>
+                                  ? "warning"
+                                  : "success"
+                              }
+                            >
+                              {reservation.status === "cancelled"
+                                ? "Cancelada"
+                                : reservation.displayStatus === "expired"
+                                ? "No Vigente"
+                                : "Activa"}
+                            </Badge>
+                          </td>
+                          <td>
+                            {reservation.status !== "cancelled" &&
+                              reservation.displayStatus !== "expired" && (
+                                <Button
+                                  variant="outline-danger"
+                                  size="sm"
+                                  onClick={() =>
+                                    handleCancelReservation(reservation)
+                                  }
+                                >
+                                  🗑️ Cancelar
+                                </Button>
+                              )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
                 ) : (
-                  <div className="empty-state">
-                    <div className="empty-state-icon">🏨</div>
-                    <h5>No tienes reservas registradas aún</h5>
-                    <p>Comienza a planear tu estadía con nosotros</p>
+                  <div className="text-center py-4">
+                    <p className="text-muted">
+                      No tienes reservas registradas aún.
+                    </p>
+
                     <Button
-                      className="profile-btn profile-btn-primary"
+                      variant="primary"
                       onClick={() => (window.location.href = "/reservation")}
                     >
                       🏨 Hacer una Reserva
@@ -706,134 +944,180 @@ const Profile = () => {
             </Card>
           </Tab>
         </Tabs>
+      </Container>
 
-        <Modal
-          show={showPasswordModal}
-          onHide={() => setShowPasswordModal(false)}
-          className="profile-modal"
-          centered
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>🔐 Cambiar Contraseña</Modal.Title>
-          </Modal.Header>
-          <Form onSubmit={handlePasswordSubmit} className="profile-form">
-            <Modal.Body>
-              <Form.Group className="mb-3">
-                <Form.Label>Contraseña Actual *</Form.Label>
-                <Form.Control
-                  type="password"
-                  name="currentPassword"
-                  value={passwordData.currentPassword}
-                  onChange={handlePasswordChange}
-                  isInvalid={!!passwordErrors.currentPassword}
-                  placeholder="Tu contraseña actual"
-                />
-                <Form.Control.Feedback type="invalid">
-                  {passwordErrors.currentPassword}
-                </Form.Control.Feedback>
-              </Form.Group>
+      <Modal
+        show={showPasswordModal}
+        onHide={() => setShowPasswordModal(false)}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Cambiar Contraseña</Modal.Title>
+        </Modal.Header>
 
-              <Form.Group className="mb-3">
-                <Form.Label>Nueva Contraseña *</Form.Label>
-                <Form.Control
-                  type="password"
-                  name="newPassword"
-                  value={passwordData.newPassword}
-                  onChange={handlePasswordChange}
-                  isInvalid={!!passwordErrors.newPassword}
-                  placeholder="Nueva contraseña (mín. 6 caracteres)"
-                />
-                <Form.Control.Feedback type="invalid">
-                  {passwordErrors.newPassword}
-                </Form.Control.Feedback>
-              </Form.Group>
+        <Form onSubmit={handlePasswordSubmit}>
+          <Modal.Body>
+            <Form.Group className="mb-3">
+              <Form.Label>Contraseña Actual *</Form.Label>
 
-              <Form.Group className="mb-3">
-                <Form.Label>Confirmar Nueva Contraseña *</Form.Label>
-                <Form.Control
-                  type="password"
-                  name="confirmPassword"
-                  value={passwordData.confirmPassword}
-                  onChange={handlePasswordChange}
-                  isInvalid={!!passwordErrors.confirmPassword}
-                  placeholder="Confirma tu nueva contraseña"
-                />
-                <Form.Control.Feedback type="invalid">
-                  {passwordErrors.confirmPassword}
-                </Form.Control.Feedback>
-              </Form.Group>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button
-                className="profile-btn profile-btn-secondary"
-                onClick={() => setShowPasswordModal(false)}
-              >
-                ❌ Cancelar
-              </Button>
-              <Button className="profile-btn profile-btn-primary" type="submit">
-                💾 Cambiar Contraseña
-              </Button>
-            </Modal.Footer>
-          </Form>
-        </Modal>
+              <Form.Control
+                type="password"
+                name="currentPassword"
+                value={passwordData.currentPassword}
+                onChange={handlePasswordChange}
+                isInvalid={!!passwordErrors.currentPassword}
+                placeholder="Tu contraseña actual"
+              />
 
-        <Modal
-          show={!!cancelReservationConfirm}
-          onHide={() => setCancelReservationConfirm(null)}
-          size="lg"
-          centered
-        >
-          <Modal.Header closeButton className="bg-danger text-white">
-            <Modal.Title>⚠️ Confirmar Cancelación de Reserva</Modal.Title>
-          </Modal.Header>
-          <Modal.Body className="text-center p-4">
-            {cancelReservationConfirm && (
-              <>
-                <h4 className="text-danger mb-4">
-                  ¿Estás seguro de que deseas cancelar esta reserva?
-                </h4>
+              <Form.Control.Feedback type="invalid">
+                {passwordErrors.currentPassword}
+              </Form.Control.Feedback>
+            </Form.Group>
 
-                <div className="alert alert-warning mb-4">
-                  <p className="mb-2">
-                    <strong>Habitación:</strong>{" "}
-                    {cancelReservationConfirm.Room?.Nombre ||
-                      `Habitación #${cancelReservationConfirm.room_Id}`}
-                  </p>
-                  <p className="mb-2">
-                    <strong>Check-in:</strong>{" "}
-                    {cancelReservationConfirm.checkIn}
-                  </p>
-                  <p className="mb-0">
-                    <strong>Check-out:</strong>{" "}
-                    {cancelReservationConfirm.checkOut}
-                  </p>
-                </div>
+            <Form.Group className="mb-3">
+              <Form.Label>Nueva Contraseña *</Form.Label>
 
-                <p className="lead">Esta acción NO se puede deshacer.</p>
-                <p className="text-muted">
-                  La habitación quedará disponible automáticamente.
-                </p>
-              </>
-            )}
+              <Form.Control
+                type="password"
+                name="newPassword"
+                value={passwordData.newPassword}
+                onChange={handlePasswordChange}
+                isInvalid={!!passwordErrors.newPassword}
+                placeholder="Nueva contraseña (mín. 6 caracteres)"
+              />
+
+              <Form.Control.Feedback type="invalid">
+                {passwordErrors.newPassword}
+              </Form.Control.Feedback>
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Confirmar Nueva Contraseña *</Form.Label>
+
+              <Form.Control
+                type="password"
+                name="confirmPassword"
+                value={passwordData.confirmPassword}
+                onChange={handlePasswordChange}
+                isInvalid={!!passwordErrors.confirmPassword}
+                placeholder="Confirma tu nueva contraseña"
+              />
+
+              <Form.Control.Feedback type="invalid">
+                {passwordErrors.confirmPassword}
+              </Form.Control.Feedback>
+            </Form.Group>
           </Modal.Body>
-          <Modal.Footer className="justify-content-center">
+
+          <Modal.Footer>
             <Button
               variant="secondary"
-              onClick={() => setCancelReservationConfirm(null)}
-              size="lg"
+              onClick={() => setShowPasswordModal(false)}
             >
-              No, mantener reserva
+              Cancelar
             </Button>
-            <Button
-              variant="danger"
-              onClick={confirmCancelReservation}
-              size="lg"
-            >
-              Sí, cancelar reserva
+
+            <Button variant="primary" type="submit">
+              Cambiar Contraseña
             </Button>
           </Modal.Footer>
-        </Modal>
-      </Container>
+        </Form>
+      </Modal>
+
+      <Modal
+        show={!!cancelReservationConfirm}
+        onHide={() => setCancelReservationConfirm(null)}
+        size="lg"
+        centered
+      >
+        <Modal.Header closeButton className="bg-danger text-white">
+          <Modal.Title>⚠️ Confirmar Cancelación de Reserva</Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="text-center p-4">
+          {cancelReservationConfirm && (
+            <>
+              <h4 className="text-danger mb-4">
+                ¿Estás seguro de que deseas cancelar esta reserva?
+              </h4>
+
+              <div className="alert alert-warning mb-4">
+                <p className="mb-2">
+                  <strong>Habitación:</strong>{" "}
+                  {cancelReservationConfirm.Room?.Nombre ||
+                    `Habitación #${cancelReservationConfirm.room_Id}`}
+                </p>
+                <p className="mb-2">
+                  <strong>Check-in:</strong> {cancelReservationConfirm.checkIn}
+                </p>
+                <p className="mb-0">
+                  <strong>Check-out:</strong>{" "}
+                  {cancelReservationConfirm.checkOut}
+                </p>
+              </div>
+
+              <p className="lead">Esta acción NO se puede deshacer.</p>
+              <p className="text-muted">
+                La habitación quedará disponible automáticamente.
+              </p>
+            </>
+          )}
+        </Modal.Body>
+        <Modal.Footer className="justify-content-center">
+          <Button
+            variant="secondary"
+            onClick={() => setCancelReservationConfirm(null)}
+            size="lg"
+          >
+            No, mantener reserva
+          </Button>
+          <Button variant="danger" onClick={confirmCancelReservation} size="lg">
+            Sí, cancelar reserva
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal
+        show={showErrorsModal}
+        onHide={() => setShowErrorsModal(false)}
+        size="lg"
+        centered
+      >
+        <Modal.Header closeButton className="bg-danger text-white">
+          <Modal.Title className="d-flex align-items-center">
+            <span className="me-2">⚠️</span>
+            Errores en el formulario
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="p-4">
+          <div className="mb-3">
+            <h5 className="text-danger fw-bold mb-3">
+              Por favor corrige los siguientes errores:
+            </h5>
+            <div className="alert alert-danger">
+              <ul className="mb-0" style={{ paddingLeft: "1.5rem" }}>
+                {validationErrors.map((error, index) => (
+                  <li key={index} className="mb-2">
+                    <strong>{error.field}:</strong> {error.message}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          <p className="text-muted mb-0">
+            Revisa los campos marcados en el formulario y corrige los errores
+            antes de guardar.
+          </p>
+        </Modal.Body>
+        <Modal.Footer className="justify-content-center">
+          <Button
+            variant="danger"
+            onClick={() => setShowErrorsModal(false)}
+            size="lg"
+            className="px-5"
+          >
+            Entendido
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

@@ -34,8 +34,6 @@ function Footer() {
             />
             <p className="small">Hotels and Resorts</p>
           </Col>
-
-        
         </Row>
 
         <Row className="pt-4 mt-4 border-top">

@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -24,7 +24,20 @@ export default function BookingBar({ onSearch }) {
 
   const { token } = useContext(AuthenticationContex);
   const navigate = useNavigate();
+  useEffect(() => {
+    if (
+      availabilityResult &&
+      !availabilityResult.disponible &&
+      availabilityResult.mensaje &&
+      availabilityResult.mensaje.includes("anterior a la fecha actual")
+    ) {
+      const timer = setTimeout(() => {
+        setAvailabilityResult(null);
+      }, 3000);
 
+      return () => clearTimeout(timer);
+    }
+  }, [availabilityResult]);
   const handle = (k) => (e) => setForm({ ...form, [k]: e.target.value });
 
   const handleReservar = () => {
@@ -253,7 +266,7 @@ export default function BookingBar({ onSearch }) {
                   background: "#48c5b7",
                   border: "none",
                   height: "48px",
-                  width: "180px", 
+                  width: "180px",
                   borderRadius: "8px",
                   fontSize: "1rem",
                 }}

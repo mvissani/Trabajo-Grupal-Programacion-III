@@ -84,16 +84,19 @@ export const updateUserProfile = async (dni, userData) => {
     if (!response.ok) {
     
       let errorMessage = `Error ${response.status}: ${response.statusText}`;
+      let errorDataFull = null;
       try {
-        const errorData = await response.json();
-        console.log('[Frontend][Profile][UPDATE_ERROR_DATA]', errorData);
-        if (errorData.message) {
-          errorMessage = errorData.message;
+        errorDataFull = await response.json();
+        console.log('[Frontend][Profile][UPDATE_ERROR_DATA]', errorDataFull);
+        if (errorDataFull.message) {
+          errorMessage = errorDataFull.message;
         }
       } catch (parseError) {
         console.warn("No se pudo parsear el error del backend:", parseError);
       }
-      throw new Error(errorMessage);
+      const error = new Error(errorMessage);
+      error.responseData = errorDataFull;
+      throw error;
     }
 
     const data = await response.json();

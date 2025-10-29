@@ -1,8 +1,9 @@
 import { useContext, useState } from "react";
-import { Button, Card, Col, Container, Form, Row ,Alert } from "react-bootstrap";
+import { Button, Card, Col, Container, Form, Row, Alert } from "react-bootstrap";
 import { Navigate, useNavigate } from "react-router";
 import { AuthenticationContex } from "../services/Auth/Auth.context";
 import { UserTypeContext } from "../services/Auth/UserType.context";
+import "./Login.css";
 
 function Login() {
   const { handleLogin } = useContext(AuthenticationContex);
@@ -19,6 +20,7 @@ function Login() {
     type: "",
   });
   const navigate = useNavigate();
+
   const showNotification = (message, type) => {
     setNotification({ show: true, message, type });
     setTimeout(() => {
@@ -89,12 +91,11 @@ function Login() {
   return (
     <>
       <Container
-        className="d-flex justify-content-center align-items-center"
-        style={{ minHeight: "84.4vh" }}
+        className="d-flex justify-content-center align-items-center login-container"
       >
         <Card
           style={{ width: "10rem" }}
-          className="mb-3 w-50 bg-secondary text-white p-3 border-1 shadow"
+          className="mb-3 w-50 login-card p-3 border-1 shadow"
         >
           <Card.Body className=" justify-content-center border-1 ">
             {notification.show && (
@@ -104,46 +105,46 @@ function Login() {
                 onClose={() =>
                   setNotification({ show: false, message: "", type: "" })
                 }
-                className="mb-4"
+                className={`mb-4 login-alert alert-${notification.type}`}
               >
                 {notification.message}
               </Alert>
             )}
             <form onSubmit={handleSubmit}>
               <Row>
-                <Card.Title className="text-center fw-bold shadow fs-2">
+                <Card.Title className="text-center fw-bold shadow fs-2 text-dark">
                   Iniciar Sesión
                 </Card.Title>
 
                 <Col>
                   <Form.Group controlId="userName" className="text-center">
-                    <Form.Label className="text-center w-100">
+                    <Form.Label className="text-center w-100 login-label">
                       Ingrese su nombre de usuario
                     </Form.Label>
                     <Form.Control
                       type="email"
                       placeholder="Email"
-                      className={error.email && "bg-warning"}
                       name="email"
                       onChange={handleChange}
                     />
                     {error.email && (
-                      <p className="mt-2 text-danger">{error.email}</p>
+                      <p className="error-message">{error.email}</p>
                     )}
                   </Form.Group>
 
                   <Form.Group className="text-center w-100">
-                    <Form.Label className="text-center w-100">
+                    <Form.Label className="text-center w-100 login-label">
                       Ingrese su contraseña
                     </Form.Label>
                     <Form.Control
                       type="password"
                       placeholder="Contraseña"
-                      className={error.password && "bg-warning"}
                       name="password"
                       onChange={handleChange}
                     />
-                    <p className="mt-2 text-danger">{error.password}</p>
+                    {error.password && (
+                      <p className="error-message">{error.password}</p>
+                    )}
                   </Form.Group>
                   <Button
                     type="submit"
@@ -155,7 +156,7 @@ function Login() {
                 </Col>
               </Row>
             </form>
-            <h3 className="text-center">
+            <h3 className="text-center text-dark">
               No tienes cuenta?{" "}
               <Button
                 className="d-block mx-auto mt-3"
